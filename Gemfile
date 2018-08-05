@@ -38,6 +38,8 @@ gem 'backburner'
 gem 'redis'
 gem 'pry'
 gem 'foreman'
+gem 'openpgp'
+gem 'execjs'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
