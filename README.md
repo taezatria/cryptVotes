@@ -1,7 +1,7 @@
 # cryptVotes
 
 ### **Requirements** :
-* build-essential patch ruby-dev zlib1g-dev liblzma-dev libsqlite3-dev ruby-railties ruby-bundler
+* build-essential patch ruby-dev nodejs zlib1g-dev liblzma-dev libsqlite3-dev ruby-railties ruby-bundler
 * **bundle install**
 
 ### **Multichain Explorer**
