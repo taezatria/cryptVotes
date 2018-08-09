@@ -2,10 +2,12 @@
 
 ### **Requirements** :
 * build-essential patch nodejs zlib1g-dev liblzma-dev libsqlite3-dev
-* mysql-server mysql-client libmysqlclient-dev
+* mysql-server mysql-client libmysqlclient-dev (root password and skip-grant-tables)
 * ruby-dev ruby-bundler (ruby 2.5.1)
 * gem install rails (rails 5.2.1)
 * **bundle install**
+* rake db:create & migrate
+* foreman start
 
 ### **Multichain Explorer**
 * sqlite3 sqlite3-dev python-dev python-pip
