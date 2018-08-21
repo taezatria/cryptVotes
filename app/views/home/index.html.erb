@@ -1,9 +1,7 @@
 <div class="container-fluid">
-  <% if params.present? %>
-    <% params.each do |param| %>
-      <%= param %>
-    <% end %>
-  <% end %>
+<% if flash[:notice] %>
+  <div class="notice"><%= flash[:notice] %></div>
+<% end %>
   <div class="jumbotron" style="background-color: white; padding: 2rem 3rem;">
     <div class="row">
       <div class="col-md-5">
