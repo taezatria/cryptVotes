@@ -1,28 +1,36 @@
 <div class="container-fluid">
-    
-  <div class="jumbotron" style="background-color: white">
+  <% if params.present? %>
+    <% params.each do |param| %>
+      <%= param %>
+    <% end %>
+  <% end %>
+  <div class="jumbotron" style="background-color: white; padding: 2rem 3rem;">
     <div class="row">
       <div class="col-md-5">
-          <img src="<%= asset_path( 'logo.png' ) %>" width="50%" />
-        <div class="row" style="padding-bottom: 15px;">
-          Login to Your Account
-        </div>
-        <div class="row">
-          <form style="width: 90%;" method="post" action="/home">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" class="form-control" id="username" placeholder="Your Username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" placeholder="Your Password">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
+        <%= image_tag 'logo.png', size: '150x150' %>
+      <br />
+        Login to Your Account
+      <hr />
+        <form style="width: 100%;" method="post" action="/home">
+        <%= form_tag "/home", method: "post" do %>
+          <div class="form-group">
+            <%= label_tag :username, "Username" %>
+            <%= text_field_tag :username, "", class: "form-control" %>
+          </div>
+          <div class="form-group">
+            <%= label_tag :password, "Password" %>
+            <%= password_field_tag :password, "", class: "form-control" %>
+          </div>
+          <div class="form-check form-group">
+            <%= check_box_tag :rememberme, "1", false, class: "form-check-input" %>
+            <%= label_tag :rememberme, "Remember me", class: "form-check-label" %>
+          </div>
+          <%= submit_tag "Submit", class: "btn btn-primary btn-block" %>
+        <% end %>
+        
       </div>
-      <div class="col-md-7">
-        <img src="<%= asset_path( 'home.jpg' ) %>" width="100%" height="100%" />
+      <div class="col-md-7" style="padding-right: 0">
+        <%= image_tag 'home.jpg', size: '500x500', class: "float-right" %>
       </div>
     </div>
   </div>  

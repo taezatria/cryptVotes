@@ -37,10 +37,13 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Another tools
+gem 'redis'
+gem 'redis-rails'
+gem 'redis-namespace'
+gem 'redis-rack-cache'
 gem 'dalli'
 gem 'backburner'
-gem 'redis'
-gem 'pry'
+gem 'pry-rails'
 gem 'foreman'
 gem 'openpgp'
 gem 'execjs'
