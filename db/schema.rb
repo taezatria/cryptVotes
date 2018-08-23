@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_10_044534) do
+ActiveRecord::Schema.define(version: 2018_08_23_042749) do
+
+  create_table "candidates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "users_id"
+    t.bigint "elections_id"
+    t.text "description"
+    t.text "image", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["elections_id"], name: "index_candidates_on_elections_id"
+    t.index ["users_id"], name: "index_candidates_on_users_id"
+  end
+
+  create_table "elections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.text "description"
+    t.datetime "start_date", null: false
+    t.datetime "end_date", null: false
+    t.integer "number_of_voters", null: false
+    t.text "image", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 50, null: false
@@ -27,6 +49,15 @@ ActiveRecord::Schema.define(version: 2018_08_10_044534) do
     t.boolean "hasVote", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "voters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "users_id"
+    t.bigint "elections_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["elections_id"], name: "index_voters_on_elections_id"
+    t.index ["users_id"], name: "index_voters_on_users_id"
   end
 
 end
