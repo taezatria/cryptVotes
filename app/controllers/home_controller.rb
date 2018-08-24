@@ -5,7 +5,13 @@ class HomeController < ApplicationController
   def login
     if params[:username].present? && params[:password].present?
       user = User.login(params[:username], params[:password])
-      user ? (redirect_to '/organize') : (redirect_back fallback_location: root_path)
+      if user.present?
+        session[:current_user_id] = user
+        redirect_to '/organize'
+      else 
+        flash[:error] = "Username or password doesn't match"
+        redirect_back fallback_location: root_path
+      end
     end
   end
 end

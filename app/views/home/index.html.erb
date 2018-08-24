@@ -1,13 +1,13 @@
-<% if params.present? %>
-  <% params.each do |param| %>
-    <%= param %>
+<% if flash.present? %>
+  <% flash.each do |key, val| %>
+    <%= val %>
   <% end %>
 <% end %>
 <div class="container-fluid bg">
   <div class="jumbotron" style="background-color: white; padding: 2rem 3rem">
     <div class="row">
       <div class="col-md-5">
-        <%= image_tag "logo.png", height: "25%" %>
+        <%= image_tag "logo.png", height: "30%" %>
         <br />
         Login to Your Account
         <hr />
@@ -28,7 +28,7 @@
         <% end %>
       </div>
       <div class="col-md-7">
-        <%= image_tag "home.jpg", width: '100%', class: "rounded float-right" %>
+        <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
       </div>
     </div>
   </div>
