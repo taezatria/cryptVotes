@@ -11,4 +11,12 @@ class User < ApplicationRecord
       user.id
     end
   end
+
+  def self.change_password(user_id, password)
+    user = User.find(user_id)
+    if user.present?
+      user.password = password
+      user.save
+    end
+  end
 end
