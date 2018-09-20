@@ -1,34 +1,49 @@
-<% if flash.present? %>
-  <% flash.each do |key, val| %>
-    <%= val %>
-  <% end %>
-<% end %>
-<div class="container-fluid bg">
-  <div class="jumbotron" style="background-color: white; padding: 2rem 3rem;">
-    <div class="row">
-      <div class="col-md-5">
-        <%= image_tag "logo.png", height: "30%" %>
-        <br />
-        Login to Your Account
-        <hr />
-        <%= form_tag "/home", method: "post" do %>
-          <div class="form-group">
-            <%= label_tag :username, "Username" %>
-            <%= text_field_tag :username, "", class: "form-control" %>
+<div class="container" style="margin-top: 5%;">
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-md-4">
+      <h1 class="text-center">Welcome to CryptVotes</h1>
+      <br/>
+      <div class="col-sm-12">
+        <ul class="nav nav-pills" >
+          <li class="" style="width:50%"><a class="btn btn-lg btn-default" data-toggle="tab" href="#home">Login</a></li>
+          <li class="" style="width:48%"><a class=" btn btn-lg btn-default" data-toggle="tab" href="#menu1">Register</a></li>
+        </ul>
+        <br/>
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active">
+            <form action="#">
+              <div class="form-group">
+                <label for="UserName">Username</label>
+                <input type="text" class="form-control" id="username">
+              </div>
+
+              <div class="form-group">
+                <label for="pwd">Password</label>
+                <input type="password" class="form-control" id="password">
+              </div>
+
+              <button type="submit" class="btn btn-success btn-block">Sign In</button>
+
+            </form>
+            <br/>
+
           </div>
-          <div class="form-group">
-            <%= label_tag :password, "Password" %>
-            <%= password_field_tag :password, "", class: "form-control" %>
+          <div id="menu1" class="tab-pane fade">
+            <form action="#">
+              
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email">
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">Send Verification Email</button>
+            </form>
+            <br/>
+
           </div>
-          <div class="form-check form-group">
-            <%= check_box_tag :rememberme, 1, false, class: "form-check-input" %>
-            <%= label_tag :rememberme, "Remember me", class: "form-check-label" %>
-          </div>
-          <%= submit_tag "Submit", class: "btn btn-primary btn-block" %>
-        <% end %>
-      </div>
-      <div class="col-md-7">
-        <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
+        </div>
       </div>
     </div>
   </div>

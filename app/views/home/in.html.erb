@@ -1,0 +1,35 @@
+<% if flash.present? %>
+  <% flash.each do |key, val| %>
+    <%= val %>
+  <% end %>
+<% end %>
+<div class="container-fluid bg">
+  <div class="jumbotron" style="background-color: white; padding: 2rem 3rem;">
+    <div class="row">
+      <div class="col-md-5">
+        <%= image_tag "logo.png", height: "30%" %>
+        <br />
+        Login to Your Account
+        <hr />
+        <%= form_tag "/home", method: "post" do %>
+          <div class="form-group">
+            <%= label_tag :username, "Username" %>
+            <%= text_field_tag :username, "", class: "form-control" %>
+          </div>
+          <div class="form-group">
+            <%= label_tag :password, "Password" %>
+            <%= password_field_tag :password, "", class: "form-control" %>
+          </div>
+          <div class="form-check form-group">
+            <%= check_box_tag :rememberme, 1, false, class: "form-check-input" %>
+            <%= label_tag :rememberme, "Remember me", class: "form-check-label" %>
+          </div>
+          <%= submit_tag "Submit", class: "btn btn-primary btn-block" %>
+        <% end %>
+      </div>
+      <div class="col-md-7">
+        <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
+      </div>
+    </div>
+  </div>
+</div>
