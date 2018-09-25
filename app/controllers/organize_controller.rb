@@ -1,8 +1,8 @@
 class OrganizeController < ApplicationController
-  before_action :check_user_login
+  # before_action :check_user_login
 
   def dashboard
-    @menu = 'home'
+    @menu = 'election'
     render :dashboard
   end
 
@@ -21,7 +21,7 @@ class OrganizeController < ApplicationController
   end
 
   def logout
-    $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    # $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
     reset_session
     flash[:notice] = "You've been logged out"
     redirect_to root_path

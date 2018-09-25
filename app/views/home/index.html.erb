@@ -6,40 +6,39 @@
       <br/>
       <div class="col-sm-12">
         <ul class="nav nav-pills" >
-          <li class="" style="width:50%"><a class="btn btn-lg btn-default" data-toggle="tab" href="#home">Login</a></li>
-          <li class="" style="width:48%"><a class=" btn btn-lg btn-default" data-toggle="tab" href="#menu1">Register</a></li>
+          <li class="" style="width:50%"><a class="btn btn-lg btn-basic" data-toggle="tab" href="#home">Login</a></li>
+          <li class="" style="width:48%"><a class=" btn btn-lg btn-basic" data-toggle="tab" href="#menu1">Register</a></li>
         </ul>
         <br/>
 
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active">
-            <form action="#">
+          
+            <%= form_tag "/home", method: "post" do %>
               <div class="form-group">
-                <label for="UserName">Username</label>
-                <input type="text" class="form-control" id="username">
+                <%= label_tag :username, "Username" %>
+                <%= text_field_tag :username, "", class: "form-control" %>
               </div>
 
               <div class="form-group">
-                <label for="pwd">Password</label>
-                <input type="password" class="form-control" id="password">
+                <%= label_tag :password, "Password" %>
+                <%= password_field_tag :password, "", class: "form-control" %>
               </div>
 
-              <button type="submit" class="btn btn-success btn-block">Sign In</button>
-
-            </form>
+              <%= submit_tag "Sign In", class: "btn btn-success btn-block" %>
+            <% end %>
             <br/>
-
           </div>
-          <div id="menu1" class="tab-pane fade">
-            <form action="#">
-              
-              <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" class="form-control" id="email">
-              </div>
 
-              <button type="submit" class="btn btn-primary btn-block">Send Verification Email</button>
-            </form>
+          <div id="menu1" class="tab-pane fade">
+            <%= form_tag "#", method: "get" do %>
+              <div class="form-group">
+                <%= label_tag :email, "Email" %>
+                <%= email_field_tag :email, "", class: "form-control" %>
+             </div>
+
+             <%= submit_tag "Send Verification Email", class: "btn btn-primary btn-block" %>
+            <% end %>
             <br/>
 
           </div>
