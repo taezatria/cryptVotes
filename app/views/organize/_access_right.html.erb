@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="row">
+    <h1>Access Rights</h1>
+  </div>
+
+  <div class="row" style="margin-bottom: 10px">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
+        <span class="fa fa-plus mr-3"></span>
+        Add New
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-hover table-responsive">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Normal Organizer</td>
+          <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
+          <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Admin</td>
+          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
+          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Normal Organizer</td>
+          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
+          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- The Modal Add -->
+<div class="modal fade" id="addModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag "#", method: "get" do %>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">New Election</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <div class="form-group">
+          <%= label_tag :name, "Name" %>
+          <%= text_field_tag :name, "", class: "form-control" %>
+        </div>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <%= submit_tag "Submit", class: "btn btn-success" %>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal Edit -->
+<div class="modal fade" id="editModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag "#", method: "get" do %>
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Election</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <div class="form-group">
+          <%= label_tag :name, "Name" %>
+          <%= text_field_tag :name, "", class: "form-control" %>
+        </div>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <%= submit_tag "Save", class: "btn btn-success" %>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal Delete -->
+<div class="modal fade" id="deleteModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Delete Election</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        Are you sure ?
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

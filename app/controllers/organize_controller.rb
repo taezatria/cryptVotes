@@ -2,7 +2,7 @@ class OrganizeController < ApplicationController
   # before_action :check_user_login
 
   def dashboard
-    @menu = 'election'
+    @menu = 'organizer'
     render :dashboard
   end
 
