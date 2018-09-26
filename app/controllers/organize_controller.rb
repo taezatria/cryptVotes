@@ -2,7 +2,8 @@ class OrganizeController < ApplicationController
   # before_action :check_user_login
 
   def dashboard
-    @menu = 'organizer'
+    @menu = 'home'
+    @menu = params[:menu] if params[:menu].present?
     render :dashboard
   end
 
