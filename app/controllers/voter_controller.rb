@@ -1,5 +1,5 @@
-class OrganizeController < ApplicationController
-  # before_action :check_user_login
+class VoterController < ApplicationController
+# before_action :check_user_login
 
   def home
     @menu = 'home'
@@ -36,4 +36,5 @@ class OrganizeController < ApplicationController
       redirect_back fallback_location: root_path
     end
   end
+
 end

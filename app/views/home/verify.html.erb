@@ -1,0 +1,73 @@
+<div class="container" style="margin-top: 3%;">
+  <div class="row">
+    <h1 class="text-center">Universal Ballot Verification</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+    <br />
+    <h4>Transaction Input</h4>
+      <%= form_tag "/home/setup", method: "post" do %>
+        <div class="form-group">
+          <%= label_tag :txid, "Transaction ID" %>
+          <%= text_field_tag :txid, "", class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :blockhash, "Block Hash" %>
+          <small>(Optional)</small>
+          <%= text_field_tag :blockhash, "", class: "form-control" %>
+        </div>
+
+        <%= submit_tag "Submit", class: "btn btn-success btn-block" %>
+      <% end %>
+    </div>
+    <div class="col-md-7">
+    <br />
+    <h4>Detail Transaction</h4>
+      <div class="form-group">
+        <%= label_tag :txhex, "Transaction Hex" %>
+        <%= text_area_tag :txhex, "", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :blockhash, "Included in Block" %>
+        <%= text_area_tag :blockhash, "", class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :mined, "Mined time" %>
+        <%= text_field_tag :mined, "", class: "form-control" %>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= label_tag :size, "Size" %>
+            <%= text_field_tag :size, "", class: "form-control" %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= label_tag :confirmation, "Confirmation" %>
+            <%= text_field_tag :confirmation, "", class: "form-control" %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= label_tag :amount, "Amount" %>
+            <%= text_field_tag :amount, "", class: "form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :fromaddress, "Sender Address" %>
+        <%= text_field_tag :fromaddress, "", class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= label_tag :toaddress, "Receiver Address" %>
+        <%= text_field_tag :toaddress, "", class: "form-control" %>
+      </div>
+    </div>
+  </div>
+</div>

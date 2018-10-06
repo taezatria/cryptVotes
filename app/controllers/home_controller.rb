@@ -16,6 +16,10 @@ class HomeController < ApplicationController
   def register
   end
 
+  def verify
+    render 'verify'
+  end
+
   def login
     redirect_to '/organize'
     # if params[:username].present? && params[:password].present?
