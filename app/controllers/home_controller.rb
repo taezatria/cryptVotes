@@ -2,6 +2,20 @@ class HomeController < ApplicationController
   def index
   end
 
+  def setup_account
+    redirect_to '/home'
+  end
+  
+  def setup
+    render 'setup'
+  end
+
+  def email
+  end
+
+  def register
+  end
+
   def login
     redirect_to '/organize'
     # if params[:username].present? && params[:password].present?

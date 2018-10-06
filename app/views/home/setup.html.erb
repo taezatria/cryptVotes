@@ -1,0 +1,29 @@
+<div class="container" style="margin-top: 5%;">
+  <div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+      <h1 class="text-center">Setting Up Account</h1>
+      <br />
+      <%= form_tag "/home/setup", method: "post" do %>
+        <div class="form-group">
+          <%= label_tag :username, "New Username" %>
+          <%= text_field_tag :username, "", class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :password, "New Password" %>
+          <%= password_field_tag :password, "", class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= label_tag :passphrase, "New Passphrase" %>
+          <%= password_field_tag :passphrase, "", class: "form-control" %>
+          <small class="text text-danger">Note: Your passphrase will used to generate keys and not saved to the system</small>
+        </div>
+
+        <%= submit_tag "Submit", class: "btn btn-success btn-block" %>
+      <% end %>
+    </div>
+  </div>
+</div>

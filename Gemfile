@@ -48,7 +48,7 @@ gem 'foreman'
 gem 'openpgp'
 gem 'execjs'
 gem 'mail'
-gem 'bootstrap'
+gem 'bootstrap', '~> 4.1.3'
 gem 'jquery-rails'
 
 group :development, :test do

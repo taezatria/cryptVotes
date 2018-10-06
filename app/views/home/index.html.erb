@@ -5,14 +5,14 @@
       <h1 class="text-center">Welcome to CryptVotes</h1>
       <br/>
       <div class="col-sm-12">
-        <ul class="nav nav-pills" >
-          <li class="" style="width:50%"><a class="btn btn-lg btn-basic" data-toggle="tab" href="#home">Login</a></li>
-          <li class="" style="width:48%"><a class=" btn btn-lg btn-basic" data-toggle="tab" href="#menu1">Register</a></li>
+        <ul class="nav nav-tabs nav-justified" >
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Login</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu1">Register</a></li>
         </ul>
         <br/>
 
         <div class="tab-content">
-          <div id="home" class="tab-pane fade in active">
+          <div id="home" class="tab-pane fade in active show">
           
             <%= form_tag "/home", method: "post" do %>
               <div class="form-group">
@@ -30,8 +30,34 @@
             <br/>
           </div>
 
+          <div id="register" class="tab-pane fade">
+            <%= form_tag "/home/register", method: "post" do %>
+              <div class="form-group">
+                <%= label_tag :name, "Name" %>
+                <%= text_field_tag :name, "", class: "form-control" %>
+              </div>
+      
+              <div class="form-group">
+                <%= label_tag :idnumber, "ID Number" %>
+                <%= text_field_tag :idnumber, "", class: "form-control" %>
+              </div>
+      
+              <div class="form-group">
+                <%= label_tag :email, "E-mail" %>
+                <%= text_field_tag :email, "", class: "form-control" %>
+              </div>
+      
+              <div class="form-group">
+                <%= label_tag :phone, "Phone Number" %>
+                <%= text_field_tag :phone, "", class: "form-control" %>
+              </div>
+      
+              <%= submit_tag "Submit", class: "btn btn-success btn-block" %>
+            <% end %>
+          </div>
+
           <div id="menu1" class="tab-pane fade">
-            <%= form_tag "#", method: "get" do %>
+            <%= form_tag "/home/email", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :email, "Email" %>
                 <%= email_field_tag :email, "", class: "form-control" %>

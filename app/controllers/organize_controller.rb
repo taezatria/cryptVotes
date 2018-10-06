@@ -4,7 +4,7 @@ class OrganizeController < ApplicationController
   def dashboard
     @menu = 'home'
     @menu = params[:menu] if params[:menu].present?
-    render :dashboard
+    render :home
   end
 
   def change_password
