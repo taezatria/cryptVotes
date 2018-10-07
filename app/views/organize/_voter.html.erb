@@ -13,8 +13,11 @@
       </button>
     </div>
     <div class="col-md-3">
-      <%= file_field_tag "addvoter", class: "form-control-file" %>
-    </div>
+      <div class="custom-file">
+        <%= file_field_tag :addvoter, class: "custom-file-input" %>
+        <%= label_tag :addvoter, "Choose File", class: "custom-file-label" %>
+      </div>
+    </div> 
   </div>
 
   <div class="row">

@@ -13,8 +13,11 @@
       </button>
     </div>
     <div class="col-md-3">
-      <%= file_field_tag "addorganizer", class: "form-control-file" %>
-    </div>
+      <div class="custom-file">
+        <%= file_field_tag :addorganizer, class: "custom-file-input" %>
+        <%= label_tag :addorganizer, "Choose File", class: "custom-file-label" %>
+      </div>
+    </div> 
   </div>
 
   <div class="row">

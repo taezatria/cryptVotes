@@ -114,9 +114,10 @@
             <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
           </div>
           <div class="col-md-6">
-            <div class="form-group">
-              <%= label_tag :image, "Change Image" %>
-              <%= file_field_tag "Image" %>
+            <label>Add Image</label>
+            <div class="custom-file">
+                <%= file_field_tag :image, class: "custom-file-input" %>
+                <%= label_tag :image, "Choose File", class: "custom-file-label" %>
             </div>
           </div>    
         </div>
@@ -187,11 +188,12 @@
             <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
           </div>
           <div class="col-md-6">
-            <div class="form-group">
-              <%= label_tag :image, "Change Image" %>
-              <%= file_field_tag "Image" %>
+            <label>Change Image</label>
+            <div class="custom-file">
+                <%= file_field_tag :image, class: "custom-file-input" %>
+                <%= label_tag :image, "Choose File", class: "custom-file-label" %>
             </div>
-          </div>    
+          </div>   
         </div>
         
       </div>
