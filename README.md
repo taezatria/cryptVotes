@@ -6,6 +6,7 @@
 * ruby-dev ruby-bundler (ruby 2.5.1)
 * gem install rails (rails 5.2.1)
 * **bundle install**
+* create cryptAdmin
 * rake db:create & migrate
 * foreman start
 
