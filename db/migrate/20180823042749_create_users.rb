@@ -9,10 +9,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string "phone", :limit => 20
       t.text "addressKey"
       t.text "publicKey"
-      t.text "privateKey"
-      t.text "signAddress"
-      t.boolean "hasAttend", :default => false
-      t.boolean "hasVote", :default => false
+      t.datetime "deleted_at"
       t.timestamps
     end
   end

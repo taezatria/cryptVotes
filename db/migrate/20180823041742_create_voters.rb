@@ -3,6 +3,10 @@ class CreateVoters < ActiveRecord::Migration[5.2]
     create_table :voters do |t|
       t.references :users
       t.references :elections
+      t.boolean "firstLogin", :default => false
+      t.boolean "hasAttend", :default => false
+      t.boolean "hasVote", :default => false
+      t.datetime "deleted_at"
       t.timestamps
     end
   end

@@ -5,6 +5,7 @@ class CreateCandidates < ActiveRecord::Migration[5.2]
       t.references :elections
       t.text "description"
       t.text "image", :null => false
+      t.datetime "deleted_at"
       t.timestamps
     end
   end

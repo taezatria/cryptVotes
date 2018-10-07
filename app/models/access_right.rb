@@ -1,0 +1,2 @@
+class AccessRight < ApplicationRecord
+end
