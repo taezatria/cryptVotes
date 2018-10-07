@@ -4,7 +4,6 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-    <br />
     <h4>Transaction Input</h4>
       <%= form_tag "/home/setup", method: "post" do %>
         <div class="form-group">
@@ -30,8 +29,8 @@
       </div>
 
       <div class="form-group">
-        <%= label_tag :blockhash, "Included in Block" %>
-        <%= text_area_tag :blockhash, "", class: "form-control" %>
+        <%= label_tag :blockhash1, "Included in Block" %>
+        <%= text_area_tag :blockhash1, "", class: "form-control" %>
       </div>
 
       <div class="form-group">
