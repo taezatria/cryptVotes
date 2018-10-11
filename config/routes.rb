@@ -3,11 +3,13 @@ Rails.application.routes.draw do
   root 'home#index'
   post 'home', to: 'home#login'
   post 'home/email', to: 'home#email'
-  post 'home/register', to: 'home#register'
   get 'home/:id/setup', to: 'home#setup'
   post 'home/setup', to: 'home#setup_account'
   get 'home/verify', to: 'home#verify'
   get 'home/verify/:id', to: 'home#verify'
+
+  get 'home/result', to: 'home#result'
+  get 'home/result/:id', to:'home#result'
 
   get 'organize', to: 'organize#home'
   get 'organize/logout', to: 'organize#logout'

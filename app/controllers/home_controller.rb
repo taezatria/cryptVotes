@@ -13,9 +13,6 @@ class HomeController < ApplicationController
   def email
   end
 
-  def register
-  end
-
   def verify
     render 'verify'
   end
@@ -32,5 +29,19 @@ class HomeController < ApplicationController
     #     redirect_back fallback_location: root_path
     #   end
     # end
+  end
+
+  def result
+    if params[:id].present?
+      @dummy = {
+        "Abang Randi" => 10,
+        "Bung Hassa" => 5,
+        "Om Toddi" => 15,
+        "Abstance" => 3
+      }
+      render 'viewresult'
+    else
+      render 'result'
+    end
   end
 end
