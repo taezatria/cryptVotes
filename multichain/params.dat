@@ -15,14 +15,14 @@ chain-description = cryptVotes blockchain. e-voting # Chain description, embedde
 root-stream-name = root                 # Root stream name, blank means no root stream.
 root-stream-open = true                 # Allow anyone to publish in root stream
 chain-is-testnet = false                # Content of the 'testnet' field of API responses, for compatibility.
-target-block-time = 1500                # Target time between blocks (transaction confirmation delay), seconds. (2 - 86400)
-maximum-block-size = 1000000000         # Maximum block size in bytes. (1000 - 1000000000)
+target-block-time = 900                 # Target time between blocks (transaction confirmation delay), seconds. (2 - 86400)
+maximum-block-size = 1000000            # Maximum block size in bytes. (1000 - 1000000000)
 
 # Global permissions
 
 anyone-can-connect = true               # Anyone can connect, i.e. a publicly readable blockchain.
 anyone-can-send = false                 # Anyone can send, i.e. transaction signing not restricted by address.
-anyone-can-receive = false              # Anyone can receive, i.e. transaction outputs not restricted by address.
+anyone-can-receive = true               # Anyone can receive, i.e. transaction outputs not restricted by address.
 anyone-can-receive-empty = true         # Anyone can receive empty output, i.e. without permission grants, asset transfers and zero native currency.
 anyone-can-create = false               # Anyone can create new streams.
 anyone-can-issue = false                # Anyone can issue new native assets.
@@ -38,7 +38,7 @@ allow-multisig-outputs = true           # Allow bare multisignature scripts, rar
 
 setup-first-blocks = 60                 # Length of initial setup phase in blocks, in which mining-diversity,
                                         # admin-consensus-* and mining-requires-peers are not applied. (1 - 31536000)
-mining-diversity = 0.4                  # Miners must wait <mining-diversity>*<active miners> between blocks. (0 - 1)
+mining-diversity = 0.5                  # Miners must wait <mining-diversity>*<active miners> between blocks. (0 - 1)
 admin-consensus-upgrade = 0.5           # <admin-consensus-upgrade>*<active admins> needed to upgrade the chain. (0 - 1)
 admin-consensus-admin = 0.5             # <admin-consensus-admin>*<active admins> needed to change admin perms. (0 - 1)
 admin-consensus-activate = 0.5          # <admin-consensus-activate>*<active admins> to change activate perms. (0 - 1)
@@ -49,7 +49,7 @@ admin-consensus-issue = 0.0             # <admin-consensus-issue>*<active admins
 # Defaults for node runtime parameters
 
 lock-admin-mine-rounds = 10             # Ignore forks that reverse changes in admin or mine permissions after this many mining rounds have passed. Integer only. (0 - 10000)
-mining-requires-peers = true            # Nodes only mine blocks if connected to other nodes (ignored if only one permitted miner).
+mining-requires-peers = false           # Nodes only mine blocks if connected to other nodes (ignored if only one permitted miner).
 mine-empty-rounds = 10                  # Mine this many rounds of empty blocks before pausing to wait for new transactions. If negative, continue indefinitely (ignored if target-adjust-freq>0). Non-integer allowed. (-1 - 1000)
 mining-turnover = 0.5                   # Prefer pure round robin between a subset of active miners to minimize forks (0.0) or random equal participation for all permitted miners (1.0). (0 - 1)
 
@@ -68,8 +68,8 @@ native-currency-multiple = 100000000    # Number of raw units of native currency
 # Advanced mining parameters
 
 skip-pow-check = false                  # Skip checking whether block hashes demonstrate proof of work.
-pow-minimum-bits = 8                    # Initial and minimum proof of work difficulty, in leading zero bits. (1 - 32)
-target-adjust-freq = 1209600            # Interval between proof of work difficulty adjustments, in seconds, if negative - never adjusted. (-1 - 4294967295)
+pow-minimum-bits = 16                   # Initial and minimum proof of work difficulty, in leading zero bits. (1 - 32)
+target-adjust-freq = 3600               # Interval between proof of work difficulty adjustments, in seconds, if negative - never adjusted. (-1 - 4294967295)
 allow-min-difficulty-blocks = true      # Allow lower difficulty blocks if none after 2*<target-block-time>.
 
 # Standard transaction definitions
@@ -105,4 +105,3 @@ genesis-nonce = [null]                  # Genesis block nonce.
 genesis-pubkey-hash = [null]            # Genesis block coinbase output public key hash.
 genesis-hash = [null]                   # Genesis block hash.
 chain-params-hash = [null]              # Hash of blockchain parameters, to prevent accidental changes.
-
