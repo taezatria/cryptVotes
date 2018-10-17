@@ -3,7 +3,7 @@
 ### **Requirements** :
 * build-essential patch nodejs zlib1g-dev liblzma-dev libsqlite3-dev
 * mysql-server mysql-client libmysqlclient-dev (root password and skip-grant-tables)
-* ruby-dev ruby-bundler (ruby 2.5.1)
+* ruby-dev ruby-bundler redis-server (ruby 2.5.1)
 * gem install rails (rails 5.2.1)
 * **bundle install**
 * create cryptAdmin on MySQL

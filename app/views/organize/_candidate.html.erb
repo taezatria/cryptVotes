@@ -5,6 +5,10 @@
 
   <div class="row" style="margin-bottom: 10px">
     <div class="col-md-7">
+      <div class="form-inline">
+        <%= text_field_tag :search, "", class: "form-control mr-3" %>
+        <%= button_tag "Search", class: "btn btn-basic" %>
+      </div>
     </div>
     <div class="col-md-2">
       <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
@@ -30,44 +34,24 @@
           <th>ID Number</th>
           <th>E-mail</th>
           <th>Username</th>
-          <th>Description</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
+<% all_candidates.each do |candidate| %>
         <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>Candidate pertama</td>
+  <% candidate(candidate.id).each do |cand| %>
+          <td><%= candidate.id %></td>
+          <td><%= cand.election_id %></td>
+          <td><%= candidate.name %></td>
+          <td><%= candidate.idNumber %></td>
+          <td><%= candidate.email %></td>
+          <td><%= candidate.username %></td>
           <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
           <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
+  <% end %>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>Candidate pertama</td>
-          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>Candidate pertama</td>
-          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
-        </tr>
+<% end %>
       </tbody>
     </table>
   </div>

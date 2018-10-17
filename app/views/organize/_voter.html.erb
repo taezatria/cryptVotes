@@ -5,6 +5,10 @@
 
   <div class="row" style="margin-bottom: 10px">
     <div class="col-md-7">
+      <div class="form-inline">
+        <%= text_field_tag :search, "", class: "form-control mr-3" %>
+        <%= button_tag "Search", class: "btn btn-basic" %>
+      </div>
     </div>
     <div class="col-md-2">
       <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
@@ -37,45 +41,23 @@
         </tr>
       </thead>
       <tbody>
+<% all_voters.each do |voter| %>
         <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>1</td>
-          <td>1</td>
-          <td>1</td>
+  <% voter(voter.id).each do |vot| %>
+          <td><%= voter.id %></td>
+          <td><%= vot.election_id %></td>
+          <td><%= voter.name %></td>
+          <td><%= voter.idNumber %></td>
+          <td><%= voter.email %></td>
+          <td><%= voter.username %></td>
+          <td><%= vot.firstLogin %></td>
+          <td><%= vot.hasAttend %></td>
+          <td><%= vot.hasVote %></td>
           <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
           <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
+  <% end %>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>1</td>
-          <td>1</td>
-          <td>1</td>
-          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>1</td>
-          <td>Jane Dore</td>
-          <td>3201051406982350</td>
-          <td>janedore@email.com</td>
-          <td>janedore</td>
-          <td>1</td>
-          <td>1</td>
-          <td>1</td>
-          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
-        </tr>
+<% end %>
       </tbody>
     </table>
   </div>

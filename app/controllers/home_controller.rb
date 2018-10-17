@@ -7,14 +7,14 @@ class HomeController < ApplicationController
   end
   
   def setup
-    render 'setup'
+    render :setup
   end
 
   def email
   end
 
   def verify
-    render 'verify'
+    render :verify
   end
 
   def login
@@ -43,9 +43,9 @@ class HomeController < ApplicationController
         "Om Toddi" => 15,
         "Abstance" => 3
       }
-      render 'viewresult'
+      render :viewresult
     else
-      render 'result'
+      render :result
     end
   end
 end

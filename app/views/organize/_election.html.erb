@@ -5,6 +5,10 @@
 
   <div class="row" style="margin-bottom: 10px">
     <div class="col-md-10">
+      <div class="form-inline">
+        <%= text_field_tag :search, "", class: "form-control mr-3" %>
+        <%= button_tag "Search", class: "btn btn-basic" %>
+      </div>
     </div>
     <div class="col-md-2">
       <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
@@ -26,35 +30,17 @@
         </tr>
       </thead>
       <tbody>
+<% all_elections.each do |election| %>
         <tr>
-          <td>Ketua HIMAINFRA 2018</td>
-          <td>Pemilihan ketua himpunan mahasiswa infor SIB 2018</td>
-          <td>5 October 2018</td>
-          <td>8 October 2018</td>
-          <td>189</td>
-          <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
-        </tr>
-        <tr>
-          <td>Ketua BEM 2018</td>
-          <td>Pemilihan ketua Badan Eksekutif Mahasiswa periode 2018</td>
-          <td>5 October 2018</td>
-          <td>8 October 2018</td>
-          <td>2235</td>
-          <td>
-          <button class="btn btn-success">Count</button>
-          <button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
-        </tr>
-        <tr>
-          <td>BPMF 2018</td>
-          <td>Pemilihan pengurus BPMF 2018</td>
-          <td>5 October 2018</td>
-          <td>8 October 2018</td>
-          <td>478</td>
+          <td><%= election.name %></td>
+          <td><%= election.description %></td>
+          <td><%= election.start_date.strftime("%A, %d %B %Y") %></td>
+          <td><%= election.end_date.strftime("%A, %d %B %Y") %></td>
+          <td><%= election.participants %></td>
           <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
           <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
         </tr>
+<% end %>
       </tbody>
     </table>
   </div>

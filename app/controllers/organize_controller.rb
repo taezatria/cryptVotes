@@ -2,9 +2,14 @@ class OrganizeController < ApplicationController
   before_action :check_user_login
 
   def home
+    @status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
     @menu = 'home'
     @menu = params[:menu] if params[:menu].present?
-    @status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
+    if @status == 1 
+      @menu = 'home' unless ["voter", "candidate"].include? @menu
+    elsif @status == -1
+      @menu = 'home' unless ["access_right", "election", "organizer"].include? @menu
+    end
     render :home
   end
 
