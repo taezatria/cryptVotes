@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string "phone", :limit => 20
       t.text "addressKey"
       t.text "publicKey"
+      t.text "privateKey"
       t.datetime "deleted_at"
       t.timestamps
     end

@@ -1,4 +1,4 @@
 class Candidate < ApplicationRecord
-  belongs_to :users
-  belongs_to :elections
+  belongs_to :user
+  belongs_to :election
 end

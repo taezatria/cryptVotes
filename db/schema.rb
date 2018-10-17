@@ -12,33 +12,33 @@
 
 ActiveRecord::Schema.define(version: 2018_10_07_075649) do
 
-  create_table "access_rights", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "access_rights", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "address_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "address_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "address", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "candidates", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.bigint "users_id"
-    t.bigint "elections_id"
+  create_table "candidates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "election_id"
     t.text "description"
     t.text "image", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["elections_id"], name: "index_candidates_on_elections_id"
-    t.index ["users_id"], name: "index_candidates_on_users_id"
+    t.index ["election_id"], name: "index_candidates_on_election_id"
+    t.index ["user_id"], name: "index_candidates_on_user_id"
   end
 
-  create_table "elections", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "elections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.text "description"
     t.datetime "start_date", null: false
@@ -50,31 +50,31 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "organizers", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.bigint "users_id"
-    t.bigint "elections_id"
-    t.bigint "access_rights_id"
+  create_table "organizers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "election_id"
+    t.bigint "access_right_id"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["access_rights_id"], name: "index_organizers_on_access_rights_id"
-    t.index ["elections_id"], name: "index_organizers_on_elections_id"
-    t.index ["users_id"], name: "index_organizers_on_users_id"
+    t.index ["access_right_id"], name: "index_organizers_on_access_right_id"
+    t.index ["election_id"], name: "index_organizers_on_election_id"
+    t.index ["user_id"], name: "index_organizers_on_user_id"
   end
 
-  create_table "transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.bigint "users_id"
-    t.bigint "elections_id"
-    t.text "txid"
-    t.text "digSign"
+  create_table "transactions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "election_id"
+    t.text "txid", null: false
+    t.text "digSign", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["elections_id"], name: "index_transactions_on_elections_id"
-    t.index ["users_id"], name: "index_transactions_on_users_id"
+    t.index ["election_id"], name: "index_transactions_on_election_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 
-  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "idNumber", limit: 20, null: false
     t.string "email", limit: 50, null: false
@@ -83,12 +83,13 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.string "phone", limit: 20
     t.text "addressKey"
     t.text "publicKey"
+    t.text "privateKey"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "vote_results", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "vote_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "hex"
     t.text "blockHash"
     t.text "txid"
@@ -101,17 +102,17 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "voters", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.bigint "users_id"
-    t.bigint "elections_id"
+  create_table "voters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "election_id"
     t.boolean "firstLogin", default: false
     t.boolean "hasAttend", default: false
     t.boolean "hasVote", default: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["elections_id"], name: "index_voters_on_elections_id"
-    t.index ["users_id"], name: "index_voters_on_users_id"
+    t.index ["election_id"], name: "index_voters_on_election_id"
+    t.index ["user_id"], name: "index_voters_on_user_id"
   end
 
 end

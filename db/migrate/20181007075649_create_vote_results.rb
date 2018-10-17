@@ -1,5 +1,5 @@
 class CreateVoteResults < ActiveRecord::Migration[5.2]
-  def change
+  def up
     create_table :vote_results do |t|
       t.text "hex"
       t.text "blockHash"
@@ -11,5 +11,9 @@ class CreateVoteResults < ActiveRecord::Migration[5.2]
       t.datetime "deleted_at"
       t.timestamps
     end
+  end
+
+  def down
+    drop_table :vote_results
   end
 end
