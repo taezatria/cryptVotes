@@ -28,7 +28,7 @@
           <span class="menu-collapsed">Dashboard</span>
         </div>
       </a>
-      
+<% if @status == -1 %>
       <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start toggle-icon">
         <div class="d-flex w-100 justify-content-start align-items-center">
           <span class="fa fa-key fa-fw mr-3"></span>
@@ -36,7 +36,7 @@
           <span class="fa fa-chevron-down fa-fw mr-3 ml-auto"></span>
         </div>
       </a>
-      
+
       <div id="submenu2" class="collapse sidebar-submenu">
         <a href="/organize?menu=election" class="list-group-item list-group-item-action bg-dark text-white">
           <span class="fa fa-tasks fa-fw mr-3"></span>
@@ -51,7 +51,7 @@
           <span class="menu-collapsed">Access Rights</span>
         </a>
       </div> 
-
+<% elsif @status == 1 %>
       <a href="/organize?menu=voter" class="bg-dark list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-start align-items-center">
           <span class="fa fa-users fa-fw mr-3"></span>
@@ -64,7 +64,7 @@
           <span class="menu-collapsed">Candidates</span>
         </div>
       </a>
-
+<% end %>
       <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed" style="background-color: #333;">
         <small>OPTIONS</small>
       </li>

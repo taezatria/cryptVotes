@@ -1,9 +1,10 @@
 class OrganizeController < ApplicationController
-  # before_action :check_user_login
+  before_action :check_user_login
 
   def home
     @menu = 'home'
     @menu = params[:menu] if params[:menu].present?
+    @status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
     render :home
   end
 
@@ -22,7 +23,7 @@ class OrganizeController < ApplicationController
   end
 
   def logout
-    # $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
     reset_session
     flash[:notice] = "You've been logged out"
     redirect_to root_path

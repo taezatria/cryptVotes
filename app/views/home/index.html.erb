@@ -1,6 +1,10 @@
 <div class="container" style="margin-top: 5%;">
   <div class="row">
-    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+<% if flash[:error].present? %>
+  <%= flash[:error] %>
+<% end %>
+    </div>
     <div class="col-md-4">
       <h1 class="text-center">Welcome to CryptVotes</h1>
       <br/>
@@ -10,7 +14,6 @@
           <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regisemail">Register</a></li>
         </ul>
         <br/>
-
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active show">
           
