@@ -78,9 +78,9 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.string "name", limit: 50, null: false
     t.string "idNumber", limit: 20, null: false
     t.string "email", limit: 50, null: false
-    t.string "username", limit: 20, null: false
-    t.text "password", null: false
-    t.string "phone", limit: 20
+    t.string "username"
+    t.text "password"
+    t.string "phone", limit: 20, null: false
     t.text "addressKey"
     t.text "publicKey"
     t.text "privateKey"

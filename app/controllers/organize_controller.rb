@@ -1,15 +1,11 @@
 class OrganizeController < ApplicationController
   before_action :check_user_login
+  skip_before_action :verify_authenticity_token
 
   def home
-    @status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
-    @menu = 'home'
-    @menu = params[:menu] if params[:menu].present?
-    if @status == 1 
-      @menu = 'home' unless ["voter", "candidate"].include? @menu
-    elsif @status == -1
-      @menu = 'home' unless ["access_right", "election", "organizer"].include? @menu
-    end
+    @status = role_user
+    @menu = params[:menu].present? ? params[:menu] : 'home'
+    @menu = display_menu(@menu, @status)
     render :home
   end
 
@@ -34,6 +30,23 @@ class OrganizeController < ApplicationController
     redirect_to root_path
   end
 
+  def add
+    new_user = User.create(name: params[:name], idNumber: params[:id_number], email: params[:email], phone: params[:phone]);
+    if params[:menu] == 'organizer'
+      Organizer.create(user: new_user, election: Election.first, access_right_id: params[:access_right_id])
+    end
+    @status = role_user
+    @menu = params[:menu].present? ? params[:menu] : 'home'
+    @menu = display_menu(@menu, @status)
+    render :home
+  end
+
+  def get_data
+    user = User.find(params[:id])
+    org = Organizer.where(user_id: user.id, deleted_at: nil)
+    render :json => { user: user, organizer: org }
+  end
+
   private
 
   def check_user_login
@@ -41,5 +54,18 @@ class OrganizeController < ApplicationController
       flash[:error] = "You must login first !"
       redirect_back fallback_location: root_path
     end
+  end
+
+  def role_user
+    $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
+  end
+
+  def display_menu(menu, status)
+    if status == 1 
+      menu = 'home' unless ["voter", "candidate"].include? menu
+    elsif status == -1
+      menu = 'home' unless ["access_right", "election", "organizer"].include? menu
+    end
+    menu
   end
 end

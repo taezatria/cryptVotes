@@ -21,7 +21,7 @@
           <%= password_field_tag :passphrase, "", class: "form-control" %>
           <small class="text text-danger">Note: Your passphrase will used to generate keys and not saved to the system</small>
         </div>
-
+        <input type="hidden" name="user_id" id="user_id" value="<%= @user_id %>">
         <%= submit_tag "Submit", class: "btn btn-success btn-block" %>
       <% end %>
     </div>

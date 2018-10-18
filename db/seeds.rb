@@ -10,6 +10,7 @@ admin = User.create(
   name: "Admin CryptVotes",
   idNumber: "1234567890",
   email: "admin@cryptvotes.com",
+  phone: "000-1234567",
   username: "cryptadmin",
   password: "cryptadmin"
 )

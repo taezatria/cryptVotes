@@ -40,8 +40,8 @@
       </thead>
       <tbody>
 <% all_organizers.each do |organizer| %>
-        <tr>
   <% organizer(organizer.id).each do |org| %>
+        <tr>
           <td><%= organizer.id %></td>
           <td><%= org.election_id %></td>
           <td><%= org.access_right_id %></td>
@@ -49,10 +49,11 @@
           <td><%= organizer.idNumber %></td>
           <td><%= organizer.email %></td>
           <td><%= organizer.username %></td>
-          <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
+          <td><button class="btn btn-secondary" id="modalEditButton" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
+          <input type="hidden" id="organizer_id" value="<%= organizer.id %>">
           <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
-  <% end %>
         </tr>
+  <% end %>
 <% end %>
       </tbody>
     </table>
@@ -63,29 +64,23 @@
 <div class="modal fade" id="addModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/add", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">New Organizer</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-
+        
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :user_id, "User ID" %>
-              <%= text_field_tag :user_id, "", class: "form-control" %>
-            </div>
-          </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :election_id, "Election ID" %>
               <%= text_field_tag :election_id, "", class: "form-control" %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :access_right_id, "Access Right ID" %>
               <%= text_field_tag :access_right_id, "", class: "form-control" %>
@@ -122,7 +117,8 @@
             </div>
           </div>
         </div>
-        
+        <%= hidden_field_tag 'menu', 'organizer' %>
+
       </div>
 
       <!-- Modal footer -->

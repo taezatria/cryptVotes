@@ -4,9 +4,9 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string "name", :limit => 50, :null => false
       t.string "idNumber", :limit => 20, :null => false
       t.string "email", :limit => 50, :null => false
-      t.string "username", :limit => 20, :null => false
-      t.text "password", :null => false
-      t.string "phone", :limit => 20
+      t.string "username"
+      t.text "password"
+      t.string "phone", :limit => 20, :null => false
       t.text "addressKey"
       t.text "publicKey"
       t.text "privateKey"
