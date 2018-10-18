@@ -42,6 +42,9 @@
 <% all_organizers.each do |organizer| %>
   <% organizer(organizer.id).each do |org| %>
         <tr>
+        <input type="hidden" id="menu" value="organizer">
+        <input type="hidden" id="user_id" value="<%= organizer.id %>">
+        <input type="hidden" id="other_id" value="<%= org.id %>">
           <td><%= organizer.id %></td>
           <td><%= org.election_id %></td>
           <td><%= org.access_right_id %></td>
@@ -50,8 +53,8 @@
           <td><%= organizer.email %></td>
           <td><%= organizer.username %></td>
           <td><button class="btn btn-secondary" id="modalEditButton" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
-          <input type="hidden" id="organizer_id" value="<%= organizer.id %>">
-          <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
+          
+          <button class="btn btn-dark" id="modalDeleteButton" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
         </tr>
   <% end %>
 <% end %>
@@ -76,29 +79,14 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :election_id, "Election ID" %>
-              <%= text_field_tag :election_id, "", class: "form-control" %>
+              <%= label_tag :add_election_id, "Election ID" %>
+              <%= text_field_tag :add_election_id, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :access_right_id, "Access Right ID" %>
-              <%= text_field_tag :access_right_id, "", class: "form-control" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <%= label_tag :name, "Name" %>
-              <%= text_field_tag :name, "", class: "form-control" %>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <%= label_tag :id_number, "ID Number" %>
-              <%= text_field_tag :id_number, "", class: "form-control" %>
+              <%= label_tag :add_access_right_id, "Access Right ID" %>
+              <%= text_field_tag :add_access_right_id, "", class: "form-control" %>
             </div>
           </div>
         </div>
@@ -106,14 +94,29 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :email, "E-mail" %>
-              <%= text_field_tag :email, "", class: "form-control" %>
+              <%= label_tag :add_name, "Name" %>
+              <%= text_field_tag :add_name, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :phone, "Phone Number" %>
-              <%= text_field_tag :phone, "", class: "form-control" %>
+              <%= label_tag :add_id_number, "ID Number" %>
+              <%= text_field_tag :add_id_number, "", class: "form-control" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= label_tag :add_email, "E-mail" %>
+              <%= text_field_tag :add_email, "", class: "form-control" %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= label_tag :add_phone, "Phone Number" %>
+              <%= text_field_tag :add_phone, "", class: "form-control" %>
             </div>
           </div>
         </div>
@@ -135,7 +138,7 @@
 <div class="modal fade" id="editModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/alter", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Edit Organizer</h4>
@@ -147,41 +150,20 @@
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :user_id, "User ID" %>
-              <%= text_field_tag :user_id, "", class: "form-control" %>
+              <%= label_tag :edit_user_id, "User ID" %>
+              <%= text_field_tag :edit_user_id, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :election_id, "Election ID" %>
-              <%= text_field_tag :election_id, "", class: "form-control" %>
+              <%= label_tag :edit_election_id, "Election ID" %>
+              <%= text_field_tag :edit_election_id, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :access_right_id, "Access Right ID" %>
-              <%= text_field_tag :access_right_id, "", class: "form-control" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :name, "Name" %>
-              <%= text_field_tag :name, "", class: "form-control" %>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :id_number, "ID Number" %>
-              <%= text_field_tag :id_number, "", class: "form-control" %>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :phone, "Phone Number" %>
-              <%= text_field_tag :phone, "", class: "form-control" %>
+              <%= label_tag :edit_access_right_id, "Access Right ID" %>
+              <%= text_field_tag :edit_access_right_id, "", class: "form-control" %>
             </div>
           </div>
         </div>
@@ -189,14 +171,20 @@
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :email, "E-mail" %>
-              <%= text_field_tag :email, "", class: "form-control" %>
+              <%= label_tag :edit_name, "Name" %>
+              <%= text_field_tag :edit_name, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :username, "Username" %>
-              <%= text_field_tag :username, "", class: "form-control" %>
+              <%= label_tag :edit_id_number, "ID Number" %>
+              <%= text_field_tag :edit_id_number, "", class: "form-control" %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :edit_phone, "Phone Number" %>
+              <%= text_field_tag :edit_phone, "", class: "form-control" %>
             </div>
           </div>
         </div>
@@ -204,14 +192,29 @@
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :address, "Blockchain Address" %>
-              <%= text_field_tag :address, "", class: "form-control", readonly: true %>
+              <%= label_tag :edit_email, "E-mail" %>
+              <%= text_field_tag :edit_email, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :public_key, "Blockchain Public Key" %>
-              <%= text_field_tag :public_key, "", class: "form-control", readonly: true %>
+              <%= label_tag :edit_username, "Username" %>
+              <%= text_field_tag :edit_username, "", class: "form-control" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :edit_address, "Blockchain Address" %>
+              <%= text_field_tag :edit_address, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :edit_public_key, "Blockchain Public Key" %>
+              <%= text_field_tag :edit_public_key, "", class: "form-control", readonly: true %>
             </div>
           </div>
           <div class="col-md-4">
@@ -220,7 +223,8 @@
             </div>
           </div>
         </div>
-        
+        <input type="hidden" name="edit_org_id" id="edit_org_id">
+        <%= hidden_field_tag 'menu', 'organizer' %>
       </div>
 
       <!-- Modal footer -->
@@ -237,7 +241,7 @@
 <div class="modal fade" id="deleteModal">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-
+      <%= form_tag "organize/discard", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Delete Organizer</h4>
@@ -247,14 +251,16 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
+        <input type="hidden" name="delete_org_id" id="delete_org_id">
+        <%= hidden_field_tag 'menu', 'organizer' %>
       </div>
-
+      
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <%= submit_tag "Delete", class: "btn btn-danger" %>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
-
+      <% end %>
     </div>
   </div>
 </div>

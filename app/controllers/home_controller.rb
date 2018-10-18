@@ -1,13 +1,35 @@
 class HomeController < ApplicationController
+
   def index
   end
 
   def setup_account
+    if User.setupAcc(params[:user_id], params[:username], params[:password])
+      flash[:notice] = "successfully"
+    else
+      flash[:alert] = "failed"
+    end
     redirect_to '/home'
   end
   
   def setup
-    render :setup
+    user = User.find_by(id: params[:id], approved: true, firstLogin: true, deleted_at: nil)
+    if user.present?
+      @user_id = user.id
+      render :setup
+    else
+      redirect_to root_path
+    end
+  end
+
+  def register
+    User.create(
+      name: params[:name],
+      idNumber: params[:idnumber],
+      email: params[:email],
+      phone: params[:phone]
+    )
+    redirect_to :home
   end
 
   def email

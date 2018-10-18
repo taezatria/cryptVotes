@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.text "addressKey"
     t.text "publicKey"
     t.text "privateKey"
+    t.boolean "approved", default: false
+    t.boolean "firstLogin", default: true
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -105,7 +107,6 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
   create_table "voters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "election_id"
-    t.boolean "firstLogin", default: false
     t.boolean "hasAttend", default: false
     t.boolean "hasVote", default: false
     t.datetime "deleted_at"

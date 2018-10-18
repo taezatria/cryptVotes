@@ -7,7 +7,7 @@ class User < ApplicationRecord
   has_many :transactions
 
   def self.login(username, password)
-    user = User.find_by(username: username, password: password)
+    user = User.find_by(username: username, password: password, approved: true, firstLogin: false, deleted_at: nil)
     
     if user.present?
       organizer = Organizer.find_by(user_id: user.id)
@@ -33,5 +33,28 @@ class User < ApplicationRecord
       user.password = password
       user.save
     end
+  end
+
+  def self.approve(user_id)
+    user = User.find(user_id)
+    user.approved = true
+    user.save
+  end
+
+  def self.setupAcc(id, username, password)
+    the_user = User.find(id)
+    if the_user.present?
+      the_user.username = username.downcase
+      the_user.password = Digest::MD5.hexdigest(password)
+      the_user.save
+    else
+      false
+    end
+  end
+
+  def self.discard(id)
+    user = User.find(id)
+    user.deleted_at = DateTime.now
+    user.save
   end
 end

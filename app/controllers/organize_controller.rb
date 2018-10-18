@@ -31,20 +31,57 @@ class OrganizeController < ApplicationController
   end
 
   def add
-    new_user = User.create(name: params[:name], idNumber: params[:id_number], email: params[:email], phone: params[:phone]);
+    new_user = User.create(
+      name: params[:add_name], 
+      idNumber: params[:add_id_number], 
+      email: params[:add_email], 
+      phone: params[:add_phone],
+      approved: true
+    )
     if params[:menu] == 'organizer'
-      Organizer.create(user: new_user, election: Election.first, access_right_id: params[:access_right_id])
+      Organizer.create(
+        user: new_user, 
+        election_id: params[:add_election_id], 
+        access_right_id: params[:add_access_right_id]
+      )
     end
-    @status = role_user
-    @menu = params[:menu].present? ? params[:menu] : 'home'
-    @menu = display_menu(@menu, @status)
-    render :home
+    redirect_to organize_path(menu: params[:menu])
   end
 
   def get_data
-    user = User.find(params[:id])
-    org = Organizer.where(user_id: user.id, deleted_at: nil)
-    render :json => { user: user, organizer: org }
+    user = User.find_by(id: params[:user_id], deleted_at: nil)
+    if params[:menu] == 'organizer'
+      other = Organizer.find_by(id: params[:other_id], deleted_at: nil)
+    elsif params[:menu] == 'candidate'
+      other = Candidate.find_by(id: params[:other_id], deleted_at: nil)
+    elsif params[:menu] == 'voter'
+      other = Voter.find_by(id: params[:other_id], deleted_at: nil)
+    else
+      user = nil
+      other = nil
+    end
+    render :json => { user: user, other: other }
+  end
+
+  def alter
+    the_user = User.find(params[:edit_user_id])
+    the_user.email = params[:edit_email]
+    the_user.username = params[:edit_username]
+    the_user.save
+    if params[:menu] == 'organizer'
+      org = Organizer.find(params[:edit_org_id])
+      org.election_id = params[:edit_election_id]
+      org.access_right_id = params[:edit_access_right_id]
+      org.save
+    end
+    redirect_to organize_path(menu: params[:menu])
+  end
+
+  def discard
+    if params[:menu] == 'organizer'
+      Organizer.discard(params[:delete_org_id])
+    end
+    redirect_to organize_path(menu: params[:menu])
   end
 
   private

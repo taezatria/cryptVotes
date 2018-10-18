@@ -10,6 +10,8 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.text "addressKey"
       t.text "publicKey"
       t.text "privateKey"
+      t.boolean "approved", :default => false
+      t.boolean "firstLogin", :default => true
       t.datetime "deleted_at"
       t.timestamps
     end
