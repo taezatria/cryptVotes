@@ -35,7 +35,6 @@
           <th>ID Number</th>
           <th>E-mail</th>
           <th>Username</th>
-          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -52,9 +51,6 @@
           <td><%= organizer.idNumber %></td>
           <td><%= organizer.email %></td>
           <td><%= organizer.username %></td>
-          <td><button class="btn btn-secondary" id="modalEditButton" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
-          
-          <button class="btn btn-dark" id="modalDeleteButton" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
         </tr>
   <% end %>
 <% end %>
@@ -79,14 +75,22 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :add_election_id, "Election ID" %>
-              <%= text_field_tag :add_election_id, "", class: "form-control" %>
+              <%= label_tag :add_election_id, "Election" %>
+              <select name="add_election_id" id="add_election_id" class="custom-select">
+                <% all_elections.each do |election| %>
+                <option value="<%= election.id %>"><%= election.name =%></option>
+                <% end %>
+              </select>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :add_access_right_id, "Access Right ID" %>
-              <%= text_field_tag :add_access_right_id, "", class: "form-control" %>
+              <%= label_tag :add_access_right_id, "Access Right" %>
+              <select name="add_access_right_id" id="add_access_right_id" class="custom-select">
+<% all_access_rights.each do |access_right| %>
+                <option value="<%= access_right.id %>"><%= access_right.name =%></option>
+<% end %>
+              </select>
             </div>
           </div>
         </div>
@@ -156,14 +160,22 @@
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :edit_election_id, "Election ID" %>
-              <%= text_field_tag :edit_election_id, "", class: "form-control" %>
+              <%= label_tag :edit_election_id, "Election" %>
+              <select name="edit_election_id" id="edit_election_id" class="custom-select">
+                <% all_elections.each do |election| %>
+                <option value="<%= election.id %>"><%= election.name =%></option>
+                <% end %>
+              </select>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
-              <%= label_tag :edit_access_right_id, "Access Right ID" %>
-              <%= text_field_tag :edit_access_right_id, "", class: "form-control" %>
+              <%= label_tag :edit_access_right_id, "Access Right" %>
+              <select name="edit_access_right_id" id="edit_access_right_id" class="custom-select">
+<% all_access_rights.each do |access_right| %>
+                <option value="<%= access_right.id %>"><%= access_right.name =%></option>
+<% end %>
+              </select>
             </div>
           </div>
         </div>
@@ -229,8 +241,9 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
+        <button class="btn btn-danger" id="modalDeleteButton" data-dismiss="modal" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span> Delete</button>
         <%= submit_tag "Save", class: "btn btn-success" %>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
       <% end %>
     </div>

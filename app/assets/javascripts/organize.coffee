@@ -3,9 +3,10 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
-  $("tr").on "click", "#modalEditButton", ->
+  $("tr").click ->
+    $("#delete_org_id").val($(this).children("#other_id").val());
     $.ajax
-      url: 'organize/'+$(this).siblings("#menu").val()+'/'+$(this).siblings("#user_id").val()+'/'+$(this).siblings("#other_id").val()
+      url: 'organize/'+$(this).children("#menu").val()+'/'+$(this).children("#user_id").val()+'/'+$(this).children("#other_id").val()
       method: 'get'
       dataType: 'json'
       success: (data) ->
@@ -20,6 +21,4 @@ $(document).ready ->
         $("#edit_username").val(data.user.username);
         $("#edit_address").val(data.user.address);
         $("#edit_public_key").val(data.user.publicKey);
-
-  $("tr").on "click", "#modalDeleteButton", ->
-    $("#delete_org_id").val($(this).siblings("#other_id").val());
+    $("#editModal").modal('show');
