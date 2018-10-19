@@ -6,7 +6,7 @@
   <div class="row" style="margin-bottom: 10px">
     <div class="col-md-7">
       <div class="form-inline">
-        <%= text_field_tag :search, "", class: "form-control mr-3" %>
+        <%= text_field_tag :search, "", class: "form-control mr-3", placeholder: "Name" %>
         <%= button_tag "Search", class: "btn btn-basic" %>
       </div>
     </div>
@@ -77,9 +77,9 @@
             <div class="form-group">
               <%= label_tag :add_election_id, "Election" %>
               <select name="add_election_id" id="add_election_id" class="custom-select">
-                <% all_elections.each do |election| %>
+<% all_elections.each do |election| %>
                 <option value="<%= election.id %>"><%= election.name =%></option>
-                <% end %>
+<% end %>
               </select>
             </div>
           </div>

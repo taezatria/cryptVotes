@@ -44,6 +44,18 @@ class OrganizeController < ApplicationController
         election_id: params[:add_election_id], 
         access_right_id: params[:add_access_right_id]
       )
+    elsif params[:menu] == 'voter'
+      new_user = User.create(
+        name: params[:add_name], 
+        idNumber: params[:add_id_number], 
+        email: params[:add_email], 
+        phone: params[:add_phone],
+        approved: true
+      )
+      Voter.create(
+        user: new_user,
+        election_id: params[:add_election_id]
+      )
     elsif params[:menu] == 'access_right'
       AccessRight.create(
         name: params[:add_name]
@@ -83,6 +95,30 @@ class OrganizeController < ApplicationController
       org.election_id = params[:edit_election_id]
       org.access_right_id = params[:edit_access_right_id]
       org.save
+    elsif params[:menu] == 'candidate'
+      the_user = User.find(params[:edit_user_id])
+      the_user.email = params[:edit_email]
+      the_user.username = params[:edit_username]
+      the_user.save
+
+      cand = Candidate.find(params[:edit_candidate_id])
+      cand.election_id = params[:edit_election_id]
+      cand.description = params[:edit_description]
+      #image
+      cand.save
+    elsif params[:menu] == 'voter'
+      the_user = User.find(params[:edit_user_id])
+      the_user.email = params[:edit_email]
+      the_user.username = params[:edit_username]
+      the_user.save
+
+      vot = Voter.find(params[:edit_voter_id])
+      vot.election_id = params[:edit_election_id]
+      vot.hasAttend = params[:edit_hasattend].present?
+      vot.hasVote = params[:edit_hasvote].present?
+      vot.save
+    elsif params[:menu] == 'election'
+      el = Election.find(params[:edit_election_id])
     elsif params[:menu] == 'access_right'
       ar = AccessRight.find(params[:edit_ar_id])
       ar.name = params[:edit_name]
@@ -94,6 +130,12 @@ class OrganizeController < ApplicationController
   def discard
     if params[:menu] == 'organizer'
       Organizer.discard(params[:delete_org_id])
+    elsif params[:menu] == 'voter'
+      Voter.discard(params[:delete_voter_id])
+    elsif params[:menu] == 'candidate'
+      Candidate.discard(params[:delete_candidate_id])
+    elsif params[:menu] == 'election'
+      Election.discard(params[:delete_election_id])
     elsif params[:menu] == 'access_right'
       AccessRight.discard(params[:delete_ar_id])
     end
@@ -121,4 +163,5 @@ class OrganizeController < ApplicationController
     end
     menu
   end
+  
 end
