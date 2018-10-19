@@ -26,19 +26,18 @@
           <th>Start Date</th>
           <th>End Date</th>
           <th>Participants</th>
-          <th>Action</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tbody_election">
 <% all_elections.each do |election| %>
         <tr>
+        <input type="hidden" id="menu" value="election">
+        <input type="hidden" id="election_id" value="<%= election.id %>">
           <td><%= election.name %></td>
           <td><%= election.description %></td>
           <td><%= election.start_date.strftime("%A, %d %B %Y") %></td>
           <td><%= election.end_date.strftime("%A, %d %B %Y") %></td>
           <td><%= election.participants %></td>
-          <td><button class="btn btn-secondary"><span class="fa fa-edit"></span></button>
-          <button class="btn btn-dark"><span class="fa fa-trash"></span></button></td>
         </tr>
 <% end %>
       </tbody>
@@ -50,7 +49,7 @@
 <div class="modal fade" id="addModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/add", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">New Election</h4>
@@ -62,35 +61,35 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :name, "Name" %>
-              <%= text_field_tag :name, "", class: "form-control" %>
+              <%= label_tag :add_name, "Name" %>
+              <%= text_field_tag :add_name, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :participants, "Participants" %>
-              <%= number_field_tag :participants, "", class: "form-control" %>
+              <%= label_tag :add_participants, "Participants" %>
+              <%= number_field_tag :add_participants, "", class: "form-control" %>
             </div>
           </div>
         </div>
 
 
           <div class="form-group">
-            <%= label_tag :description, "Description" %>
-            <%= text_area_tag :description, "", class: "form-control" %>
+            <%= label_tag :add_description, "Description" %>
+            <%= text_area_tag :add_description, "", class: "form-control" %>
           </div>
 
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :start_date, "Start Date" %>
-              <%= date_field :start_date, "", class: "form-control" %>
+              <%= label_tag :add_start_date, "Start Date" %>
+              <%= date_field :add_start_date, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :end_date, "End Date" %>
-              <%= date_field :end_date, "", class: "form-control" %>
+              <%= label_tag :add_end_date, "End Date" %>
+              <%= date_field :add_end_date, "", class: "form-control" %>
             </div>
           </div>    
         </div>
@@ -102,12 +101,12 @@
           <div class="col-md-6">
             <label>Add Image</label>
             <div class="custom-file">
-                <%= file_field_tag :image, class: "custom-file-input" %>
-                <%= label_tag :image, "Choose File", class: "custom-file-label" %>
+                <%= file_field_tag :add_image, class: "custom-file-input" %>
+                <%= label_tag :add_image, "Choose File", class: "custom-file-label" %>
             </div>
           </div>    
         </div>
-        
+        <%= hidden_field_tag 'menu', 'election' %>
       </div>
 
       <!-- Modal footer -->
@@ -124,7 +123,7 @@
 <div class="modal fade" id="editModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/alter", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Edit Election</h4>
@@ -136,35 +135,35 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :name, "Name" %>
-              <%= text_field_tag :name, "", class: "form-control" %>
+              <%= label_tag :edit_name, "Name" %>
+              <%= text_field_tag :edit_name, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :participants, "Participants" %>
-              <%= number_field_tag :participants, "", class: "form-control" %>
+              <%= label_tag :edit_participants, "Participants" %>
+              <%= number_field_tag :edit_participants, "", class: "form-control" %>
             </div>
           </div>
         </div>
 
 
           <div class="form-group">
-            <%= label_tag :description, "Description" %>
-            <%= text_area_tag :description, "", class: "form-control" %>
+            <%= label_tag :edit_description, "Description" %>
+            <%= text_area_tag :edit_description, "", class: "form-control" %>
           </div>
 
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :start_date, "Start Date" %>
-              <%= date_field :start_date, "", class: "form-control" %>
+              <%= label_tag :edit_start_date, "Start Date" %>
+              <%= date_field :edit_start_date, "", class: "form-control" %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <%= label_tag :end_date, "End Date" %>
-              <%= date_field :end_date, "", class: "form-control" %>
+              <%= label_tag :edit_end_date, "End Date" %>
+              <%= date_field :edit_end_date, "", class: "form-control" %>
             </div>
           </div>    
         </div>
@@ -176,18 +175,19 @@
           <div class="col-md-6">
             <label>Change Image</label>
             <div class="custom-file">
-                <%= file_field_tag :image, class: "custom-file-input" %>
-                <%= label_tag :image, "Choose File", class: "custom-file-label" %>
+                <%= file_field_tag :edit_image, class: "custom-file-input" %>
+                <%= label_tag :edit_image, "Choose File", class: "custom-file-label" %>
             </div>
           </div>   
         </div>
-        
+        <%= hidden_field_tag 'menu', 'election' %>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
+        <button class="btn btn-danger"><span class="fa fa-trash"></span></button>
         <%= submit_tag "Save", class: "btn btn-success" %>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
       <% end %>
     </div>
@@ -198,7 +198,7 @@
 <div class="modal fade" id="deleteModal">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-
+    <%= form_tag "organize/discard", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Delete Election</h4>
@@ -208,14 +208,16 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
+        <input type="hidden" id="delete_election_id" name="delete_election_id">
+        <%= hidden_field_tag 'menu', 'election' %>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <%= submit_tag "Delete", class: "btn btn-danger" %>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
-
+      <% end %>
     </div>
   </div>
 </div>

@@ -31,31 +31,40 @@ class OrganizeController < ApplicationController
   end
 
   def add
-    new_user = User.create(
-      name: params[:add_name], 
-      idNumber: params[:add_id_number], 
-      email: params[:add_email], 
-      phone: params[:add_phone],
-      approved: true
-    )
     if params[:menu] == 'organizer'
+      new_user = User.create(
+        name: params[:add_name], 
+        idNumber: params[:add_id_number], 
+        email: params[:add_email], 
+        phone: params[:add_phone],
+        approved: true
+      )
       Organizer.create(
         user: new_user, 
         election_id: params[:add_election_id], 
         access_right_id: params[:add_access_right_id]
+      )
+    elsif params[:menu] == 'access_right'
+      AccessRight.create(
+        name: params[:add_name]
       )
     end
     redirect_to organize_path(menu: params[:menu])
   end
 
   def get_data
-    user = User.find_by(id: params[:user_id], deleted_at: nil)
     if params[:menu] == 'organizer'
+      user = User.find_by(id: params[:user_id], deleted_at: nil)
       other = Organizer.find_by(id: params[:other_id], deleted_at: nil)
     elsif params[:menu] == 'candidate'
+      user = User.find_by(id: params[:user_id], deleted_at: nil)
       other = Candidate.find_by(id: params[:other_id], deleted_at: nil)
     elsif params[:menu] == 'voter'
+      user = User.find_by(id: params[:user_id], deleted_at: nil)
       other = Voter.find_by(id: params[:other_id], deleted_at: nil)
+    elsif params[:menu] == 'election'
+      user = Election.find_by(id: params[:user_id], deleted_at: nil)
+      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d") }
     else
       user = nil
       other = nil
@@ -64,15 +73,20 @@ class OrganizeController < ApplicationController
   end
 
   def alter
-    the_user = User.find(params[:edit_user_id])
-    the_user.email = params[:edit_email]
-    the_user.username = params[:edit_username]
-    the_user.save
     if params[:menu] == 'organizer'
+      the_user = User.find(params[:edit_user_id])
+      the_user.email = params[:edit_email]
+      the_user.username = params[:edit_username]
+      the_user.save
+
       org = Organizer.find(params[:edit_org_id])
       org.election_id = params[:edit_election_id]
       org.access_right_id = params[:edit_access_right_id]
       org.save
+    elsif params[:menu] == 'access_right'
+      ar = AccessRight.find(params[:edit_ar_id])
+      ar.name = params[:edit_name]
+      ar.save
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -80,6 +94,8 @@ class OrganizeController < ApplicationController
   def discard
     if params[:menu] == 'organizer'
       Organizer.discard(params[:delete_org_id])
+    elsif params[:menu] == 'access_right'
+      AccessRight.discard(params[:delete_ar_id])
     end
     redirect_to organize_path(menu: params[:menu])
   end

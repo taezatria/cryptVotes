@@ -20,16 +20,15 @@
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody_access_right">
 <% all_access_rights.each do |access_right| %>
           <tr>
-            <td><%= access_right.id %></td>
-            <td><%= access_right.name %></td>
-            <td><button class="btn btn-secondary" data-toggle="modal" data-target="#editModal"><span class="fa fa-edit"></span></button>
-            <button class="btn btn-dark" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button></td>
+          <input type="hidden" id="menu" value="access_right">
+          <input type="hidden" id="access_right_id" value="<%= access_right.id %>">
+            <td id="ar_id"><%= access_right.id %></td>
+            <td id="ar_name"><%= access_right.name %></td>
           </tr>
 <% end %>
         </tbody>
@@ -42,7 +41,7 @@
 <div class="modal fade" id="addModal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/add", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">New Access Right</h4>
@@ -53,10 +52,10 @@
       <div class="modal-body">
 
         <div class="form-group">
-          <%= label_tag :name, "Name" %>
-          <%= text_field_tag :name, "", class: "form-control" %>
+          <%= label_tag :add_name, "Name" %>
+          <%= text_field_tag :add_name, "", class: "form-control" %>
         </div>
-
+        <%= hidden_field_tag 'menu', 'access_right' %>
       </div>
 
       <!-- Modal footer -->
@@ -73,7 +72,7 @@
 <div class="modal fade" id="editModal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "organize/alter", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Edit Access Right</h4>
@@ -82,18 +81,29 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-
-        <div class="form-group">
-          <%= label_tag :name, "Name" %>
-          <%= text_field_tag :name, "", class: "form-control" %>
+      
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= label_tag :edit_ar_id, "ID" %>
+              <%= text_field_tag :edit_ar_id, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= label_tag :edit_name, "Name" %>
+              <%= text_field_tag :edit_name, "", class: "form-control" %>
+            </div>
+          </div>
         </div>
-
+        <%= hidden_field_tag 'menu', 'access_right' %>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
+        <button class="btn btn-danger" data-toggle="modal" data-dismiss="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button>
         <%= submit_tag "Save", class: "btn btn-success" %>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
       <% end %>
     </div>
@@ -104,7 +114,7 @@
 <div class="modal fade" id="deleteModal">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
-
+    <%= form_tag "organize/discard", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Delete Access Right</h4>
@@ -114,14 +124,16 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
+        <input type="hidden" name="delete_ar_id" id="delete_ar_id">
+        <%= hidden_field_tag 'menu', 'access_right' %>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <%= submit_tag "Delete", class: "btn btn-danger" %>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
-
+      <% end %>
     </div>
   </div>
 </div>

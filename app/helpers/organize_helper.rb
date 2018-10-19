@@ -1,7 +1,7 @@
 module OrganizeHelper
 
   def all_elections
-    Election.all
+    Election.where(deleted_at: nil)
   end
 
   def all_voters
@@ -17,7 +17,7 @@ module OrganizeHelper
   end
 
   def all_access_rights
-    AccessRight.all
+    AccessRight.where(deleted_at: nil)
   end
 
   def voter(id)

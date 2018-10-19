@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
-  $("tr").click ->
+  $("#tbody_organizer").on "click", "tr", ->
     $("#delete_org_id").val($(this).children("#other_id").val());
     $.ajax
       url: 'organize/'+$(this).children("#menu").val()+'/'+$(this).children("#user_id").val()+'/'+$(this).children("#other_id").val()
@@ -21,4 +21,25 @@ $(document).ready ->
         $("#edit_username").val(data.user.username);
         $("#edit_address").val(data.user.address);
         $("#edit_public_key").val(data.user.publicKey);
+    $("#editModal").modal('show');
+
+  $("#tbody_access_right").on "click", "tr", ->
+    $("#delete_ar_id").val($(this).children("#access_right_id").val());
+    $("#edit_ar_id").val($(this).children("#ar_id").html());
+    $("#edit_name").val($(this).children("#ar_name").html());
+    $("#editModal").modal('show');
+  
+  $("#tbody_election").on "click", "tr", ->
+    $("#delete_election_id").val($(this).children("#election_id").val());
+    $.ajax
+      url: 'organize/'+$(this).children("#menu").val()+'/'+$(this).children("#election_id").val()+'/election'
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#edit_election_id").val(data.user.id);
+        $("#edit_name").val(data.user.name);
+        $("#edit_participants").val(data.user.participants);
+        $("#edit_description").val(data.user.description);
+        $("#edit_start_date_").val(data.other.start_date);
+        $("#edit_end_date_").val(data.other.end_date);
     $("#editModal").modal('show');

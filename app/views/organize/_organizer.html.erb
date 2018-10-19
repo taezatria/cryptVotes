@@ -37,7 +37,7 @@
           <th>Username</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tbody_organizer">
 <% all_organizers.each do |organizer| %>
   <% organizer(organizer.id).each do |org| %>
         <tr>
@@ -155,7 +155,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_user_id, "User ID" %>
-              <%= text_field_tag :edit_user_id, "", class: "form-control" %>
+              <%= text_field_tag :edit_user_id, "", class: "form-control", readonly: true %>
             </div>
           </div>
           <div class="col-md-4">
@@ -184,19 +184,19 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
-              <%= text_field_tag :edit_name, "", class: "form-control" %>
+              <%= text_field_tag :edit_name, "", class: "form-control", readonly: true %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_id_number, "ID Number" %>
-              <%= text_field_tag :edit_id_number, "", class: "form-control" %>
+              <%= text_field_tag :edit_id_number, "", class: "form-control", readonly: true %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_phone, "Phone Number" %>
-              <%= text_field_tag :edit_phone, "", class: "form-control" %>
+              <%= text_field_tag :edit_phone, "", class: "form-control", readonly: true %>
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button class="btn btn-danger" id="modalDeleteButton" data-dismiss="modal" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span> Delete</button>
+        <button class="btn btn-danger" id="modalDeleteButton" data-dismiss="modal" data-toggle="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button>
         <%= submit_tag "Save", class: "btn btn-success" %>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
