@@ -56,6 +56,16 @@ class OrganizeController < ApplicationController
         user: new_user,
         election_id: params[:add_election_id]
       )
+    elsif params[:menu] == 'election'
+      item_name = save_image(params[:add_image])
+      Election.create(
+        name: params[:add_name],
+        description: params[:add_description],
+        start_date: params[:add_start_date][0],
+        end_date: params[:add_end_date][0],
+        participants: params[:add_participants],
+        image: item_name
+      )
     elsif params[:menu] == 'access_right'
       AccessRight.create(
         name: params[:add_name]
@@ -76,7 +86,8 @@ class OrganizeController < ApplicationController
       other = Voter.find_by(id: params[:other_id], deleted_at: nil)
     elsif params[:menu] == 'election'
       user = Election.find_by(id: params[:user_id], deleted_at: nil)
-      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d") }
+      asset_path = '/assets/'+user.image#ActionController::Base.helpers.image_url(user.image)
+      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d"), image_path: asset_path }
     else
       user = nil
       other = nil
@@ -118,7 +129,15 @@ class OrganizeController < ApplicationController
       vot.hasVote = params[:edit_hasvote].present?
       vot.save
     elsif params[:menu] == 'election'
+      item_name = save_image(params[:edit_image])
       el = Election.find(params[:edit_election_id])
+      el.name = params[:edit_name]
+      el.participants = params[:edit_participants]
+      el.description = params[:edit_description]
+      el.start_date = params[:edit_start_date][0]
+      el.end_date = params[:edit_end_date][0]
+      el.image = item_name
+      el.save
     elsif params[:menu] == 'access_right'
       ar = AccessRight.find(params[:edit_ar_id])
       ar.name = params[:edit_name]
@@ -162,6 +181,15 @@ class OrganizeController < ApplicationController
       menu = 'home' unless ["access_right", "election", "organizer"].include? menu
     end
     menu
+  end
+
+  def save_image(img)
+    item_name = img.original_filename
+    item_path = File.join("public", "assets", item_name)
+    File.open(item_path, "wb") do |f|
+      f.write(img.read)
+    end
+    item_name
   end
   
 end

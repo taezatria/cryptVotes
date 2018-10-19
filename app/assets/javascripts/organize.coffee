@@ -42,6 +42,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_description").val(data.user.description);
         $("#edit_start_date_").val(data.other.start_date);
         $("#edit_end_date_").val(data.other.end_date);
+        $("#edit_show_image").attr('src', data.other.image_path);
     $("#editModal").modal('show');
   
   $("#tbody_voter").on "click", "tr", ->
