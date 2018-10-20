@@ -61,7 +61,7 @@
 <div class="modal fade" id="addModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "organize/add", method: "post" do %>
+      <%= form_tag "organize/add", method: "post", multipart: true do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">New Candidate</h4>
@@ -149,7 +149,7 @@
 <div class="modal fade" id="editModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "organize/alter", method: "post" do %>
+      <%= form_tag "organize/alter", method: "post", multipart: true do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Edit Voter</h4>
@@ -240,7 +240,7 @@
 
         <div class="row">
           <div class="col-md-6">
-            <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
+            <%= image_tag "home.jpg", width: '90%', id: "edit_show_image", class: "rounded float-right" %>
           </div>
           <div class="col-md-6">
             <label>Change Image</label>

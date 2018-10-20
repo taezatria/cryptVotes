@@ -28,7 +28,7 @@ class User < ApplicationRecord
   end
 
   def self.change_password(user_id, password)
-    user = User.find(user_id)
+    user = User.find_by(id: user_id, approved: true, firstLogin: false, deleted_at: nil)
     if user.present?
       user.password = password
       user.save
@@ -36,16 +36,17 @@ class User < ApplicationRecord
   end
 
   def self.approve(user_id)
-    user = User.find(user_id)
+    user = User.find_by(id: user_id, approved: false, firstLogin: false, deleted_at: nil)
     user.approved = true
     user.save
   end
 
   def self.setupAcc(id, username, password)
-    the_user = User.find(id)
+    the_user = User.find_by(id: id, approved: true, firstLogin: true, deleted_at: nil)
     if the_user.present?
       the_user.username = username.downcase
       the_user.password = Digest::MD5.hexdigest(password)
+      the_user.firstLogin = false
       the_user.save
     else
       false

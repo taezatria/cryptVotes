@@ -6,6 +6,8 @@ class HomeController < ApplicationController
   def setup_account
     if User.setupAcc(params[:user_id], params[:username], params[:password])
       flash[:notice] = "successfully"
+      user = User.find(params[:user_id])
+      UserMailer.with(user: user).welcome_email.deliver_later
     else
       flash[:alert] = "failed"
     end
@@ -27,12 +29,21 @@ class HomeController < ApplicationController
       name: params[:name],
       idNumber: params[:idnumber],
       email: params[:email],
-      phone: params[:phone]
+      phone: params[:phone],
+      approved: false
     )
     redirect_to :home
   end
 
   def email
+    user = User.find_by(email: params[:email], approved: true, firstLogin: true, deleted_at: nil)
+    if user.present?
+      UserMailer.with(user: user).verification_email.deliver_later
+      flash[:notice] = "E-mail sent successfully"
+    else
+      flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
+    end
+    render :home
   end
 
   def verify

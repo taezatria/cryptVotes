@@ -56,8 +56,23 @@ class OrganizeController < ApplicationController
         user: new_user,
         election_id: params[:add_election_id]
       )
+    elsif params[:menu] == 'candidate'
+      item_name = save_image(params[:add_image]) if params[:add_image].present?
+      new_user = User.create(
+        name: params[:add_name], 
+        idNumber: params[:add_id_number], 
+        email: params[:add_email], 
+        phone: params[:add_phone],
+        approved: true
+      )
+      Candidate.create(
+        user: new_user,
+        election_id: params[:add_election_id],
+        description: params[:add_description],
+        image: item_name
+      )
     elsif params[:menu] == 'election'
-      item_name = save_image(params[:add_image])
+      item_name = save_image(params[:add_image]) if params[:add_image].present?
       Election.create(
         name: params[:add_name],
         description: params[:add_description],
@@ -86,8 +101,8 @@ class OrganizeController < ApplicationController
       other = Voter.find_by(id: params[:other_id], deleted_at: nil)
     elsif params[:menu] == 'election'
       user = Election.find_by(id: params[:user_id], deleted_at: nil)
-      asset_path = '/assets/'+user.image#ActionController::Base.helpers.image_url(user.image)
-      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d"), image_path: asset_path }
+      #asset_path = '/assets/'+user.image#ActionController::Base.helpers.image_url(user.image)
+      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d") }
     else
       user = nil
       other = nil
@@ -112,10 +127,11 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
+      item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : the_user.image
       cand = Candidate.find(params[:edit_candidate_id])
       cand.election_id = params[:edit_election_id]
       cand.description = params[:edit_description]
-      #image
+      cand.image = item_name
       cand.save
     elsif params[:menu] == 'voter'
       the_user = User.find(params[:edit_user_id])
@@ -129,13 +145,13 @@ class OrganizeController < ApplicationController
       vot.hasVote = params[:edit_hasvote].present?
       vot.save
     elsif params[:menu] == 'election'
-      item_name = save_image(params[:edit_image])
       el = Election.find(params[:edit_election_id])
       el.name = params[:edit_name]
       el.participants = params[:edit_participants]
       el.description = params[:edit_description]
       el.start_date = params[:edit_start_date][0]
       el.end_date = params[:edit_end_date][0]
+      item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : el.image
       el.image = item_name
       el.save
     elsif params[:menu] == 'access_right'
@@ -189,7 +205,7 @@ class OrganizeController < ApplicationController
     File.open(item_path, "wb") do |f|
       f.write(img.read)
     end
-    item_name
+    '/assets/'+item_name
   end
   
 end

@@ -42,7 +42,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_description").val(data.user.description);
         $("#edit_start_date_").val(data.other.start_date);
         $("#edit_end_date_").val(data.other.end_date);
-        $("#edit_show_image").attr('src', data.other.image_path);
+        $("#edit_show_image").attr('src', data.user.image);
     $("#editModal").modal('show');
   
   $("#tbody_voter").on "click", "tr", ->
@@ -81,6 +81,8 @@ $(document).on "turbolinks:load", ->
         $("#edit_email").val(data.user.email);
         $("#edit_phone").val(data.user.phone);
         $("#edit_username").val(data.user.username);
+        $("#edit_description").val(data.other.description);
         $("#edit_address").val(data.user.address);
         $("#edit_public_key").val(data.user.publicKey);
+        $("#edit_show_image").attr('src', data.other.image);
     $("#editModal").modal('show');
