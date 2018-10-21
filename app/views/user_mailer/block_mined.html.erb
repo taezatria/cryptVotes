@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Passphrase Reset Request</h1>
+    <p>
+      Dear <%= @user.name %>, <br /><br />
+      Your ballot has been included to the blockchain !<br />
+      Here is the detail of the block<br />
+    </p>
+      <h4>Block Hash :</h4>
+      <h3><%= @blockhash %></h3>
+      <br />
+      <h4>Transaction ID (or Vote ID) :</h4>
+      <h3><%= @txid %></h3>
+      <br />
+      <p>These IDs and details can be verified at Verification Page:<br />
+      <%= @url %>
+    </p>
+    <p>Thanks and have a great day!<br />
+    CryptVotes Election Authorization</p>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+Election is coming
+===============================================
+ 
+Dear <%= @user.name %>,
+
+An election is coming.
+
+The <%= @election.name %> will be held at
+<%= @election.start_date.strftime("%A, %d %B %Y") %>
+until
+<%= @election.end_date.strftime("%A, %d %B %Y") %>
+ 
+Thanks and have a great day!,
+CryptVotes Election Authorization

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1><%= @election.name %> Election is coming</h1>
+    <p>
+      Dear <%= @user.name %>, <br /><br />
+      An election is coming.<br />
+    </p>
+    <h3>The <%= @election.name %> will be held at</h3>
+    <h2><%= @election.start_date.strftime("%A, %d %B %Y") %></h2>
+    <h3>until</h3>
+    <h2><%= @election.end_date.strftime("%A, %d %B %Y") %></h2>
+    <p>Thanks and have a great day!<br />
+    CryptVotes Election Authorization</p>
+  </body>
+</html>
