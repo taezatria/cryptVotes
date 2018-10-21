@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get 'home/:id/setup', to: 'home#setup'
   post 'home/setup', to: 'home#setup_account'
   post 'home/register', to: 'home#register'
+  get 'home/:id/forget', to: 'home#forget_password'
+  get 'home/:id/genkey', to: 'home#keygen'
 
   get 'home/verify', to: 'home#verify'
   get 'home/verify/:id', to: 'home#verify'

@@ -21,6 +21,6 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def block_mined
-    UserMailer.with(user: User.first).block_mined
+    UserMailer.with(user: User.first, blockhash: SecureRandom.hex(25), txid: SecureRandom.hex(25)).block_mined
   end
 end

@@ -72,6 +72,14 @@ class HomeController < ApplicationController
     end
   end
 
+  def forget_password
+    
+  end
+
+  def keygen
+
+  end
+
   def result
     if params[:id].present?
       @dummy = {

@@ -35,6 +35,7 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     @blockhash = params[:blockhash]
     @txid = params[:txid]
+    @url = ''
     mail(to: @user.email, subject: 'Ballot Block Detail')
   end
 end
