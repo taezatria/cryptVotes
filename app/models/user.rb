@@ -30,7 +30,7 @@ class User < ApplicationRecord
   def self.change_password(user_id, password)
     user = User.find_by(id: user_id, approved: true, firstLogin: false, deleted_at: nil)
     if user.present?
-      user.password = password
+      user.password = Digest::MD5.hexdigest(password)
       user.save
     end
   end

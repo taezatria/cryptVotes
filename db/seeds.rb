@@ -6,13 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+#admin
 admin = User.create(
   name: "Admin CryptVotes",
   idNumber: "1234567890",
   email: "admin@cryptvotes.com",
   phone: "000-1234567",
   username: "cryptadmin",
-  password: "cryptadmin",
+  password: Digest::MD5.hexdigest("cryptadmin"),
   approved: true,
   firstLogin: false
 )
@@ -37,7 +38,7 @@ Organizer.create(
   access_right: admin_right
 )
 
-
+#other user seed
 elec1 = Election.create(
   name: SecureRandom.hex(10),
   description: SecureRandom.hex,
@@ -119,3 +120,5 @@ end
     access_right: ar
   )
 end
+
+#vote result seed

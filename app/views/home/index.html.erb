@@ -1,22 +1,29 @@
 <div class="container" style="margin-top: 5%;">
   <div class="row">
     <div class="col-sm-4">
-<% if flash[:error].present? %>
-  <%= flash[:error] %>
-<% end %>
+  <%= flash[:alert] if flash[:alert].present? %>
+  <%= flash[:notice] if flash[:notice].present? %>
     </div>
     <div class="col-md-4">
       <h1 class="text-center">Welcome to CryptVotes</h1>
       <br/>
       <div class="col-sm-12">
         <ul class="nav nav-tabs nav-justified" >
+<% if @regis.present? %>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#home">Login</a></li>
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#regisemail">Register</a></li>
+<% else %>
           <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Login</a></li>
           <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regisemail">Register</a></li>
+<% end %>
         </ul>
         <br/>
         <div class="tab-content">
+<% if @regis.present? %>
+          <div id="home" class="tab-pane fade in">
+<% else %>
           <div id="home" class="tab-pane fade in active show">
-          
+<% end %>
             <%= form_tag "/home", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :username, "Username" %>
@@ -32,8 +39,11 @@
             <% end %>
             <br/>
           </div>
-
+<% if @regis.present? %>
+          <div id="register" class="tab-pane fade active show">
+<% else %>
           <div id="register" class="tab-pane fade">
+<% end %>
             <%= form_tag "/home/register", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :name, "Name" %>

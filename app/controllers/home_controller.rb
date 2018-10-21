@@ -1,10 +1,12 @@
 class HomeController < ApplicationController
+  before_action :check_user_login
 
-  def index
+  def index  
   end
 
   def setup_account
     if User.setupAcc(params[:user_id], params[:username], params[:password])
+      $opssl.genpkey(params[:user_id], params[:passphrase])
       flash[:notice] = "successfully"
       user = User.find(params[:user_id])
       UserMailer.with(user: user).welcome_email.deliver_later
@@ -32,6 +34,7 @@ class HomeController < ApplicationController
       phone: params[:phone],
       approved: false
     )
+    flash[:notice] = "successfully registered. Please wait until the organizer approve it"
     redirect_to :home
   end
 
@@ -41,9 +44,10 @@ class HomeController < ApplicationController
       UserMailer.with(user: user).verification_email.deliver_later
       flash[:notice] = "E-mail sent successfully"
     else
+      @regis = "aaaa"
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
     end
-    render :home
+    render :index
   end
 
   def verify
@@ -53,7 +57,7 @@ class HomeController < ApplicationController
   def login
     # redirect_to '/organize'
     if params[:username].present? && params[:password].present?
-      user = User.login(params[:username], params[:password])
+      user = User.login(params[:username], Digest::MD5.hexdigest(params[:password]))
       if user.present?
         session[:current_user_id] = user[:user_id]
         if user[:status] == 0
@@ -62,7 +66,7 @@ class HomeController < ApplicationController
           redirect_to '/organize'
         end 
       else 
-        flash[:error] = "Username or password doesn't match"
+        flash[:alert] = "Username or password doesn't match"
         redirect_back fallback_location: root_path
       end
     end
@@ -79,6 +83,20 @@ class HomeController < ApplicationController
       render :viewresult
     else
       render :result
+    end
+  end
+
+  private
+
+  def check_user_login
+    if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).present?
+      flash[:alert] = "You have logged in!"
+      status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+      if status == 0
+        redirect_to '/voter'
+      else
+        redirect_to '/organize'
+      end
     end
   end
 end

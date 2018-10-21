@@ -24,5 +24,6 @@ Rails.application.routes.draw do
   post 'organize/discard', to: 'organize#discard'
 
   get 'voter', to: 'voter#home'
+  get 'voter/logout', to: 'voter#logout'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
