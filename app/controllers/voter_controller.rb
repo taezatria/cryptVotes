@@ -4,7 +4,7 @@ class VoterController < ApplicationController
   def home
     @status = role_user
     @menu = params[:menu].present? ? params[:menu] : 'home'
-    @menu = 'home' unless ["change_password", "vote", "verify"].include? menu
+    @menu = 'home' unless ["change_password", "vote", "verify"].include? @menu
     render :home
   end
 
