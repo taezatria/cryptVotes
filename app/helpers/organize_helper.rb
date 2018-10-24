@@ -5,15 +5,15 @@ module OrganizeHelper
   end
 
   def all_voters
-    User.joins(:voters).where(deleted_at: nil)
+    User.joins(:voters).where(deleted_at: nil).distinct
   end
 
   def all_candidates
-    User.joins(:candidates).where(deleted_at: nil)
+    User.joins(:candidates).where(deleted_at: nil).distinct
   end
 
   def all_organizers
-    User.joins(:organizers).where(deleted_at: nil)
+    User.joins(:organizers).where(deleted_at: nil).distinct
   end
 
   def all_access_rights

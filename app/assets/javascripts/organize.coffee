@@ -86,3 +86,4 @@ $(document).on "turbolinks:load", ->
         $("#edit_public_key").val(data.user.publicKey);
         $("#edit_show_image").attr('src', data.other.image);
     $("#editModal").modal('show');
+   

@@ -26,4 +26,41 @@ module Multichain
 
     class JSONRPCError < RuntimeError; end
   end
+
+  class Multichain
+    def self.prepare_ballot(user)
+      addresses = get_addresses
+      multisigaddress = $cold.createmultisig 3 [user.publicKey, addresses["organizer"], addresses["node"]]
+      $hot.importaddress multisigaddress["address"]
+      $hot.grant 
+    end
+
+    def self.topup(user)
+      $hot.createrawsendfrom
+      $hot.sendrawtransaction
+    end
+    
+    def self.vote(user)
+      $hot.createrawsendfrom
+      $cold.decoderawtransaction
+      $cold.signrawtransaction
+      $hot.sendrawtransaction
+      $hot.signmessage
+      $hot.revoke
+    end
+
+    def verify(user)
+      $hot.verifymessage
+    end
+
+    private
+
+    def self.get_addresses
+      org_count = Organizer.all.count
+      rnd = SecureRandom.random_number(org_count) + 1
+      org_id = Organizer.find(rnd).user_id
+      org = User.find(org_id)
+      org
+    end
+  end
 end
