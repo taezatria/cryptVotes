@@ -10,24 +10,13 @@
         </tr>
       </thead>
       <tbody id="tbody_vote">
+<% all_elections_vote.each do |el| %>
         <tr>
-          <td>Ketua HIMAINFRA 2018</td>
-          <td>Pemilihan Ketua HIMAINFRA</td>
-          <td>
-          <button class="btn btn-danger" data-toggle="modal" data-target="#voteModal"><span class="fa fa-info-circle"></span> Vote !</button></td>
+          <td><%= el.name %></td>
+          <td><%= el.description %></td>
+          <td><button class="btn btn-danger" data-toggle="modal" data-target="#voteModal"><span class="fa fa-info-circle"></span> Vote !</button></td>
         </tr>
-        <tr>
-          <td>Ketua BEM 2018</td>
-          <td>Pemilihan Ketua BEM. Pilihlah yang bijak !</td>
-          <td>
-          <button class="btn btn-danger" data-toggle="modal" data-target="#voteModal"><span class="fa fa-info-circle"></span> Vote !</button></td>
-        </tr>
-        <tr>
-          <td>BPMF 2018</td>
-          <td>Pemilihan BPMF. Tentukan BPMF MU SEKARANG!</td>
-          <td>
-          <button class="btn btn-danger" data-toggle="modal" data-target="#voteModal"><span class="fa fa-info-circle"></span> Vote !</button></td>
-        </tr>
+<% end %>
       </tbody>
     </table>
   </div>

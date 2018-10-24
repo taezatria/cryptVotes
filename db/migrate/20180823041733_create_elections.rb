@@ -6,6 +6,7 @@ class CreateElections < ActiveRecord::Migration[5.2]
       t.datetime "start_date", :null => false
       t.datetime "end_date", :null => false
       t.integer "participants", :null => false
+      t.integer "status", :default => 0
       t.text "image", :null => false
       t.datetime "deleted_at"
       t.timestamps

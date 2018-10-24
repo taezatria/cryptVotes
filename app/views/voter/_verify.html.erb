@@ -13,25 +13,14 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tbody_verify">
+<% all_elections_end.each do |el| %>
           <tr>
-            <td>Ketua HIMAINFRA 2018</td>
+            <td><%= el.name %></td>
             <td><button class="btn btn-secondary" data-toggle="modal" data-target="#passModal"><span class="fa fa-lock-open"></span> Open Transaction</button></td>
-            <td>
-            <button class="btn btn-dark" data-toggle="modal" data-target="#passModal"><span class="fa fa-info-circle"></span> Verify</button></td>
+            <td><button class="btn btn-dark" data-toggle="modal" data-target="#passModal"><span class="fa fa-info-circle"></span> Verify</button></td>
           </tr>
-          <tr>
-            <td>Ketua BEM 2018</td>
-            <td><button class="btn btn-secondary" data-toggle="modal" data-target="#passModal"><span class="fa fa-lock-open"></span> Open Transaction</button></td>
-            <td>
-            <button class="btn btn-dark" data-toggle="modal" data-target="#passModal"><span class="fa fa-info-circle"></span> Verify</button></td>
-          </tr>
-          <tr>
-            <td>BPMF 2018</td>
-            <td><button class="btn btn-secondary" data-toggle="modal" data-target="#passModal"><span class="fa fa-lock-open"></span> Open Transaction</button></td>
-            <td>
-            <button class="btn btn-dark" data-toggle="modal" data-target="#passModal"><span class="fa fa-info-circle"></span> Verify</button></td>
-          </tr>
+<% end %>
         </tbody>
       </table>
     </div>

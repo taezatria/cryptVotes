@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false
     t.integer "participants", null: false
+    t.integer "status", default: 0
     t.text "image", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -95,6 +96,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.text "hex"
     t.text "blockHash"
     t.text "txid"
+    t.text "data"
     t.text "fromAddress"
     t.text "toAddress"
     t.integer "amount"

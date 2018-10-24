@@ -39,20 +39,53 @@ Organizer.create(
 )
 
 #other user seed
+sd = DateTime.now + (SecureRandom.random_number(28)-14).days
+ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+while ed <= sd do
+  ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+end
+if DateTime.now < sd
+  sta = 0
+elsif DateTime.now <= ed
+  sta = 1
+elsif DateTime.now <= (ed + 6.days)
+  sta = 2
+else
+  sta = 3
+end
+
 elec1 = Election.create(
   name: SecureRandom.hex(10),
   description: SecureRandom.hex,
-  start_date: DateTime.now,
-  end_date: DateTime.now,
+  start_date: sd,
+  end_date: ed,
   participants: SecureRandom.random_number(100),
+  status: sta,
   image: SecureRandom.hex
 )
+
+sd = DateTime.now + (SecureRandom.random_number(28)-14).days
+ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+while ed <= sd do
+  ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+end
+if DateTime.now < sd
+  sta = 0
+elsif DateTime.now <= ed
+  sta = 1
+elsif DateTime.now <= (ed + 6.days)
+  sta = 2
+else
+  sta = 3
+end
+
 elec2 = Election.create(
   name: SecureRandom.hex(10),
   description: SecureRandom.hex,
-  start_date: DateTime.now,
-  end_date: DateTime.now,
+  start_date: sd,
+  end_date: ed,
   participants: SecureRandom.random_number(100),
+  status: sta,
   image: SecureRandom.hex
 )
 
@@ -121,4 +154,26 @@ end
   )
 end
 
+c = [{ id: 1, el_id: 2, name: "Candidate nomor 1"},
+{ id: 2, el_id: 3, name: "Candidate nomor 1"},
+{ id: 3, el_id: 2, name: "Candidate nomor 2"},
+{ id: 4, el_id: 3, name: "Candidate nomor 2"},
+{ id: 5, el_id: 2, name: "Candidate nomor 3"},
+{ id: 6, el_id: 3, name: "Candidate nomor 3"},
+{ id: 7, el_id: 3, name: "Candidate nomor 4"}]
 #vote result seed
+100.times do
+  ca = c[SecureRandom.random_number(7)]
+  str_ca = ca[:id].to_s + "00" + ca[:el_id].to_s + "00" + ca[:name]
+  hex_ca = str_ca.each_byte.map { |b| b.to_s(16) }.join
+  VoteResult.create(
+    hex: SecureRandom.hex,
+    blockHash: SecureRandom.hex,
+    txid: SecureRandom.hex,
+    data: hex_ca,
+    fromAddress: SecureRandom.hex,
+    toAddress: SecureRandom.hex,
+    amount: SecureRandom.random_number(10)+1,
+    confirmation: SecureRandom.random_number(100)+1
+  )
+end

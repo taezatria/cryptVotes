@@ -82,12 +82,7 @@ class HomeController < ApplicationController
 
   def result
     if params[:id].present?
-      @dummy = {
-        "Abang Randi" => 10,
-        "Bung Hassa" => 5,
-        "Om Toddi" => 15,
-        "Abstance" => 3
-      }
+      @data = vote_result(params[:id])
       render :viewresult
     else
       render :result
@@ -95,6 +90,17 @@ class HomeController < ApplicationController
   end
 
   private
+
+  def vote_result(elect_id)
+    res = {}
+    VoteResult.group(:data).count.each do |k,v|
+      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+      if str_key[1] == elect_id.to_s
+        res[str_key[2]] = v
+      end
+    end
+    res
+  end
 
   def check_user_login
     if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).present?
