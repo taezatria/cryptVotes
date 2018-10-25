@@ -2,27 +2,23 @@
   <div class="row">
     <h1>Individual Ballot Verification</h1>
   </div>
-  <div class="row">
-    <div class="col-md-12">
+
     <br />
-      <table class="table table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th>Election</th>
-            <th>Transaction ID</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="tbody_verify">
-<% all_elections_end.each do |el| %>
-          <tr>
-            <td><%= el.name %></td>
-            <td><button class="btn btn-secondary" data-toggle="modal" data-target="#passModal"><span class="fa fa-lock-open"></span> Open Transaction</button></td>
-            <td><button class="btn btn-dark" data-toggle="modal" data-target="#passModal"><span class="fa fa-info-circle"></span> Verify</button></td>
-          </tr>
+    <div class="card-columns">
+<% all_elections_end(session[:current_user_id].to_s).each do |elec| %>
+      <div class="card bg-light" style="width:300px">
+      <input type="hidden" id="elec_id" value="<%= elec.id %>">
+        <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
+        <div class="card-body">
+          <h4 class="card-title"><%= elec.name %></h4>
+          <p class="card-text"><%= elec.description %></p>
+          <p class="card-text"><%= elec.participants %> participants<br />
+          <%= elec.start_date.strftime("%A, %d %B %Y") %> - <%= elec.end_date.strftime("%A, %d %B %Y") %></p>
+          <button class="btn btn-secondary" data-toggle="modal" data-target="#passModal"><span class="fa fa-lock-open"></span> Open Transaction</button>
+        </div>
+      </div>
 <% end %>
-        </tbody>
-      </table>
+
     </div>
   </div>
 </div>

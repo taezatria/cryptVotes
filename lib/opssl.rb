@@ -31,11 +31,17 @@ module OpSSL
     end
 
     def del_pub(user)
-      IO.popen("rm ~/.keysdat/"+user.to_s+"_pbkey.pem")
+      IO.popen("rm ~/.keysdat/"+user.to_s+"_pbkey.pem") do |f|
+        f.close
+        $?.to_i == 0
+      end
     end
 
     def del_pkey(user)
-      IO.popen("rm ~/.keysdat/"+user.to_s+"_pkey.pem")
+      IO.popen("rm ~/.keysdat/"+user.to_s+"_pkey.pem") do |f|
+        f.close
+        $?.to_i == 0
+      end
     end
   end
 end

@@ -106,7 +106,7 @@ class HomeController < ApplicationController
     if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).present?
       flash[:alert] = "You have logged in!"
       status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
-      if status == 0
+      if status == "0"
         redirect_to '/voter'
       else
         redirect_to '/organize'
