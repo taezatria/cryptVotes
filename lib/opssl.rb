@@ -4,11 +4,17 @@ module OpSSL
     end
 
     def genpkey(user, pass)
-      IO.popen("openssl genpkey -algorithm RSA -out ~/.keysdat/"+user.to_s+"_pkey.pem -aes-256-cbc -pass pass:"+pass.to_s)
+      IO.popen("openssl genpkey -algorithm RSA -out ~/.keysdat/"+user.to_s+"_pkey.pem -aes-256-cbc -pass pass:"+pass.to_s) do |f|
+        f.close
+        $?.to_i == 0
+      end
     end
 
     def genpbkey(user, pass)
-      IO.popen("openssl rsa -pubout -in ~/.keysdat/"+user.to_s+"_pkey.pem -passin pass:"+pass.to_s+" -out ~/.keysdat/"+user.to_s+"_pbkey.pem")
+      IO.popen("openssl rsa -pubout -in ~/.keysdat/"+user.to_s+"_pkey.pem -passin pass:"+pass.to_s+" -out ~/.keysdat/"+user.to_s+"_pbkey.pem") do |f|
+        f.close
+        $?.to_i == 0
+      end
     end
 
     def encrypt(user, data)
@@ -19,7 +25,8 @@ module OpSSL
 
     def decrypt(user, pass, data)
       IO.popen("echo '"+data.to_s+"' | xxd -p -r | openssl rsautl -decrypt -inkey ~/.keysdat/"+user.to_s+"_pkey.pem -passin pass:"+pass.to_s) do |f|
-        f.gets.chomp
+        dat = f.gets 
+        dat.chomp if dat.present?
       end
     end
 

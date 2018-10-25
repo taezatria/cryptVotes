@@ -30,27 +30,32 @@ module Multichain
   class Multichain
     def self.prepare_ballot(user)
       addresses = get_addresses
-      multisigaddress = $cold.createmultisig 3 [user.publicKey, addresses["organizer"], addresses["node"]]
+      multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"], addresses["node"]]
       $hot.importaddress multisigaddress["address"]
-      $hot.grant 
+      $redis.set(user.id.to_s+"redeemScript",multisigaddress["redeemScript"])
+      $hot.grant multisigaddress["address"], "send"
     end
 
     def self.topup(user)
       $hot.createrawsendfrom
+      #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
       $hot.sendrawtransaction
     end
     
     def self.vote(user)
       $hot.createrawsendfrom
-      $cold.decoderawtransaction
+      $hot.decoderawtransaction
       $cold.signrawtransaction
+      #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
       $hot.sendrawtransaction
       $hot.signmessage
+      #f = $hot.signmessage a[0]["privkey"], e["hex"]
       $hot.revoke
     end
 
     def verify(user)
       $hot.verifymessage
+      #$hot.verifymessage a[0]["address"], f, e["hex"]
     end
 
     private

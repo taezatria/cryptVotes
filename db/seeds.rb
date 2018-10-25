@@ -39,10 +39,11 @@ Organizer.create(
 )
 
 #other user seed
-sd = DateTime.now + (SecureRandom.random_number(28)-14).days
-ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+sd = DateTime.now + (SecureRandom.random_number(21)-14).days
+ed = DateTime.now + (SecureRandom.random_number(21)-7).days
 while ed <= sd do
-  ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+  sd = DateTime.now + (SecureRandom.random_number(21)-14).days
+  ed = DateTime.now + (SecureRandom.random_number(21)-7).days
 end
 if DateTime.now < sd
   sta = 0
@@ -64,10 +65,11 @@ elec1 = Election.create(
   image: SecureRandom.hex
 )
 
-sd = DateTime.now + (SecureRandom.random_number(28)-14).days
-ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+sd = DateTime.now + (SecureRandom.random_number(21)-14).days
+ed = DateTime.now + (SecureRandom.random_number(21)-7).days
 while ed <= sd do
-  ed = DateTime.now + (SecureRandom.random_number(14)-7).days
+  sd = DateTime.now + (SecureRandom.random_number(21)-14).days
+  ed = DateTime.now + (SecureRandom.random_number(21)-7).days
 end
 if DateTime.now < sd
   sta = 0
