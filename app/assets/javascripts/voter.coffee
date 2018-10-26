@@ -3,12 +3,22 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on "turbolinks:load", ->
-  $(".card").on "click", "button", ->
-    $("#vote_election_id").val($(this).siblings("#elec_id").val());
+  $("#electvote_card").on "click", ".card", ->
+    $("#vote_election_id").val($(this).children("#elec_id").val());
     $.ajax
-      url: 'vote/'+$(this).siblings("#elec_id").val()
+      url: 'vote/'+$(this).children("#elec_id").val()
       method: 'get'
       dataType: 'json'
-      error: ->
+      success: (res) ->
+        #alert(JSON.stringify(res));
         $("#card_list").html("");
-        $("#card_list").append('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="foo" alt="Card image"><div class="card-body"><h4 class="card-title">foo</h4><p class="card-text">foo</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" id="bar" name="bar"><label class="custom-control-label" for="bar"></label></div></div></div>');
+        $(res.candidate).each (i, data) ->
+          $("#card_list").append('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="'+data.image+'" alt="Card image"><div class="card-body"><h4 class="card-title">'+res.other[i].name+'</h4><p class="card-text">'+data.description+'</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="candidate_id" value="'+data.id+'"><label class="custom-control-label"></label></div></div></div>');
+    $("#voteModal").modal('show');
+
+  $("#card_list").on "click", ".card", ->
+    $(this).find("input").prop('checked', true);
+    $(this).siblings(".card").each ->
+      $(this).removeClass('bg-secondary');
+      $(this).addClass('bg-light');
+    $(this).toggleClass('bg-secondary bg-light');

@@ -4,7 +4,7 @@
   </div>
 
     <br />
-    <div class="card-columns">
+    <div class="card-columns" id="electverify_card">
 <% all_elections_end(session[:current_user_id].to_s).each do |elec| %>
       <div class="card bg-light" style="width:300px">
       <input type="hidden" id="elec_id" value="<%= elec.id %>">

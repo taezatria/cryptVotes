@@ -1,17 +1,17 @@
 <div class="container" style="margin-top: 2%">
   <h1>Time to Vote</h1>
 
-  <div class="card-columns">
+  <div class="card-columns" id="electvote_card">
 <% all_elections_vote(session[:current_user_id].to_s).each do |elec| %>
     <div class="card bg-light" style="width:300px">
       <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
+      <input type="hidden" id="elec_id" value="<%= elec.id %>">
       <div class="card-body">
         <h4 class="card-title"><%= elec.name %></h4>
         <p class="card-text"><%= elec.description %></p>
         <p class="card-text"><%= elec.participants %> participants<br />
         <%= elec.start_date.strftime("%A, %d %B %Y") %> - <%= elec.end_date.strftime("%A, %d %B %Y") %></p>
-        <button class="btn btn-dark" data-toggle="modal" data-target="#voteModal"><span class="fa fa-file-signature"></span> Vote</button>
-        <input type="hidden" id="elec_id" value="<%= elec.id %>">
+        <button class="btn btn-dark"><span class="fa fa-file-signature"></span> Vote</button>
       </div>
     </div>
   <% end %>
@@ -22,7 +22,7 @@
 <div class="modal fade" id="voteModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "#", method: "get" do %>
+      <%= form_tag "/vote", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Ballot</h4>
@@ -35,7 +35,7 @@
         <div class="card-columns" id="card_list">
           
         </div>
-        <input type="hidden" id="vote_election_id">
+        <input type="hidden" id="vote_election_id" name="vote_election_id">
 
       </div>
 

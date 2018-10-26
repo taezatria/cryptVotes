@@ -27,5 +27,8 @@ Rails.application.routes.draw do
 
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
+
+  get 'vote/:id', to: 'voter#get_candidate'
+  post 'vote', to: 'voter#vote'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

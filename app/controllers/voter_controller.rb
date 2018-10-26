@@ -8,6 +8,25 @@ class VoterController < ApplicationController
     render :home
   end
 
+  def vote
+    if params[:passphrase].present? && params[:candidate_id].present? & params[:vote_election_id].present?
+      #if $opssl.genpbkey(session[:current_user_id].to_s, params[:passphrase])
+    end
+  end
+
+  def get_candidate
+    if params[:id].present?
+      other = []
+      candidate = Candidate.where(election_id: params[:id], deleted_at: nil);
+      candidate.each do |cand|
+        other.push(User.find_by(id: cand.user_id, deleted_at: nil))
+      end
+    else
+      candidate = nil
+    end
+    render :json => { candidate: candidate, other: other }
+  end
+
   def change_password
     if params[:oldpassword].present? && params[:newpassword].present? && params[:retypepassword].present?
       user = User.find_by(id: session[:current_user_id], deleted_at: nil)
