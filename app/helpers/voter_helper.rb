@@ -13,6 +13,7 @@ module VoterHelper
     Voter.where(user_id: user).each do |voter|
       el.push(voter.election_id)
     end
-    Election.where(id: el, status: 2, deleted_at: nil).where('? > end_date', DateTime.now)
+    # Election.where(id: el, status: 2, deleted_at: nil).where('? > end_date', DateTime.now)
+    Election.all
   end
 end

@@ -32,25 +32,26 @@ module Multichain
       addresses = get_addresses
       multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"], addresses["node"]]
       $hot.importaddress multisigaddress["address"]
-      $redis.set(user.id.to_s+"redeemScript",multisigaddress["redeemScript"])
-      $hot.grant multisigaddress["address"], "send"
+      $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
+      grnt = $hot.grant multisigaddress["address"], "send"
+      multisigaddress["address"] if grnt.present?
     end
 
-    def self.topup(user)
-      $hot.createrawsendfrom
+    def self.topup(el, addr, user)
+      tx = $hot.createrawsendfrom el.address, { addr => { "cryptvotecoin": 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
-      $hot.sendrawtransaction
+      $hot.sendrawtransaction tx
     end
     
-    def self.vote(user)
-      $hot.createrawsendfrom
-      $hot.decoderawtransaction
-      $cold.signrawtransaction
+    def self.vote(el, addr, user)
+      tx1 = $hot.createrawsendfrom addr, { el.address => { "cryptvotecoin": 1 } }
+      dtx = $hot.decoderawtransaction tx1
+      tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [,,]
       #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
-      $hot.sendrawtransaction
-      $hot.signmessage
+      $hot.sendrawtransaction tx2
+      $hot.signmessage , tx2["hex"]
       #f = $hot.signmessage a[0]["privkey"], e["hex"]
-      $hot.revoke
+      $hot.revoke addr, "send"
     end
 
     def verify(user)
@@ -66,6 +67,10 @@ module Multichain
       org_id = Organizer.find(rnd).user_id
       org = User.find(org_id)
       org
+    end
+
+    def self.get_election_address(el)
+      Election.find_by(id: el, status: 1, deleted_at: nil)
     end
   end
 end

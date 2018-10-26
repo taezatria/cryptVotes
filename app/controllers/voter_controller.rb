@@ -10,8 +10,13 @@ class VoterController < ApplicationController
 
   def vote
     if params[:passphrase].present? && params[:candidate_id].present? & params[:vote_election_id].present?
-      #if $opssl.genpbkey(session[:current_user_id].to_s, params[:passphrase])
+      if $opssl.genpbkey(session[:current_user_id].to_s, params[:passphrase])
+        flash[:notice] = "berhasil"
+      else
+        flash[:alert] = "gagal"
+      end
     end
+    redirect_to '/voter'
   end
 
   def get_candidate
@@ -55,6 +60,15 @@ class VoterController < ApplicationController
       flash[:alert] = "You must login first !"
       redirect_back fallback_location: root_path
     end
+  end
+
+  def check_election
+    el = []
+    Voter.where(user_id: session[:current_user_id]).each do |voter|
+      el.push(voter.election_id)
+    end
+    co = Election.where(id: el, status: 1, deleted_at: nil).where('? BETWEEN start_date AND end_date', DateTime.now).count
+    co != 0
   end
 
   def role_user

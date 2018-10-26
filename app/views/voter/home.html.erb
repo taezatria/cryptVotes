@@ -76,6 +76,7 @@
   </div>
 
   <div class="col">
+    <%= flash[:notice] if flash[:notice].present? %>
     <%= flash[:alert] if flash[:alert].present? %>
     <%= render @menu %>
   </div>

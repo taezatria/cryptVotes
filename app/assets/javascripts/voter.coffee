@@ -17,8 +17,23 @@ $(document).on "turbolinks:load", ->
     $("#voteModal").modal('show');
 
   $("#card_list").on "click", ".card", ->
-    $(this).find("input").prop('checked', true);
+    ch = $(this).find("input").prop('checked');
+    $(this).find("input").prop('checked', !ch);
     $(this).siblings(".card").each ->
       $(this).removeClass('bg-secondary');
       $(this).addClass('bg-light');
     $(this).toggleClass('bg-secondary bg-light');
+
+  $("#electverify_card").on "click", "#verifybutt",->
+    $("#elect_id").val($(this).siblings("#elec_id").val());
+    $("#open-verify").val("verify");
+    $("#passModal").modal('show');
+    $(this).attr('hidden',true);
+    $(this).siblings("#openbutt").removeAttr("hidden");
+
+  $("#electverify_card").on "click", "#openbutt",->
+    $("#elect_id").val($(this).siblings("#elec_id").val());
+    $("#open-verify").val("open");
+    $("#passModal").modal('show');
+    $(this).attr('hidden',true);
+    $(this).siblings("#verifybutt").removeAttr("hidden");
