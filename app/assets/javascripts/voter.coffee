@@ -24,16 +24,32 @@ $(document).on "turbolinks:load", ->
       $(this).addClass('bg-light');
     $(this).toggleClass('bg-secondary bg-light');
 
-  $("#electverify_card").on "click", "#verifybutt",->
-    $("#elect_id").val($(this).siblings("#elec_id").val());
-    $("#open-verify").val("verify");
+  $("#verifybutt").click ->
+    $("#openverify").val("verify");
+    $("#verifyModal").modal('hide');
     $("#passModal").modal('show');
-    $(this).attr('hidden',true);
-    $(this).siblings("#openbutt").removeAttr("hidden");
 
   $("#electverify_card").on "click", "#openbutt",->
     $("#elect_id").val($(this).siblings("#elec_id").val());
-    $("#open-verify").val("open");
+    $("#openverify").val("open");
     $("#passModal").modal('show');
-    $(this).attr('hidden',true);
-    $(this).siblings("#verifybutt").removeAttr("hidden");
+
+  $("#submit").click ->
+    raw = $("#formPass").serializeArray();
+    data = {};
+    $(raw).each (i,val) ->
+      data[val.name] = val.value
+    $.ajax
+      url: 'vote/verify'
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        $("#passphrase").val("");
+        if res.status == 1
+          alert("verified");
+        else if res.status == 0
+          $("#verifyModal").modal('show');
+        else
+          alert('nil');
+        

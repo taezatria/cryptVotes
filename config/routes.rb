@@ -30,5 +30,6 @@ Rails.application.routes.draw do
 
   get 'vote/:id', to: 'voter#get_candidate'
   post 'vote', to: 'voter#vote'
+  post 'vote/verify', to: 'voter#verify'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

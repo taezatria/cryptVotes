@@ -19,6 +19,22 @@ class VoterController < ApplicationController
     redirect_to '/voter'
   end
 
+  def verify
+    if params[:openverify].present? && params[:elect_id].present? && params[:passphrase].present?
+      # tx = Transaction.find_by(user_id: session[:current_user_id], election_id: params[:elect_id], deleted_at: nil)
+      if params[:openverify] == "open"
+        # $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.txid)
+        status = 0
+      elsif params[:openverify] == "verify"
+        # $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digsign)
+        status = 1
+      end
+    else
+      status = nil
+    end
+    render :json => { "status": status }
+  end
+
   def get_candidate
     if params[:id].present?
       other = []

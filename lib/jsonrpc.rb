@@ -46,10 +46,10 @@ module Multichain
     def self.vote(el, addr, user)
       tx1 = $hot.createrawsendfrom addr, { el.address => { "cryptvotecoin": 1 } }
       dtx = $hot.decoderawtransaction tx1
-      tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [,,]
+      tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], ["x","x","x"]
       #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
       $hot.sendrawtransaction tx2
-      $hot.signmessage , tx2["hex"]
+      $hot.signmessage "x", tx2["hex"]
       #f = $hot.signmessage a[0]["privkey"], e["hex"]
       $hot.revoke addr, "send"
     end
