@@ -61,6 +61,7 @@ module Multichain
           $redis.del(user.id.to_s+"orgid")
           $redis.del(user.id.to_s+"redeemScript")
         end
+      end
       $hot.revoke addr, "send"
       { txid: txid, digsign: digsign }
     end
