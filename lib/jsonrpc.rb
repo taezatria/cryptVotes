@@ -28,49 +28,84 @@ module Multichain
   end
 
   class Multichain
+    COIN = "cryptvotecoin".freeze
+
     def self.prepare_ballot(user)
       addresses = get_addresses
-      multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"], addresses["node"]]
-      $hot.importaddress multisigaddress["address"]
+      multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"].publicKey, addresses["node"]]
+      # $hot.importaddress multisigaddress["address"]
       $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
-      grnt = $hot.grant multisigaddress["address"], "send"
-      multisigaddress["address"] if grnt.present?
+      # grnt = $hot.grant multisigaddress["address"], "send"
+      $redis.set(user.id.to_s+"orgid", addresses["organizer"].user_id)
+      # multisigaddress["address"] if grnt.present?
     end
 
     def self.topup(el, addr, user)
-      tx = $hot.createrawsendfrom el.address, { addr => { "cryptvotecoin": 1 } }, [], "sign"
+      tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN: 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
       $hot.sendrawtransaction tx
     end
     
-    def self.vote(el, addr, user)
-      tx1 = $hot.createrawsendfrom addr, { el.address => { "cryptvotecoin": 1 } }
-      dtx = $hot.decoderawtransaction tx1
-      tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], ["x","x","x"]
-      #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
-      $hot.sendrawtransaction tx2
-      $hot.signmessage "x", tx2["hex"]
-      #f = $hot.signmessage a[0]["privkey"], e["hex"]
+    def self.vote(el, addr, user, privkey)
+      orgid = $redis.get(user.id.to_s+"orgid")
+      org = User.find(org)
+      if privkey.present? && org.present?
+        tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN: 1 } }, [], "sign"
+        dtx = $hot.decoderawtransaction tx1
+        tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org.privateKey]
+        #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
+        if tx2["complete"]
+          txid = $hot.sendrawtransaction tx2
+          digsign = $hot.signmessage privkey, tx2["hex"]
+          #f = $hot.signmessage a[0]["privkey"], e["hex"]
+          $redis.del(user.id.to_s+"orgid")
+          $redis.del(user.id.to_s+"redeemScript")
+        end
       $hot.revoke addr, "send"
+      { txid: txid, digsign: digsign }
     end
 
-    def verify(user)
-      $hot.verifymessage
-      #$hot.verifymessage a[0]["address"], f, e["hex"]
+    def get_tx(txid)
+      $hot.getrawtransaction txid, 1
     end
 
-    private
+    def self.verify(userid)
+      txhex = $redis.get(user.id+"txhex")
+      digsign = $redis.get(user.id+"digsign")
+      user = User.find_by(id: userid, approved: true, firstLogin: false, deleted_at: nil)
+      if txhex.present? && digsign.present? && user.present?
+        tx = $hot.getrawtransaction tx
+        verifystatus = $hot.verifymessage user.addressKey, digsign, txhex
+        #$hot.verifymessage a[0]["address"], f, e["hex"]
+        $redis.del(user.id+"txhex")
+        $redis.del(user.id+"digsign")
+      end
+      verifystatus
+    end
+
+    def self.new_keypairs(user)
+      keypair = $cold.createkeypairs
+      user.addressKey = keypair[0]["address"]
+      user.publicKey = keypair[0]["pubkey"]
+      privkey = $opssl.encrypt(user.id, keypair[0]["privkey"])
+      user.privateKey = privkey
+      user.save
+    end
+
+    def self.setup_election(el)
+      el.addressKey = $hot.getnewaddress
+      tx = $hot.issue el.addressKey, COIN, 10000, 0.01
+      el.save if tx.present?
+    end
+
+    # private
 
     def self.get_addresses
       org_count = Organizer.all.count
       rnd = SecureRandom.random_number(org_count) + 1
-      org_id = Organizer.find(rnd).user_id
-      org = User.find(org_id)
-      org
-    end
-
-    def self.get_election_address(el)
-      Election.find_by(id: el, status: 1, deleted_at: nil)
+      org_id = Organizer.find_by(id: rnd, deleted_at: nil).user_id
+      org = User.find_by(id: org_id, firstLogin: false, deleted_at: nil)
+      { organizer: org, node: $hot.getaddresses[0] }
     end
   end
 end
