@@ -44,14 +44,21 @@ class HomeController < ApplicationController
       UserMailer.with(user: user).verification_email.deliver_later
       flash[:notice] = "E-mail sent successfully"
     else
-      @regis = "aaaa"
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
     end
     render :index
   end
 
   def verify
-    render :verify
+    if params[:txid].present?
+      tx = Multichain::Multichain.get_tx params[:txid]
+      if params[:blockhash].present?
+        cek = tx["blockhash"] == params[:blockhash]
+      end
+      render :json => { tx: tx, blockhash: cek }
+    else
+      render :verify
+    end
   end
 
   def login

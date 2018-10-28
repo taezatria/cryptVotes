@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'home/:id/genkey', to: 'home#keygen'
 
   get 'home/verify', to: 'home#verify'
-  get 'home/verify/:id', to: 'home#verify'
+  post 'home/verify', to: 'home#verify'
 
   get 'home/result', to: 'home#result'
   get 'home/result/:id', to:'home#result'

@@ -35,14 +35,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				<% all_result_data.each do |tx| %>
+				<% all_result_data.each do |tx|
+					rawdata = tx.data.scan(/../).map { |x| x.hex.chr }.join.split('00')
+					if rawdata[1] == @el.id.to_s %>
 					<tr>
 						<td><%= tx.txid %></td>
 						<td><%= tx.blockHash %></td>
-						<% data = tx.data.scan(/../).map { |x| x.hex.chr }.join.split('00')[2] %>
-						<td><%= data %></td>
+						<td><%= rawdata[2] %></td>
 						<td><%= tx.fromAddress %></td>
 					</tr>
+					<% end %>
 				<% end %>
 			</tbody>
 		</table>
