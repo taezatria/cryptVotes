@@ -97,6 +97,16 @@ class HomeController < ApplicationController
     end
   end
 
+  def download
+    @result = VoteResult.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @result.to_csv, 
+      filename: "vote-result-#{Date.today}.csv" }
+    end
+  end
+
   private
 
   def vote_result(elect_id)

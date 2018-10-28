@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   post 'home/verify', to: 'home#verify'
 
   get 'home/result', to: 'home#result'
+  get 'home/result/download', to: 'home#download'
   get 'home/result/:id', to:'home#result'
 
   get 'organize', to: 'organize#home'
