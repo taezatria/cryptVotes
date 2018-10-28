@@ -33,23 +33,30 @@ module Multichain
     def self.prepare_ballot(user)
       addresses = get_addresses
       multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"].publicKey, addresses["node"]]
-      # $hot.importaddress multisigaddress["address"]
+      $hot.importaddress multisigaddress["address"]
       $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
-      # grnt = $hot.grant multisigaddress["address"], "send"
       $redis.set(user.id.to_s+"orgid", addresses["organizer"].user_id)
-      # multisigaddress["address"] if grnt.present?
+      grnt = $hot.grant multisigaddress["address"], "send"
+      if grnt.present?
+        AddressList.create(
+          address: multisigaddress["address"],
+        )
+        $redis.set(user.id_to_s+"multiaddress", multisigaddress["address"])
+      end
     end
 
-    def self.topup(el, addr, user)
+    def self.topup(el, user)
+      addr = $redis.get(user.id.to_s+"multiaddress")
       tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN: 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
       $hot.sendrawtransaction tx
     end
     
-    def self.vote(el, addr, user, privkey)
+    def self.vote(el, user, privkey)
       orgid = $redis.get(user.id.to_s+"orgid")
       org = User.find(org)
-      if privkey.present? && org.present?
+      addr = $redis.get(user.id.to_s+"multiaddress")
+      if privkey.present? && org.present? && addr.present?
         tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN: 1 } }, [], "sign"
         dtx = $hot.decoderawtransaction tx1
         tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org.privateKey]
@@ -60,6 +67,9 @@ module Multichain
           #f = $hot.signmessage a[0]["privkey"], e["hex"]
           $redis.del(user.id.to_s+"orgid")
           $redis.del(user.id.to_s+"redeemScript")
+          adr = AddressList.find_by(address: addr)
+          adr.tx = txid
+          adr.save
         end
       end
       $hot.revoke addr, "send"
@@ -75,7 +85,6 @@ module Multichain
       digsign = $redis.get(user.id+"digsign")
       user = User.find_by(id: userid, approved: true, firstLogin: false, deleted_at: nil)
       if txhex.present? && digsign.present? && user.present?
-        tx = $hot.getrawtransaction tx
         verifystatus = $hot.verifymessage user.addressKey, digsign, txhex
         #$hot.verifymessage a[0]["address"], f, e["hex"]
         $redis.del(user.id+"txhex")

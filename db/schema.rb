@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.integer "participants", null: false
     t.integer "status", default: 0
     t.text "image", null: false
+    t.text "addressKey"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

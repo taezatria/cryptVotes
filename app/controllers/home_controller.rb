@@ -83,6 +83,7 @@ class HomeController < ApplicationController
   def result
     if params[:id].present?
       @data = vote_result(params[:id])
+      @el = Election.find params[:id]
       render :viewresult
     else
       render :result

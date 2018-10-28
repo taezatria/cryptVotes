@@ -37,35 +37,34 @@ class VoterController < ApplicationController
   def verify
     if params[:openverify].present? && params[:elect_id].present? && params[:passphrase].present?
       tx = Transaction.find_by(user_id: session[:current_user_id], election_id: params[:elect_id], deleted_at: nil)
-      if params[:openverify] == "open"
+      if params[:openverify] == "open" && tx.present?
         txid = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.txid)
         tx = Multichain::Multichain.get_tx(txid)
         $redis.set(session[:current_user_id].to_s+"txhex", tx["hex"])
         status = 0
-      elsif params[:openverify] == "verify"
+      elsif params[:openverify] == "verify" && tx.present?
         digsign = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digsign)
         $redis.set(session[:current_user_id].to_s+"txhex", digsign)
         verifystatus = Multichain::Multichain.verify(session[:current_user_id])
         status = 1
       end
-    else
-      status = nil
     end
     render :json => { "status": status, tx: tx, "verifystatus": verifystatus }
   end
 
   def get_candidate
+    stts = nil
     if params[:id].present?
       other = []
       candidate = Candidate.where(election_id: params[:id], deleted_at: nil);
       candidate.each do |cand|
         other.push(User.find_by(id: cand.user_id, deleted_at: nil))
       end
-
-    else
-      candidate = nil
+      if candidate.present? && other.present?
+        stts = Multichain::Multichain.prepare_ballot(session[:current_user_id])
+      end
     end
-    render :json => { candidate: candidate, other: other }
+    render :json => { status: stts == "OK", candidate: candidate, other: other }
   end
 
   def change_password
