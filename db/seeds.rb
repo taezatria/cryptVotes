@@ -64,7 +64,8 @@ elec1 = Election.create(
   status: sta,
   image: SecureRandom.hex
 )
-Multichain::Multichain.setup_election(elec1)
+#Multichain::Multichain.setup_election(elec1)
+#16fDSG4bhjBtto3PbqPKYoe2ZqhMNMDczRCdKQ
 
 sd = DateTime.now + (SecureRandom.random_number(21)-14).days
 ed = DateTime.now + (SecureRandom.random_number(21)-7).days
@@ -91,7 +92,8 @@ elec2 = Election.create(
   status: sta,
   image: SecureRandom.hex
 )
-Multichain::Multichain.setup_election(elec2)
+#Multichain::Multichain.setup_election(elec2)
+#1gncPC1YXxSd1WDXC4FHrSWYvJe8sroJwZGfr
 
 $opssl.genpkey("default","foobar")
 $opssl.genpbkey("default","foobar")
@@ -189,12 +191,13 @@ end
 end
 
 org = User.last
-org.firstlogin = false
 org.username = "cobaadmin"
 org.password = Digest::MD5.hexdigest("cobaadmin")
 org.save
 
 address = $cold.createkeypairs[0]
+$opssl.genpkey(org.id+1,"foobar")
+$opssl.genpbkey(org.id+1,"foobar")
 privkey = $opssl.encrypt(org.id+1,address["privkey"])
 user = User.create(
   name: SecureRandom.hex(10), 

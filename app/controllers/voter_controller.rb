@@ -13,16 +13,22 @@ class VoterController < ApplicationController
       voter = Voter.find_by(user_id: session[:current_user_id], hasVote: false, hasAttend: true)
       user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at: nil)
       el = election_now(params[:vote_election_id])
-      if voter.present? && user.present? && el.present?
+      cand = Candidate.find_by(id: params[:candidate_id], election_id: params[:vote_election_id])
+      candidate = Candidate.find_by(id: cand.user_id, approved: true, deleted_at: nil)
+      if voter.present? && user.present? && el.present? && candidate.present?
         privkey = $opssl.decrypt(user.id, params[:passphrase], user.privateKey)
+        rawdata = [candidate.id, el.id, candidate.name, cand.id].join("0x0")
+        data = rawdata.each_byte.map { |b| b.to_s(16) }.join
         if privkey.present?
-          res = Multichain::Multichain.vote(el, addr, user, privkey)
+          res = Multichain::Multichain.vote(el, addr, user, privkey, data)
           if res[:txid].present? && res[:digsign].present?
+            ctx = $opssl.encrypt(user.id, res[:txid])
+            cdig = $opssl.encrypt(user.id, res[:digsign])
             Transaction.create(
               user: user,
               election: el,
-              txid: res[:txid],
-              digsign: res[:digsign]
+              txid: ctx,
+              digsign: cdig
             )
           end
         end
@@ -60,11 +66,8 @@ class VoterController < ApplicationController
       candidate.each do |cand|
         other.push(User.find_by(id: cand.user_id, deleted_at: nil))
       end
-      if candidate.present? && other.present?
-        stts = Multichain::Multichain.prepare_ballot(session[:current_user_id])
-      end
     end
-    render :json => { status: stts == "OK", candidate: candidate, other: other }
+    render :json => { candidate: candidate, other: other }
   end
 
   def change_password

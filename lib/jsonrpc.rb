@@ -32,39 +32,41 @@ module Multichain
 
     def self.prepare_ballot(user)
       addresses = get_addresses
-      multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses["organizer"].publicKey, addresses["node"]]
+      multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses[:organizer].publicKey, addresses[:node]["pubkey"]]
       $hot.importaddress multisigaddress["address"]
       $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
-      $redis.set(user.id.to_s+"orgid", addresses["organizer"].user_id)
+      $redis.set(user.id.to_s+"orgid", addresses[:organizer].id)
       grnt = $hot.grant multisigaddress["address"], "send"
       if grnt.present?
         AddressList.create(
           address: multisigaddress["address"],
         )
-        $redis.set(user.id_to_s+"multiaddress", multisigaddress["address"])
+        $redis.set(user.id.to_s+"multiaddress", multisigaddress["address"])
       end
     end
 
     def self.topup(el, user)
       addr = $redis.get(user.id.to_s+"multiaddress")
-      tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN: 1 } }, [], "sign"
+      tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN+el.id.to_s => 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
-      $hot.sendrawtransaction tx
+      $hot.sendrawtransaction tx["hex"]
     end
 
-    def self.vote(el, user, privkey)
+    def self.vote(el, user, privkey, data)
       orgid = $redis.get(user.id.to_s+"orgid")
-      org = User.find(org)
+      org = User.find(orgid)
       addr = $redis.get(user.id.to_s+"multiaddress")
       if privkey.present? && org.present? && addr.present?
-        tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN: 1 } }, [], "sign"
+        tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN+el.id.to_s => 1 } }, [data]
         dtx = $hot.decoderawtransaction tx1
         passdef = $redis.get("defaultpassphrase")
-        org_privkey = $opssl.decrypt("default",passdef,org.privkey)
-        tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey]
+        org_privkey = $opssl.decrypt("default", passdef, org.privateKey)
+        node_address = $hot.getaddresses[0]
+        node_privkey = $hot.dumpprivkey node_address
+        tx2 = $cold.signrawtransaction tx1, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][1]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey, node_privkey]
         #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
         if tx2["complete"]
-          txid = $hot.sendrawtransaction tx2
+          txid = $hot.sendrawtransaction tx2["hex"]
           digsign = $hot.signmessage privkey, tx2["hex"]
           #f = $hot.signmessage a[0]["privkey"], e["hex"]
           $redis.del(user.id.to_s+"orgid")
@@ -83,14 +85,14 @@ module Multichain
     end
 
     def self.verify(userid)
-      txhex = $redis.get(user.id+"txhex")
-      digsign = $redis.get(user.id+"digsign")
+      txhex = $redis.get(userid.to_s+"txhex")
+      digsign = $redis.get(userid.to_s+"digsign")
       user = User.find_by(id: userid, approved: true, firstLogin: false, deleted_at: nil)
       if txhex.present? && digsign.present? && user.present?
         verifystatus = $hot.verifymessage user.addressKey, digsign, txhex
         #$hot.verifymessage a[0]["address"], f, e["hex"]
-        $redis.del(user.id+"txhex")
-        $redis.del(user.id+"digsign")
+        $redis.del(user.id.to_s+"txhex")
+        $redis.del(user.id.to_s+"digsign")
       end
       verifystatus
     end
@@ -106,8 +108,11 @@ module Multichain
 
     def self.setup_election(el)
       el.addressKey = $hot.getnewaddress
-      tx = $hot.issue el.addressKey, COIN+el.id.to_s, 10000, 1
-      el.save if tx.present?
+      grnt = $hot.grant el.addressKey, "send"
+      if grnt.present?
+        tx = $hot.issue el.addressKey, COIN+el.id.to_s, 10000, 1
+        el.save if tx.present?
+      end
     end
 
     # private
@@ -117,7 +122,8 @@ module Multichain
       rnd = SecureRandom.random_number(org_count) + 1
       org_id = Organizer.find_by(id: rnd, deleted_at: nil).user_id
       org = User.find_by(id: org_id, firstLogin: false, deleted_at: nil)
-      { organizer: org, node: $hot.getaddresses[0] }
+      addr = $hot.getaddresses[0]
+      { organizer: org, node: $hot.validateaddress(addr) }
     end
   end
 end
