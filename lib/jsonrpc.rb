@@ -51,7 +51,7 @@ module Multichain
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
       $hot.sendrawtransaction tx
     end
-    
+
     def self.vote(el, user, privkey)
       orgid = $redis.get(user.id.to_s+"orgid")
       org = User.find(org)
@@ -59,7 +59,9 @@ module Multichain
       if privkey.present? && org.present? && addr.present?
         tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN: 1 } }, [], "sign"
         dtx = $hot.decoderawtransaction tx1
-        tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org.privateKey]
+        passdef = $redis.get("defaultpassphrase")
+        org_privkey = $opssl.decrypt("default",passdef,org.privkey)
+        tx2 = $cold.signrawtransaction dtx, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][0]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey]
         #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
         if tx2["complete"]
           txid = $hot.sendrawtransaction tx2
@@ -104,7 +106,7 @@ module Multichain
 
     def self.setup_election(el)
       el.addressKey = $hot.getnewaddress
-      tx = $hot.issue el.addressKey, COIN, 10000, 0.01
+      tx = $hot.issue el.addressKey, COIN+el.id.to_s, 10000, 1
       el.save if tx.present?
     end
 

@@ -6,7 +6,7 @@ $(document).on "turbolinks:load", ->
   $("#electvote_card").on "click", ".card", ->
     $("#vote_election_id").val($(this).children("#elec_id").val());
     $.ajax
-      url: 'vote/'+$(this).children("#elec_id").val()
+      url: '/vote/'+$(this).children("#elec_id").val()
       method: 'get'
       dataType: 'json'
       success: (res) ->

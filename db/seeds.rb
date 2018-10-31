@@ -64,6 +64,7 @@ elec1 = Election.create(
   status: sta,
   image: SecureRandom.hex
 )
+Multichain::Multichain.setup_election(elec1)
 
 sd = DateTime.now + (SecureRandom.random_number(21)-14).days
 ed = DateTime.now + (SecureRandom.random_number(21)-7).days
@@ -90,13 +91,26 @@ elec2 = Election.create(
   status: sta,
   image: SecureRandom.hex
 )
+Multichain::Multichain.setup_election(elec2)
 
-10.times do
+$opssl.genpkey("default","foobar")
+$opssl.genpbkey("default","foobar")
+
+10.times do |i|
+  address = $cold.createkeypairs[0]
+  privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
     name: SecureRandom.hex(10), 
     idNumber: SecureRandom.hex(10), 
     email: SecureRandom.hex(10), 
-    phone: SecureRandom.hex(5)
+    phone: SecureRandom.hex(5),
+    approved: true,
+    firstLogin: false,
+    username: "coba"+i.to_s,
+    password: Digest::MD5.hexdigest("coba"+i.to_s),
+    addressKey: address["address"],
+    publicKey: address["pubkey"],
+    privateKey: privkey
   )
   Voter.create(
     user: user,
@@ -107,12 +121,21 @@ elec2 = Election.create(
     election: elec2
   )
 end
-4.times do
+4.times do |i|
+  address = $cold.createkeypairs[0]
+  privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
     name: SecureRandom.hex(10), 
     idNumber: SecureRandom.hex(10), 
     email: SecureRandom.hex(10), 
-    phone: SecureRandom.hex(5)
+    phone: SecureRandom.hex(5),
+    approved: true,
+    firstLogin: false,
+    username: "coba"+i.to_s,
+    password: Digest::MD5.hexdigest("coba"+i.to_s),
+    addressKey: address["address"],
+    publicKey: address["pubkey"],
+    privateKey: privkey
   )
   Candidate.create(
     user: user,
@@ -131,12 +154,21 @@ end
     access_right: ar
   )
 end
-4.times do
+4.times do |i|
+  address = $cold.createkeypairs[0]
+  privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
     name: SecureRandom.hex(10), 
     idNumber: SecureRandom.hex(10), 
     email: SecureRandom.hex(10), 
-    phone: SecureRandom.hex(5)
+    phone: SecureRandom.hex(5),
+    approved: true,
+    firstLogin: false,
+    username: "coba"+i.to_s,
+    password: Digest::MD5.hexdigest("coba"+i.to_s),
+    addressKey: address["address"],
+    publicKey: address["pubkey"],
+    privateKey: privkey
   )
   Candidate.create(
     user: user,
@@ -155,6 +187,32 @@ end
     access_right: ar
   )
 end
+
+org = User.last
+org.firstlogin = false
+org.username = "cobaadmin"
+org.password = Digest::MD5.hexdigest("cobaadmin")
+org.save
+
+address = $cold.createkeypairs[0]
+privkey = $opssl.encrypt(org.id+1,address["privkey"])
+user = User.create(
+  name: SecureRandom.hex(10), 
+  idNumber: SecureRandom.hex(10), 
+  email: SecureRandom.hex(10), 
+  phone: SecureRandom.hex(5),
+  approved: true,
+  firstLogin: false,
+  username: "cobavoter",
+  password: Digest::MD5.hexdigest("cobavoter"),
+  addressKey: address["address"],
+  publicKey: address["pubkey"],
+  privateKey: privkey
+)
+Voter.create(
+  user: user,
+  election: elec1
+)
 
 c = [{ id: 1, el_id: 2, name: "Candidate nomor 1"},
 { id: 2, el_id: 3, name: "Candidate nomor 1"},
