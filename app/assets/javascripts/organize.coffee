@@ -86,4 +86,15 @@ $(document).on "turbolinks:load", ->
         $("#edit_public_key").val(data.user.publicKey);
         $("#edit_show_image").attr('src', data.other.image);
     $("#editModal").modal('show');
-   
+
+  $("#voter_search").keyup ->
+    alert('searching...');
+
+  $("#candidate_search").keyup ->
+    alert('searching...');
+
+  $("#organizer_search").keyup ->
+    alert('searching...');
+
+  $("#election_search").keyup ->
+    alert('searching...');

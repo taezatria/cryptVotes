@@ -89,6 +89,21 @@ class OrganizeController < ApplicationController
     redirect_to organize_path(menu: params[:menu])
   end
 
+  def search
+    user = User.where('name LIKE ?',"%#{params[:name]}%").where(deleted_at: nil)
+    if params[:menu] == 'organizer'
+      other = Organizer.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'candidate'
+      other = Candidate.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'voter'
+      other = Voter.where(user_id: user.ids, deleted_at: nil)
+    else
+      user = nil
+      other = nil
+    end
+    render :json => { user: user, other: other }
+  end
+
   def get_data
     if params[:menu] == 'organizer'
       user = User.find_by(id: params[:user_id], deleted_at: nil)

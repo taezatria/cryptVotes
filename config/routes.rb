@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   post 'organize/change_password', to: 'organize#change_password'
 
   post 'organize/add', to: 'organize#add'
+  get 'organize/:menu/search/:name', to: 'organize#search'
   get 'organize/:menu/:user_id/:other_id', to: 'organize#get_data'
   post 'organize/alter', to: 'organize#alter'
   post 'organize/discard', to: 'organize#discard'
