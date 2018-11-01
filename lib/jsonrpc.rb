@@ -38,9 +38,11 @@ module Multichain
       $redis.set(user.id.to_s+"orgid", addresses[:organizer].id)
       grnt = $hot.grant multisigaddress["address"], "send"
       if grnt.present?
-        AddressList.create(
-          address: multisigaddress["address"],
-        )
+        if AddressList.where(address: multisigaddress["address"]).count == 0
+          AddressList.create(
+            address: multisigaddress["address"],
+          )
+        end
         $redis.set(user.id.to_s+"multiaddress", multisigaddress["address"])
       end
     end
@@ -59,11 +61,19 @@ module Multichain
       if privkey.present? && org.present? && addr.present?
         tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN+el.id.to_s => 1 } }, [data]
         dtx = $hot.decoderawtransaction tx1
+        scriptPubkey = nil
+        dtx["vout"].each do |vout|
+          if vout["scriptPubKey"]["addresses"].present?
+            scriptPubkey = vout["scriptPubKey"]["hex"] if vout["scriptPubKey"]["addresses"][0] == addr
+          end
+        end
+
         passdef = $redis.get("defaultpassphrase")
         org_privkey = $opssl.decrypt("default", passdef, org.privateKey)
         node_address = $hot.getaddresses[0]
         node_privkey = $hot.dumpprivkey node_address
-        tx2 = $cold.signrawtransaction tx1, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": dtx["vout"][1]["scriptPubKey"]["hex"], "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey, node_privkey]
+
+        tx2 = $cold.signrawtransaction tx1, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": scriptPubkey, "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey, node_privkey]
         #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
         if tx2["complete"]
           txid = $hot.sendrawtransaction tx2["hex"]
@@ -74,13 +84,16 @@ module Multichain
           adr = AddressList.find_by(address: addr)
           adr.tx = txid
           adr.save
+          voter = Voter.find_by(user_id: user.id)
+          voter.hasVote = true
+          voter.save
         end
       end
       $hot.revoke addr, "send"
       { txid: txid, digsign: digsign }
     end
 
-    def get_tx(txid)
+    def self.get_tx(txid)
       $hot.getrawtransaction txid, 1
     end
 
@@ -121,7 +134,7 @@ module Multichain
       org_count = Organizer.all.count
       rnd = SecureRandom.random_number(org_count) + 1
       org_id = Organizer.find_by(id: rnd, deleted_at: nil).user_id
-      org = User.find_by(id: org_id, firstLogin: false, deleted_at: nil)
+      org = User.find_by(id: 16, firstLogin: false, deleted_at: nil)
       addr = $hot.getaddresses[0]
       { organizer: org, node: $hot.validateaddress(addr) }
     end

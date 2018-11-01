@@ -39,13 +39,14 @@ $(document).on "turbolinks:load", ->
     data = {};
     $(raw).each (i,val) ->
       data[val.name] = val.value
+    $("#passphrase").val("");
     $.ajax
       url: 'vote/verify'
       method: 'post'
       dataType: 'json'
       data: data
       success: (res) ->
-        $("#passphrase").val("");
+        alert(JSON.stringify(res));
         if res.status == 1
           alert("verified");
         else if res.status == 0

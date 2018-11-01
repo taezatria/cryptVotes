@@ -5,6 +5,9 @@ class VoterController < ApplicationController
     @status = role_user
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = 'home' unless ["change_password", "vote", "verify"].include? @menu
+    if @menu == "vote"
+      check_election
+    end
     render :home
   end
 
@@ -14,13 +17,13 @@ class VoterController < ApplicationController
       user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at: nil)
       el = election_now(params[:vote_election_id])
       cand = Candidate.find_by(id: params[:candidate_id], election_id: params[:vote_election_id])
-      candidate = Candidate.find_by(id: cand.user_id, approved: true, deleted_at: nil)
+      candidate = User.find_by(id: cand.user_id, approved: true, deleted_at: nil)
       if voter.present? && user.present? && el.present? && candidate.present?
         privkey = $opssl.decrypt(user.id, params[:passphrase], user.privateKey)
-        rawdata = [candidate.id, el.id, candidate.name, cand.id].join("0x0")
-        data = rawdata.each_byte.map { |b| b.to_s(16) }.join
         if privkey.present?
-          res = Multichain::Multichain.vote(el, addr, user, privkey, data)
+          rawdata = [candidate.id, el.id, candidate.name, cand.id].join("0x0")
+          data = rawdata.each_byte.map { |b| b.to_s(16) }.join
+          res = Multichain::Multichain.vote(el, user, privkey, data)
           if res[:txid].present? && res[:digsign].present?
             ctx = $opssl.encrypt(user.id, res[:txid])
             cdig = $opssl.encrypt(user.id, res[:digsign])
@@ -28,14 +31,21 @@ class VoterController < ApplicationController
               user: user,
               election: el,
               txid: ctx,
-              digsign: cdig
+              digSign: cdig
             )
+            $redis.del(user.id.to_s+"Ballot")
+            flash[:notice] = "success, txid: "+ res[:txid]
+          else
+            flash[:alert] = "failed to vote"
           end
+        else
+          flash[:alert] = "wrong passphrase"
         end
-        flash[:notice] = "berhasil"
       else
-        flash[:alert] = "gagal"
+        flash[:alert] = "datas are not valid"
       end
+    else
+      flash[:alert] = "datas are not completed"
     end
     redirect_to '/voter'
   end
@@ -45,17 +55,21 @@ class VoterController < ApplicationController
       tx = Transaction.find_by(user_id: session[:current_user_id], election_id: params[:elect_id], deleted_at: nil)
       if params[:openverify] == "open" && tx.present?
         txid = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.txid)
-        tx = Multichain::Multichain.get_tx(txid)
-        $redis.set(session[:current_user_id].to_s+"txhex", tx["hex"])
-        status = 0
+        if txid.present?
+          txs = Multichain::Multichain.get_tx(txid)
+          $redis.set(session[:current_user_id].to_s+"txhex", txs["hex"])
+          status = 0
+        end
       elsif params[:openverify] == "verify" && tx.present?
-        digsign = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digsign)
-        $redis.set(session[:current_user_id].to_s+"txhex", digsign)
-        verifystatus = Multichain::Multichain.verify(session[:current_user_id])
-        status = 1
+        digsign = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digSign)
+        if digsign.present?
+          $redis.set(session[:current_user_id].to_s+"digsign", digsign)
+          verifystatus = Multichain::Multichain.verify(session[:current_user_id])
+          status = 1
+        end
       end
     end
-    render :json => { "status": status, tx: tx, "verifystatus": verifystatus }
+    render :json => { "status": status, tx: txs, "verifystatus": verifystatus }
   end
 
   def get_candidate
@@ -101,16 +115,22 @@ class VoterController < ApplicationController
   end
 
   def election_now(el)
-    Election.find_by(id: el, status: 1, deleted_at: nil).where('? BETWEEN start_date AND end_date', DateTime.now)
+    Election.where('? BETWEEN start_date AND end_date', DateTime.now).find_by(id: el, status: 1, deleted_at: nil)
   end
 
   def check_election
-    el = []
-    Voter.where(user_id: session[:current_user_id]).each do |voter|
-      el.push(voter.election_id)
+    if $redis.get(session[:current_user_id].to_s+"Ballot").nil?
+      el = []
+      Voter.where(user_id: session[:current_user_id], hasVote: false, hasAttend: true, deleted_at: nil).each do |voter|
+        el.push(voter.election_id)
+      end
+      co = Election.where(id: el, status: 1, deleted_at: nil).where('? BETWEEN start_date AND end_date', DateTime.now).count
+      if co > 0
+        user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at:nil)
+        Multichain::Multichain.prepare_ballot(user)
+        $redis.set(user.id.to_s+"Ballot", true)
+      end
     end
-    co = Election.where(id: el, status: 1, deleted_at: nil).where('? BETWEEN start_date AND end_date', DateTime.now).count
-    co != 0
   end
 
   def role_user
