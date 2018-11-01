@@ -1,6 +1,8 @@
 class HomeController < ApplicationController
   before_action :check_user_login
 
+  require 'objspace'
+
   def index  
   end
 
@@ -55,7 +57,7 @@ class HomeController < ApplicationController
       if params[:blockhash].present?
         cek = tx["blockhash"] == params[:blockhash]
       end
-      render :json => { tx: tx, blockhash: cek }
+      render :json => { tx: tx, blockhash: cek, size: ObjectSpace.memsize_of(tx) }
     else
       render :verify
     end

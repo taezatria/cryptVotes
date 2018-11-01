@@ -14,12 +14,19 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
-        # $("#txhex").val()
-        # $("#blockhash1").val()
-        # $("#mined").val()
-        # $("#size").val()
-        # $("#confirmation").val()
-        # $("#amount").val()
-        # $("#fromaddress").val()
-        # $("#toaddress").val()
+        if res.blockhash
+          $("#cek").html("verified");
+        else
+          $("#cek").html("not same block");
+        $("#txhex").val(res.tx.hex);
+        $("#blockhash1").val(res.tx.blockhash);
+        $("#mined").val(res.tx.time);
+        $("#data").val(res.tx.data);
+        $("#size").val(res.size);
+        $("#confirmation").val(res.tx.confirmations);
+        $(res.tx.vout).each (i, data) ->
+          if data.assets.length > 0
+            $("#toaddress").val(data.scriptPubKey.addresses);
+            $("#amount").val(data.assets[0].qty);
+          else if data.scriptPubKey.addresses != ""
+            $("#fromaddress").val(data.scriptPubKey.addresses);
