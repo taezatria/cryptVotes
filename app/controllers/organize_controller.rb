@@ -1,3 +1,5 @@
+require 'csv'
+
 class OrganizeController < ApplicationController
   before_action :check_user_login
   skip_before_action :verify_authenticity_token
@@ -87,6 +89,48 @@ class OrganizeController < ApplicationController
       )
     end
     redirect_to organize_path(menu: params[:menu])
+  end
+
+  def add_by_file
+    if params[:addfile].present? && params[:menu].present?
+      data = []
+      other = []
+      CSV.foreach(params[:addfile].path, :headers => true) do |row|
+        user_data = row.to_hash
+        other_data = user_data.slice!("name","idNumber","email","phone")
+        user = User.create!(user_data)
+        if params[:menu] == "organizer"
+          other_data["election"] = other_data["election"].split(",")
+          other_data["access_right"] = other_data["access_right"].split(",")
+          other_data["election"].count.times do |i|
+            Organizer.create(
+              user: user,
+              election_id: other_data["election"][i],
+              access_right_id: other_data["access_right_id"][i]
+            )
+          end
+        elsif params[:menu] == "voter"
+          other_data["election"] = other_data["election"].split(",")
+          other_data["election"].count.times do |i|
+            Voter.create(
+              user: user,
+              election_id: other_data["election"][i]
+            )
+          end
+        elsif params[:menu] == "candidate"
+          other_data["election"] = other_data["election"].split(",")
+          other_data["election"].count.times do |i|
+            Candidate.create(
+              user: user,
+              election_id: other_data["election"][i]
+            )
+          end
+        end
+        data.push user_data
+        other.push other_data
+      end
+    end
+    render :json => { data: data, other: other }
   end
 
   def search
