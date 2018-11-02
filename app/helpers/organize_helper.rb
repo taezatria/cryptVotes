@@ -20,6 +20,10 @@ module OrganizeHelper
     AccessRight.where(deleted_at: nil)
   end
 
+  def all_users
+    User.where(deleted_at: nil)
+  end
+
   def voter(id)
     Voter.where(user_id: id, deleted_at: nil)
   end

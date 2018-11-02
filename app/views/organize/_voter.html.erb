@@ -76,6 +76,15 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6">
+            <div class="form-group">
+              <%= label_tag :add_user_id, "User" %>
+              <select name="add_user_id" id="add_user_id" class="custom-select">
+                <option value="0">--= NEW USER =--</option>
+<% all_users.each do |user| %>
+                <option value="<%= user.id %>"><%= user.name =%></option>
+<% end %>
+              </select>
+            </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
@@ -204,13 +213,13 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_address, "Blockchain Address" %>
-              <%= text_field_tag :edit_address, "", class: "form-control", readonly: true %>
+              <%= text_area_tag :edit_address, "", class: "form-control", readonly: true, rows: 4  %>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_public_key, "Blockchain Public Key" %>
-              <%= text_field_tag :edit_public_key, "", class: "form-control", readonly: true %>
+              <%= text_area_tag :edit_public_key, "", class: "form-control", readonly: true, rows: 4  %>
             </div>
           </div>
           <div class="col-md-4">

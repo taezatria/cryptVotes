@@ -98,7 +98,9 @@ elec2 = Election.create(
 $opssl.genpkey("default","foobar")
 $opssl.genpbkey("default","foobar")
 
-10.times do |i|
+i = 0
+
+10.times do
   address = $cold.createkeypairs[0]
   privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
@@ -122,8 +124,9 @@ $opssl.genpbkey("default","foobar")
     user: user,
     election: elec2
   )
+  i+=1
 end
-4.times do |i|
+4.times do
   address = $cold.createkeypairs[0]
   privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
@@ -155,8 +158,9 @@ end
     election: elec1,
     access_right: ar
   )
+  i+=1
 end
-4.times do |i|
+4.times do
   address = $cold.createkeypairs[0]
   privkey = $opssl.encrypt("default",address["privkey"])
   user = User.create(
@@ -188,6 +192,7 @@ end
     election: elec2,
     access_right: ar
   )
+  i+=1
 end
 
 org = User.last

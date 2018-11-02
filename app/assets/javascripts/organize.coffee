@@ -19,7 +19,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_email").val(data.user.email);
         $("#edit_phone").val(data.user.phone);
         $("#edit_username").val(data.user.username);
-        $("#edit_address").val(data.user.address);
+        $("#edit_address").val(data.user.addressKey);
         $("#edit_public_key").val(data.user.publicKey);
     $("#editModal").modal('show');
 
@@ -60,7 +60,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_email").val(data.user.email);
         $("#edit_phone").val(data.user.phone);
         $("#edit_username").val(data.user.username);
-        $("#edit_address").val(data.user.address);
+        $("#edit_address").val(data.user.addressKey);
         $("#edit_public_key").val(data.user.publicKey);
         $("#edit_hasattend").prop('checked', data.other.hasAttend);
         $("#edit_hasvote").prop('checked', data.other.hasVote);
@@ -82,19 +82,97 @@ $(document).on "turbolinks:load", ->
         $("#edit_phone").val(data.user.phone);
         $("#edit_username").val(data.user.username);
         $("#edit_description").val(data.other.description);
-        $("#edit_address").val(data.user.address);
-        $("#edit_public_key").val(data.user.publicKey);
         $("#edit_show_image").attr('src', data.other.image);
     $("#editModal").modal('show');
+  
+  $("#add_user_id").change ->
+    if $(this).val() == "0"
+      $("#add_name").removeAttr("readonly");
+      $("#add_id_number").removeAttr("readonly");
+      $("#add_email").removeAttr("readonly");
+      $("#add_phone").removeAttr("readonly");
+      $("#add_name").val("");
+      $("#add_id_number").val("");
+      $("#add_email").val("");
+      $("#add_phone").val("");
+    else
+      $.ajax
+        url: 'organize/user/'+$(this).val()+'/0'
+        method: 'get'
+        dataType: 'json'
+        success: (data) ->
+          $("#add_name").attr("readonly",true);
+          $("#add_id_number").attr("readonly",true);
+          $("#add_email").attr("readonly",true);
+          $("#add_phone").attr("readonly",true);
+          $("#add_name").val(data.user.name);
+          $("#add_id_number").val(data.user.idNumber);
+          $("#add_email").val(data.user.email);
+          $("#add_phone").val(data.user.phone);
 
   $("#voter_search").keyup ->
-    alert('searching...');
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/voter/search/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_voter").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              return false;
 
   $("#candidate_search").keyup ->
-    alert('searching...');
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/candidate/search/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_candidate").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_candidate").append('<tr><input type="hidden" id="menu" value="candidate"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
 
   $("#organizer_search").keyup ->
-    alert('searching...');
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/organizer/search/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_organizer").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value1.access_right_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
 
   $("#election_search").keyup ->
-    alert('searching...');
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/election/search/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_election").html("");
+        $(data.user).each (i, value) ->
+          $sd = new Date(value.start_date).toDateString();
+          $ed = new Date(value.end_date).toDateString();
+          $("#tbody_election").append('<tr><input type="hidden" id="menu" value="election"><input type="hidden" id="election_id" value="'+value.id+'"><td>'+value.name+'</td><td>'+value.description+'</td><td>'+$sd+'</td><td>'+$ed+'</td><td>'+value.participants+'</td></tr>');

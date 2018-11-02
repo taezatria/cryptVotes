@@ -90,13 +90,26 @@ class OrganizeController < ApplicationController
   end
 
   def search
-    user = User.where('name LIKE ?',"%#{params[:name]}%").where(deleted_at: nil)
+    if params[:menu] == "election"
+      if params[:name] == "all"
+        user = Election.where(deleted_at: nil)
+      else
+        user = Election.where('name LIKE ?',"%#{params[:name]}%").where(deleted_at: nil)
+      end
+    elsif params[:name] == "all"
+      user = User.where(deleted_at: nil)
+    else
+      user = User.where('name LIKE ?',"%#{params[:name]}%").where(deleted_at: nil)
+    end
+
     if params[:menu] == 'organizer'
       other = Organizer.where(user_id: user.ids, deleted_at: nil)
     elsif params[:menu] == 'candidate'
       other = Candidate.where(user_id: user.ids, deleted_at: nil)
     elsif params[:menu] == 'voter'
       other = Voter.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'election'
+      other = nil
     else
       user = nil
       other = nil
@@ -105,7 +118,9 @@ class OrganizeController < ApplicationController
   end
 
   def get_data
-    if params[:menu] == 'organizer'
+    if params[:menu] == 'user'
+      user = User.find_by(id: params[:user_id], deleted_at: nil)
+    elsif params[:menu] == 'organizer'
       user = User.find_by(id: params[:user_id], deleted_at: nil)
       other = Organizer.find_by(id: params[:other_id], deleted_at: nil)
     elsif params[:menu] == 'candidate'
