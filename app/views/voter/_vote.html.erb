@@ -35,14 +35,16 @@
         <div class="card-columns" id="card_list">
           
         </div>
-        <input type="hidden" id="vote_election_id" name="vote_election_id">
+        <input type="hidden" id="vote_election_id" name="vote_election_id" required>
 
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
         <div class="col-md-4">
-          <%= password_field_tag :passphrase, "", class: "form-control", placeholder: "Passphrase" %>
+          <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "Passphrase", required: true %>
+          <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
+          <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>
         <%= submit_tag "Submit", class: "btn btn-success" %>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

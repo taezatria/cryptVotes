@@ -36,7 +36,75 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= label_tag :txhex, "Transaction Hex" %>
+              <%= text_area_tag :txhex, "", class: "form-control", rows: 3, readonly: true %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= label_tag :blockhash1, "Included in Block" %>
+              <%= text_area_tag :blockhash1, "", class: "form-control", rows: 3, readonly: true %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <%= label_tag :mined, "Mined time" %>
+              <%= text_field_tag :mined, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="form-group">
+              <%= label_tag :data, "Data" %>
+              <%= text_field_tag :data, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :size, "Size" %>
+              <%= text_field_tag :size, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :confirmation, "Confirmation" %>
+              <%= text_field_tag :confirmation, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= label_tag :amount, "Amount" %>
+              <%= text_field_tag :amount, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= label_tag :fromaddress, "Sender Address" %>
+              <%= text_area_tag :fromaddress, "", class: "form-control",rows: 2, readonly: true %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= label_tag :toaddress, "Receiver Address" %>
+              <%= text_area_tag :toaddress, "", class: "form-control",rows: 2, readonly: true %>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Modal footer -->
@@ -65,10 +133,12 @@
 
         <div class="form-group">
           <%= label_tag :passphrase, "Passphrase" %>
-          <%= password_field_tag :passphrase, "", class: "form-control" %>
+          <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "Passphrase", required: true %>
+          <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
+          <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>
-        <input type="hidden" id="openverify" name="openverify">
-        <input type="hidden" id="elect_id" name="elect_id">
+        <input type="hidden" id="openverify" name="openverify" required>
+        <input type="hidden" id="elect_id" name="elect_id" required>
       </div>
 
       <!-- Modal footer -->

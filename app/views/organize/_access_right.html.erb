@@ -53,9 +53,11 @@
 
         <div class="form-group">
           <%= label_tag :add_name, "Name" %>
-          <%= text_field_tag :add_name, "", class: "form-control" %>
+          <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
+          <div class="invalid-feedback" hidden><span class="fa fa-times"></span></div>
+          <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>
-        <%= hidden_field_tag 'menu', 'access_right' %>
+        <%= hidden_field_tag 'menu', 'access_right', required: true %>
       </div>
 
       <!-- Modal footer -->
@@ -86,17 +88,19 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_ar_id, "ID" %>
-              <%= text_field_tag :edit_ar_id, "", class: "form-control", readonly: true %>
+              <%= text_field_tag :edit_ar_id, "", class: "form-control", readonly: true, required: true %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
-              <%= text_field_tag :edit_name, "", class: "form-control" %>
+              <%= text_field_tag :edit_name, "", class: "form-control name-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span></div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
-        <%= hidden_field_tag 'menu', 'access_right' %>
+        <%= hidden_field_tag 'menu', 'access_right', required: true %>
       </div>
 
       <!-- Modal footer -->
@@ -124,8 +128,8 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
-        <input type="hidden" name="delete_ar_id" id="delete_ar_id">
-        <%= hidden_field_tag 'menu', 'access_right' %>
+        <input type="hidden" name="delete_ar_id" id="delete_ar_id" required>
+        <%= hidden_field_tag 'menu', 'access_right', required: true %>
       </div>
 
       <!-- Modal footer -->

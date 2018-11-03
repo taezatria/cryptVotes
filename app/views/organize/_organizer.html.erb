@@ -114,13 +114,17 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_name, "Name" %>
-              <%= text_field_tag :add_name, "", class: "form-control" %>
+              <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> min 6 characters</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_id_number, "ID Number" %>
-              <%= text_field_tag :add_id_number, "", class: "form-control" %>
+              <%= text_field_tag :add_id_number, "", class: "form-control idnumber-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> ex: m26415123, c14150123</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
@@ -129,17 +133,21 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_email, "E-mail" %>
-              <%= text_field_tag :add_email, "", class: "form-control" %>
+              <%= text_field_tag :add_email, "", class: "form-control email-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> ex: name@email.com, username@serv.univ.ac.id</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_phone, "Phone Number" %>
-              <%= text_field_tag :add_phone, "", class: "form-control" %>
+              <%= text_field_tag :add_phone, "", class: "form-control phone-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric, ex: 021-1234567, 081234567890</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
-        <%= hidden_field_tag 'menu', 'organizer' %>
+        <%= hidden_field_tag 'menu', 'organizer', required: true %>
 
       </div>
 
@@ -170,7 +178,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_user_id, "User ID" %>
-              <%= text_field_tag :edit_user_id, "", class: "form-control", readonly: true %>
+              <%= text_field_tag :edit_user_id, "", class: "form-control", readonly: true, required: true %>
             </div>
           </div>
           <div class="col-md-4">
@@ -199,19 +207,25 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
-              <%= text_field_tag :edit_name, "", class: "form-control", readonly: true %>
+              <%= text_field_tag :edit_name, "", class: "form-control name-check", readonly: true, required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span></div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_id_number, "ID Number" %>
-              <%= text_field_tag :edit_id_number, "", class: "form-control", readonly: true %>
+              <%= text_field_tag :edit_id_number, "", class: "form-control idnumber-check", readonly: true, required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span></div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_phone, "Phone Number" %>
-              <%= text_field_tag :edit_phone, "", class: "form-control", readonly: true %>
+              <%= text_field_tag :edit_phone, "", class: "form-control phone-check", readonly: true, required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span></div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
@@ -220,13 +234,17 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_email, "E-mail" %>
-              <%= text_field_tag :edit_email, "", class: "form-control" %>
+              <%= text_field_tag :edit_email, "", class: "form-control email-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> ex: name@email.com, username@serv.univ.ac.id</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_username, "Username" %>
-              <%= text_field_tag :edit_username, "", class: "form-control" %>
+              <%= text_field_tag :edit_username, "", class: "form-control username-check" %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Alphanumeric min 6 characters</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
@@ -250,8 +268,8 @@
             </div>
           </div>
         </div>
-        <input type="hidden" name="edit_org_id" id="edit_org_id">
-        <%= hidden_field_tag 'menu', 'organizer' %>
+        <input type="hidden" name="edit_org_id" id="edit_org_id" required>
+        <%= hidden_field_tag 'menu', 'organizer', required: true %>
       </div>
 
       <!-- Modal footer -->
@@ -279,8 +297,8 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
-        <input type="hidden" name="delete_org_id" id="delete_org_id">
-        <%= hidden_field_tag 'menu', 'organizer' %>
+        <input type="hidden" name="delete_org_id" id="delete_org_id" required>
+        <%= hidden_field_tag 'menu', 'organizer', required: true %>
       </div>
       
       <!-- Modal footer -->
@@ -310,9 +328,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="custom-file">
-              <%= file_field_tag :addfile, class: "custom-file-input" %>
+              <%= file_field_tag :addfile, class: "custom-file-input", required: true %>
               <%= label_tag :addfile, "Choose File CSV", class: "custom-file-label" %>
-              <%= hidden_field_tag 'menu', 'organizer' %>
+              <%= hidden_field_tag 'menu', 'organizer', required: true %>
             </div>
           </div>
         </div>

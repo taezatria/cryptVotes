@@ -9,12 +9,12 @@ class HomeController < ApplicationController
   def setup_account
     if User.setupAcc(params[:user_id], params[:username], params[:password])
       $opssl.genpkey(params[:user_id], params[:passphrase])
-      flash[:notice] = "successfully"
+      flash[:success] = "account setup successfully"
       user = User.find(params[:user_id])
       # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
       UserMailer.with(user: user).welcome_email.deliver_later
     else
-      flash[:alert] = "failed"
+      flash[:alert] = "failed to setup account"
     end
     redirect_to '/home'
   end
@@ -42,11 +42,11 @@ class HomeController < ApplicationController
   end
 
   def email
-    user = User.find_by(email: params[:email], approved: true, firstLogin: true, deleted_at: nil)
+    user = User.find_by(email: params[:verifyemail], approved: true, firstLogin: true, deleted_at: nil)
     if user.present?
       # SendEmailJob.set(wait: 10.seconds).perform_later("verify", user)
       UserMailer.with(user: user).verification_email.deliver_later
-      flash[:notice] = "E-mail sent successfully"
+      flash[:notice] = "E-mail sent successfully, please to check your inbox"
     else
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
     end

@@ -68,13 +68,17 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_name, "Name" %>
-              <%= text_field_tag :add_name, "", class: "form-control" %>
+              <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> min 6 characters</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_participants, "Participants" %>
-              <%= number_field_tag :add_participants, "", class: "form-control" %>
+              <%= number_field_tag :add_participants, "", class: "form-control number-check", min: 0, required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> min 0</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
         </div>
@@ -82,20 +86,20 @@
 
           <div class="form-group">
             <%= label_tag :add_description, "Description" %>
-            <%= text_area_tag :add_description, "", class: "form-control" %>
+            <%= text_area_tag :add_description, "", class: "form-control", required: true %>
           </div>
 
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_start_date, "Start Date" %>
-              <%= date_field :add_start_date, "", class: "form-control" %>
+              <%= date_field :add_start_date, "", class: "form-control", required: true %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_end_date, "End Date" %>
-              <%= date_field :add_end_date, "", class: "form-control" %>
+              <%= date_field :add_end_date, "", class: "form-control", required: true %>
             </div>
           </div>    
         </div>
@@ -107,12 +111,12 @@
           <div class="col-md-6">
             <label>Add Image</label>
             <div class="custom-file">
-                <%= file_field_tag :add_image, class: "custom-file-input" %>
+                <%= file_field_tag :add_image, class: "custom-file-input", required: true %>
                 <%= label_tag :add_image, "Choose File", class: "custom-file-label" %>
             </div>
           </div>    
         </div>
-        <%= hidden_field_tag 'menu', 'election' %>
+        <%= hidden_field_tag 'menu', 'election', required: true %>
       </div>
 
       <!-- Modal footer -->
@@ -142,13 +146,15 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
-              <%= text_field_tag :edit_name, "", class: "form-control" %>
+              <%= text_field_tag :edit_name, "", class: "form-control name-check", required: true %>
+              <div class="invalid-feedback" hidden><span class="fa fa-times"></span> min 6 characters</div>
+              <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_participants, "Participants" %>
-              <%= number_field_tag :edit_participants, "", class: "form-control" %>
+              <%= number_field_tag :edit_participants, "", class: "form-control", min: 0, required: true %>
             </div>
           </div>
         </div>
@@ -162,13 +168,13 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_start_date, "Start Date" %>
-              <%= date_field :edit_start_date, "", class: "form-control" %>
+              <%= date_field :edit_start_date, "", class: "form-control", required: true %>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_end_date, "End Date" %>
-              <%= date_field :edit_end_date, "", class: "form-control" %>
+              <%= date_field :edit_end_date, "", class: "form-control", required: true %>
             </div>
           </div>    
         </div>
@@ -185,8 +191,8 @@
             </div>
           </div>   
         </div>
-        <input type="hidden" id="edit_election_id" name="edit_election_id">
-        <%= hidden_field_tag 'menu', 'election' %>
+        <input type="hidden" id="edit_election_id" name="edit_election_id" required>
+        <%= hidden_field_tag 'menu', 'election', required: true %>
       </div>
 
       <!-- Modal footer -->
@@ -214,8 +220,8 @@
       <!-- Modal body -->
       <div class="modal-body">
         Are you sure ?
-        <input type="hidden" id="delete_election_id" name="delete_election_id">
-        <%= hidden_field_tag 'menu', 'election' %>
+        <input type="hidden" id="delete_election_id" name="delete_election_id" required>
+        <%= hidden_field_tag 'menu', 'election', required: true %>
       </div>
 
       <!-- Modal footer -->

@@ -176,3 +176,88 @@ $(document).on "turbolinks:load", ->
           $sd = new Date(value.start_date).toDateString();
           $ed = new Date(value.end_date).toDateString();
           $("#tbody_election").append('<tr><input type="hidden" id="menu" value="election"><input type="hidden" id="election_id" value="'+value.id+'"><td>'+value.name+'</td><td>'+value.description+'</td><td>'+$sd+'</td><td>'+$ed+'</td><td>'+value.participants+'</td></tr>');
+
+  $(".name-check").change ->
+    if (/^[a-z ]{6,50}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+  
+  $(".username-check").change ->
+    if (/^[a-z0-9]{6,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+
+  $(".password-check").change ->
+    if (/^[a-z0-9]{8,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+  
+  $(".email-check").change ->
+    $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if $re.test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+  
+  $(".idnumber-check").change ->
+    if (/^[a-z]{0,1}[0-9]{6,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+  
+  $(".phone-check").change ->
+    if (/^[0-9-]{6,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+  
+  $(".number-check").change ->
+    if (/^[0-9]+$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);

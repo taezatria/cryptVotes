@@ -13,7 +13,7 @@ $(document).on "turbolinks:load", ->
         #alert(JSON.stringify(res));
         $("#card_list").html("");
         $(res.candidate).each (i, data) ->
-          $("#card_list").append('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="'+data.image+'" alt="Card image"><div class="card-body"><h4 class="card-title">'+res.other[i].name+'</h4><p class="card-text">'+data.description+'</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="candidate_id" value="'+data.id+'"><label class="custom-control-label"></label></div></div></div>');
+          $("#card_list").append('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="'+data.image+'" alt="Card image"><div class="card-body"><h4 class="card-title">'+res.other[i].name+'</h4><p class="card-text">'+data.description+'</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="candidate_id" value="'+data.id+'" required><label class="custom-control-label"></label></div></div></div>');
     $("#voteModal").modal('show');
 
   $("#card_list").on "click", ".card", ->
@@ -53,4 +53,28 @@ $(document).on "turbolinks:load", ->
           $("#verifyModal").modal('show');
         else
           alert('nil');
+  
+  $(".password-check").change ->
+    if (/^[a-z0-9]{8,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+
+  $(".passphrase-check").change ->
+    if (/^[0-9]{6}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
         
