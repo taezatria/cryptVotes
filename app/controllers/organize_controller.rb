@@ -106,7 +106,7 @@ class OrganizeController < ApplicationController
             Organizer.create(
               user: user,
               election_id: other_data["election"][i],
-              access_right_id: other_data["access_right_id"][i]
+              access_right_id: other_data["access_right"][i]
             )
           end
         elsif params[:menu] == "voter"
@@ -122,7 +122,8 @@ class OrganizeController < ApplicationController
           other_data["election"].count.times do |i|
             Candidate.create(
               user: user,
-              election_id: other_data["election"][i]
+              election_id: other_data["election"][i],
+              image: "person.jpg"
             )
           end
         end

@@ -3,20 +3,26 @@
     <h1>Elections</h1>
   </div>
 
-  <div class="row" style="margin-bottom: 10px">
-    <div class="col-md-10">
-      <div class="form-inline">
-        <%= text_field_tag :election_search, "", class: "form-control mr-3" %>
-        <%= button_tag "Search", class: "btn btn-basic" %>
-      </div>
+  <div class="row">
+    <div class="col-md-6">
     </div>
     <div class="col-md-2">
-      <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
-        <span class="fa fa-plus mr-3"></span>
-        Add New
-      </button>
+      <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
+        <span class="fa fa-plus mr-3"></span>Add New</button>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="input-group mb-2">
+          <%= text_field_tag :election_search, "", class: "form-control", placeholder: "Name" %>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fa fa-search"></span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
   <div class="row">
     <table class="table table-hover">
       <thead class="thead-light">

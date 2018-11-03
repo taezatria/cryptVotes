@@ -3,22 +3,29 @@
     <h1>Organizers</h1>
   </div>
 
-  <div class="row" style="margin-bottom: 10px">
-    <div class="col-md-8">
-      <div class="form-inline">
-        <%= text_field_tag :organizer_search, "", class: "form-control mr-3", placeholder: "Name" %>
-        <%= button_tag "Search", class: "btn btn-basic" %>
-      </div>
+  <div class="row">
+    <div class="col-md-4">
     </div>
     <div class="col-md-2">
-      <button class="btn btn-basic" data-toggle="modal" data-target="#addModal">
+      <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
         <span class="fa fa-plus mr-3"></span>Add New</button>
     </div>
     <div class="col-md-2">
       <div class="custom-file" data-toggle="modal" data-target="#addFileModal">
-        <button type="button" class="btn btn-secondary"><span class="fa fa-file-upload mr-3"></span>Add Some</button>
+        <button type="button" class="btn btn-secondary btn-block"><span class="fa fa-file-upload mr-3"></span>Add Some</button>
       </div>
     </div> 
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="input-group mb-2">
+          <%= text_field_tag :organizer_search, "", class: "form-control", placeholder: "Name" %>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fa fa-search"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="row">
