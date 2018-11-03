@@ -8,22 +8,31 @@ class HomeController < ApplicationController
 
   def setup_account
     if User.setupAcc(params[:user_id], params[:username], params[:password])
-      $opssl.genpkey(params[:user_id], params[:passphrase])
-      flash[:success] = "account setup successfully"
-      user = User.find(params[:user_id])
-      # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
-      UserMailer.with(user: user).welcome_email.deliver_later
+      if $opssl.genpkey(params[:user_id], params[:passphrase])
+        flash[:success] = "account setup successfully"
+        user = User.find(params[:user_id])
+        # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
+        UserMailer.with(user: user).welcome_email.deliver_later
+      else
+        flash[:alert] = "failed to generate keys"  
+      end
     else
       flash[:alert] = "failed to setup account"
     end
-    redirect_to '/home'
+    redirect_to :index
   end
   
   def setup
     user = User.find_by(id: params[:id], approved: true, firstLogin: true, deleted_at: nil)
     if user.present?
-      @user_id = user.id
-      render :setup
+      name = user.name
+      str = Digest::MD5.hexdigest(params[:id].to_s+name+"setup")
+      if params[:str] == str
+        @user_id = user.id
+        render :setup
+      else
+        redirect_to root_path
+      end
     else
       redirect_to root_path
     end
@@ -66,7 +75,6 @@ class HomeController < ApplicationController
   end
 
   def login
-    # redirect_to '/organize'
     if params[:username].present? && params[:password].present?
       user = User.login(params[:username], Digest::MD5.hexdigest(params[:password]))
       if user.present?
@@ -84,11 +92,68 @@ class HomeController < ApplicationController
   end
 
   def forget_password
-    
+    if params[:id].present?
+      user = User.find_by(id: params[:id], approved: true, firstLogin: false, deleted_at: nil)
+      if user.present?
+        name = user.name
+        str = Digest::MD5.hexdigest(params[:id].to_s+name+"password")
+        if params[:str] == str
+          @user_id = user.id
+          @menu = "password"
+          render :reset
+        else
+          redirect_to root_path
+        end
+      else
+        redirect_to root_path
+      end
+    elsif params[:user_id].present?
+      user = User.find_by(id: params[:user_id], approved: true, firstLogin: false, deleted_at: nil)
+      flash[:alert] = 'New password and retype password dont match' if params[:newpassword] != params[:retypepassword]
+      unless flash[:alert].present? || user.nil?
+        user.password = Digest::MD5.hexdigest(params[:newpassword])
+        user.save
+        flash[:notice] = 'Password saved successfully'
+      else
+        flash[:alert] ||= "User doesn't exist"
+      end
+      redirect_to :index
+    else
+      redirect_to root_path
+    end
   end
 
   def keygen
-
+    if params[:id].present?
+      user = User.find_by(id: params[:id], approved: true, firstLogin: false, deleted_at: nil)
+      if user.present?
+        name = user.name
+        str = Digest::MD5.hexdigest(params[:id].to_s+name+"passphrase")
+        if params[:str] == str
+          @user_id = user.id
+          @menu = "passphrase"
+          render :setup
+        else
+          redirect_to root_path
+        end
+      else
+        redirect_to root_path
+      end
+    elsif params[:user_id].present?
+      user = User.find_by(id: params[:user_id], approved: true, firstLogin: false, deleted_at: nil)
+      if user.present?
+        if $opssl.genpkey(params[:user_id], params[:passphrase])
+          flash[:success] = "account setup successfully"
+        else
+          flash[:alert] = "failed to generate keys" 
+        end 
+      else
+        flash[:alert] = "User doesn't exist"
+      end
+      redirect_to :index
+    else
+      redirect_to root_path
+    end
   end
 
   def result

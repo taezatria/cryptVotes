@@ -1,15 +1,18 @@
 class UserMailer < ApplicationMailer
+  URL_HOME = "http://192.168.108.134:6789".freeze
+
   default from: 'admin-notification@cryptvotes.com'
 
   def welcome_email
     @user = params[:user]
-    @url = "http://192.168.108.134:6789"
+    @url = URL_HOME
     mail(to: @user.email, subject: 'Welcome to CryptVotes')
   end
 
   def verification_email
     @user = params[:user]
-    @url = "http://192.168.108.134:6789/home/"+@user.id.to_s+"/setup"
+    str = Digest::MD5.hexdigest(@user.id.to_s+@user.name+"setup")
+    @url = URL_HOME+"/home/"+@user.id.to_s+"/setup/"+str
     mail(to: @user.email, subject: 'E-mail Verification')
   end
 
@@ -21,13 +24,15 @@ class UserMailer < ApplicationMailer
 
   def forget_password
     @user = params[:user]
-    @url = ''
+    str = Digest::MD5.hexdigest(@user.id.to_s+@user.name+"password")
+    @url = URL_HOME+"/home/"+@user.id.to_s+"/forget/"+str
     mail(to: @user.email, subject: 'Forget Password Verification')
   end
 
   def passphrase_reset
     @user = params[:user]
-    @url = ''
+    str = Digest::MD5.hexdigest(@user.id.to_s+@user.name+"passphrase")
+    @url = URL_HOME+"/home/"+@user.id.to_s+"/genkey/"+str
     mail(to: @user.email, subject: 'Passphrase Reset Request')
   end
 
@@ -35,7 +40,7 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     @blockhash = params[:blockhash]
     @txid = params[:txid]
-    @url = ''
+    @url = URL_HOME+"/home/verify"
     mail(to: @user.email, subject: 'Ballot Block Detail')
   end
 end

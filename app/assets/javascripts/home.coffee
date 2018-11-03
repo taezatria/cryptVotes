@@ -43,7 +43,7 @@ $(document).on "turbolinks:load", ->
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
   
-  $("#password").change ->
+  $(".password-check").change ->
     if (/^[a-z0-9]{8,}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
@@ -117,7 +117,7 @@ $(document).on "turbolinks:load", ->
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
 
-  $("#passphrase").change ->
+  $(".passphrase-check").change ->
     if (/^[0-9]{6}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");

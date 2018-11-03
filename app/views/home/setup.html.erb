@@ -15,19 +15,19 @@
 
         <div class="form-group">
           <%= label_tag :password, "New Password" %>
-          <%= password_field_tag :password, "", class: "form-control", required: true %>
+          <%= password_field_tag :password, "", class: "form-control password-check", required: true %>
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Alphanumeric min 8 characters</div>
           <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>
 
         <div class="form-group">
           <%= label_tag :passphrase, "New Passphrase" %>
-          <%= password_field_tag :passphrase, "", class: "form-control", required: true %>
+          <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", required: true %>
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
           <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
           <small class="text text-info">Note: Your passphrase will used to generate keys and not saved to the system</small>
         </div>
-        <input type="hidden" name="user_id" id="user_id" value="<%= @user_id %>">
+        <input type="hidden" name="user_id" id="user_id" value="<%= @user_id %>" required>
         <%= submit_tag "Submit", class: "btn btn-success btn-block" %>
       <% end %>
     </div>

@@ -4,11 +4,14 @@ Rails.application.routes.draw do
 
   post 'home', to: 'home#login'
   post 'home/email', to: 'home#email'
-  get 'home/:id/setup', to: 'home#setup'
+  get 'home/:id/setup/:str', to: 'home#setup'
   post 'home/setup', to: 'home#setup_account'
   post 'home/register', to: 'home#register'
-  get 'home/:id/forget', to: 'home#forget_password'
-  get 'home/:id/genkey', to: 'home#keygen'
+
+  get 'home/:id/forget/:str', to: 'home#forget_password'
+  post 'home/forget', to: 'home#forget_password'
+  get 'home/:id/genkey/:str', to: 'home#keygen'
+  post 'home/genkey', to: 'home#keygen'
 
   get 'home/verify', to: 'home#verify'
   post 'home/verify', to: 'home#verify'
