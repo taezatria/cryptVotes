@@ -35,6 +35,20 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.default_url_options = { :host => 'localhost:6789' }
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'cryptvotes.com',
+    user_name:            'm26415172@john.petra.ac.id',
+    password:             '',
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.exceptions_app = self.routes
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

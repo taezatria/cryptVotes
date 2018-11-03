@@ -11,6 +11,7 @@ class HomeController < ApplicationController
       $opssl.genpkey(params[:user_id], params[:passphrase])
       flash[:notice] = "successfully"
       user = User.find(params[:user_id])
+      # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
       UserMailer.with(user: user).welcome_email.deliver_later
     else
       flash[:alert] = "failed"
@@ -43,6 +44,7 @@ class HomeController < ApplicationController
   def email
     user = User.find_by(email: params[:email], approved: true, firstLogin: true, deleted_at: nil)
     if user.present?
+      # SendEmailJob.set(wait: 10.seconds).perform_later("verify", user)
       UserMailer.with(user: user).verification_email.deliver_later
       flash[:notice] = "E-mail sent successfully"
     else
