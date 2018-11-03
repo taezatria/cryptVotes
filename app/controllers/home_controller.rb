@@ -102,9 +102,11 @@ class HomeController < ApplicationController
           @menu = "password"
           render :reset
         else
+          flash[:alert] = "Link doesn't exist"
           redirect_to root_path
         end
       else
+        flash[:alert] = "User doesn't exist"
         redirect_to root_path
       end
     elsif params[:user_id].present?
@@ -134,9 +136,11 @@ class HomeController < ApplicationController
           @menu = "passphrase"
           render :setup
         else
+          flash[:alert] = "Link doesn't exist"
           redirect_to root_path
         end
       else
+        flash[:alert] = "User doesn't exist"
         redirect_to root_path
       end
     elsif params[:user_id].present?
