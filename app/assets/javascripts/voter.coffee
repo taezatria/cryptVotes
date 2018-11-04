@@ -34,7 +34,8 @@ $(document).on "turbolinks:load", ->
     $("#openverify").val("open");
     $("#passModal").modal('show');
 
-  $("#submit").click ->
+  $("#formPass").submit ->
+    formPass_check(true);
     raw = $("#formPass").serializeArray();
     data = {};
     $(raw).each (i,val) ->
@@ -53,7 +54,7 @@ $(document).on "turbolinks:load", ->
           $("#verifyModal").modal('show');
         else
           alert('nil');
-  
+
   $(".password-check").change ->
     if (/^[a-z0-9]{8,}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
@@ -65,8 +66,9 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    voterchangepasswordForm_check(false);
 
-  $(".passphrase-check").change ->
+  $("#formPass .passphrase-check").change ->
     if (/^[0-9]{6}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
@@ -77,4 +79,47 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    formPass_check(false);
+  
+  $("#voteForm .passphrase-check").change ->
+    if (/^[0-9]{6}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    voteForm_check(false);
         
+  $("#voterchangepasswordForm").submit ->
+    voterchangepasswordForm_check(true);
+  
+  $("#voteForm").submit ->
+    voteForm_check(true);
+
+voterchangepasswordForm_check = ($submit) ->
+  if $("#oldpassword").hasClass("is-valid") && $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+    $("#voterchangepasswordForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#voterchangepasswordForm").children("input[type=submit]").attr("disabled",true)
+
+voteForm_check = ($submit) ->
+  if $("#passphrase").hasClass("is-valid")
+    $("#voteSubmit").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#voteSubmit").attr("disabled",true)
+
+formPass_check = ($submit) ->
+  if $("#passphrase").hasClass("is-valid")
+    $("#verifySubmit").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#verifySubmit").attr("disabled",true)

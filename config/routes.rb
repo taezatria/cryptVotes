@@ -5,13 +5,13 @@ Rails.application.routes.draw do
   post 'home', to: 'home#login'
   post 'home/email', to: 'home#email'
   get 'home/:id/setup/:str', to: 'home#setup'
-  post 'home/setup', to: 'home#setup_account'
+  post 'home/setup', to: 'home#setup_account' #!
   post 'home/register', to: 'home#register'
 
   get 'home/:id/forget/:str', to: 'home#forget_password'
-  post 'home/forget', to: 'home#forget_password'
+  post 'home/forget', to: 'home#forget_password' #!
   get 'home/:id/genkey/:str', to: 'home#keygen'
-  post 'home/genkey', to: 'home#keygen'
+  post 'home/genkey', to: 'home#keygen' #!
 
   get 'home/verify', to: 'home#verify'
   post 'home/verify', to: 'home#verify'
@@ -22,20 +22,20 @@ Rails.application.routes.draw do
 
   get 'organize', to: 'organize#home'
   get 'organize/logout', to: 'organize#logout'
-  post 'organize/change_password', to: 'organize#change_password'
+  post 'organize/change_password', to: 'organize#change_password' #!
 
-  post 'organize/add', to: 'organize#add'
-  post 'organize/addbyfile', to: 'organize#add_by_file'
+  post 'organize/add', to: 'organize#add' #!
+  post 'organize/addbyfile', to: 'organize#add_by_file' #!
   get 'organize/:menu/search/:name', to: 'organize#search'
   get 'organize/:menu/:user_id/:other_id', to: 'organize#get_data'
-  post 'organize/alter', to: 'organize#alter'
-  post 'organize/discard', to: 'organize#discard'
+  post 'organize/alter', to: 'organize#alter' #!
+  post 'organize/discard', to: 'organize#discard' #!
 
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
 
   get 'vote/:id', to: 'voter#get_candidate'
-  post 'vote', to: 'voter#vote'
+  post 'vote', to: 'voter#vote' #!
   post 'vote/verify', to: 'voter#verify'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

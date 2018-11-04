@@ -31,7 +31,7 @@ $(document).on "turbolinks:load", ->
           else if data.scriptPubKey.addresses != ""
             $("#fromaddress").val(data.scriptPubKey.addresses);
 
-  $("#username").change ->
+  $("#loginForm #username").change ->
     if (/^[a-z0-9]{6,}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
@@ -42,8 +42,9 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    loginForm_check(false);
   
-  $(".password-check").change ->
+  $("#loginForm #password").change ->
     if (/^[a-z0-9]{8,}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
@@ -54,6 +55,33 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    loginForm_check(false);
+  
+  $("#setupForm #password").change ->
+    if (/^[a-z0-9]{8,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    setupForm_check(false);
+  
+  $("#setupForm #username").change ->
+    if (/^[a-z0-9]{6,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    setupForm_check(false);
   
   $("#verifyemail").change ->
     $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -67,6 +95,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    regisEmailForm_check(false);
   
   $("#email").change ->
     $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -80,6 +109,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    registerForm_check(false);
   
   $("#name").change ->
     if (/^[a-z ]{6,50}$/i).test($(this).val())
@@ -92,6 +122,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    registerForm_check(false);
   
   $("#idnumber").change ->
     if (/^[a-z]{0,1}[0-9]{6,}$/i).test($(this).val())
@@ -104,6 +135,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    registerForm_check(false);
   
   $("#phone").change ->
     if (/^[0-9-]{6,}$/i).test($(this).val())
@@ -116,8 +148,9 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    registerForm_check(false);
 
-  $(".passphrase-check").change ->
+  $("#setupForm #passphrase").change ->
     if (/^[0-9]{6}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
@@ -128,3 +161,96 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    setupForm_check(false);
+
+  $("#resetPasswordForm .password-check").change ->
+    if (/^[a-z0-9]{6,}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    resetPasswordForm_check(false);
+  
+  $("#resetPassphraseForm #passphrase").change ->
+    if (/^[0-9]{6}$/i).test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    resetPassphraseForm_check(false);
+  
+  $("#loginForm").submit ->
+    loginForm_check(true);
+  
+  $("#regisEmailForm").submit ->
+    regisEmailForm_check(true);
+  
+  $("#registerForm").submit ->
+    registerForm_check(true);
+  
+  $("#setupForm").submit ->
+    setupForm_check(true);
+
+  $("#resetPasswordForm").submit ->
+    resetPasswordForm_check(true);
+  
+  $("#resetPassphraseForm").submit ->
+    resetPassphraseForm_check(true);
+
+loginForm_check = ($submit) ->
+  if $("#username").hasClass("is-valid") && $("#password").hasClass("is-valid")
+    $("#loginForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#loginForm").children("input[type=submit]").attr("disabled",true)
+
+regisEmailForm_check = ($submit) ->
+  if $("#verifyemail").hasClass("is-valid")
+    $("#regisEmailForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#regisEmailForm").children("input[type=submit]").attr("disabled",true)
+
+registerForm_check = ($submit) ->
+  if $("#name").hasClass("is-valid") && $("#idnumber").hasClass("is-valid") && $("#email").hasClass("is-valid") && $("#phone").hasClass("is-valid")
+    $("#registerForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#registerForm").children("input[type=submit]").attr("disabled",true)
+
+setupForm_check = ($submit) ->
+  if $("#username").hasClass("is-valid") && $("#password").hasClass("is-valid") && $("#passphrase").hasClass("is-valid")
+    $("#setupForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#setupForm").children("input[type=submit]").attr("disabled",true)
+
+resetPasswordForm_check = ($submit) ->
+  if $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+    $("#resetPasswordForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#resetPasswordForm").children("input[type=submit]").attr("disabled",true)
+
+resetPassphraseForm_check = ($submit) ->
+  if $("#passphrase").hasClass("is-valid")
+    $("#resetPassphraseForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#resetPassphraseForm").children("input[type=submit]").attr("disabled",true)

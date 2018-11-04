@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   require 'objspace'
 
-  def index  
+  def index
   end
 
   def setup_account
@@ -58,6 +58,7 @@ class HomeController < ApplicationController
       flash[:notice] = "E-mail sent successfully, please to check your inbox"
     else
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
+      @regis = true
     end
     render :index
   end

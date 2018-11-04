@@ -22,7 +22,7 @@
 <div class="modal fade" id="voteModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "/vote", method: "post" do %>
+      <%= form_tag "/vote", id: "voteForm", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Ballot</h4>
@@ -46,7 +46,7 @@
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
           <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>
-        <%= submit_tag "Submit", class: "btn btn-success" %>
+        <%= submit_tag "Submit", id: "voteSubmit", class: "btn btn-success" %>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
       <% end %>

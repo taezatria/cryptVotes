@@ -212,6 +212,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    organizerchangepasswordForm_check(false);
   
   $(".email-check").change ->
     $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -261,3 +262,14 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+
+  $("#organizerchangepasswordForm").submit ->
+    organizerchangepasswordForm_check(true);
+
+organizerchangepasswordForm_check = ($submit) ->
+  if $("#oldpassword").hasClass("is-valid") && $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+    $("#organizerchangepasswordForm").children("input[type=submit]").removeAttr("disabled")
+  else if $submit
+    event.preventDefault();
+  else
+    $("#organizerchangepasswordForm").children("input[type=submit]").attr("disabled",true)

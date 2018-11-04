@@ -48,7 +48,7 @@
 <% else %>
           <div id="home" class="tab-pane fade in active show">
 <% end %>
-            <%= form_tag "/home", method: "post" do %>
+            <%= form_tag "/home", id: "loginForm", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :username, "Username", class: "form-control-label" %>
                 <%= text_field_tag :username, "", class: "form-control", required: true %>
@@ -58,7 +58,7 @@
 
               <div class="form-group">
                 <%= label_tag :password, "Password" %>
-                <%= password_field_tag :password, "", class: "form-control password-check", required: true %>
+                <%= password_field_tag :password, "", class: "form-control", required: true %>
                 <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Alphanumeric min 8 characters</div>
                 <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
               </div>
@@ -72,7 +72,7 @@
 <% else %>
           <div id="register" class="tab-pane fade">
 <% end %>
-            <%= form_tag "/home/register", method: "post" do %>
+            <%= form_tag "/home/register", id: "registerForm", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :name, "Name" %>
                 <%= text_field_tag :name, "", class: "form-control", required: true %>
@@ -106,7 +106,7 @@
           </div>
 
           <div id="regisemail" class="tab-pane fade">
-            <%= form_tag "/home/email", method: "post" do %>
+            <%= form_tag "/home/email", id: "regisEmailForm", method: "post" do %>
               <div class="form-group">
                 <%= label_tag :verifyemail, "Email" %>
                 <%= email_field_tag :verifyemail, "", class: "form-control", required: true %>
