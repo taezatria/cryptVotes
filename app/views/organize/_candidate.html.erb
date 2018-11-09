@@ -4,7 +4,17 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <div class="input-group mb-2">
+          <%= text_field_tag :candidate_search, "", class: "form-control", placeholder: "Name" %>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fa fa-search"></span></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-md-2">
       <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
@@ -16,24 +26,13 @@
       </div>
     </div> 
 
-    <div class="col-md-4">
-      <div class="form-group">
-        <div class="input-group mb-2">
-          <%= text_field_tag :candidate_search, "", class: "form-control", placeholder: "Name" %>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fa fa-search"></span></div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="row">
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>UserID</th>
-          <th>ElectionID</th>
+          <th>Election</th>
           <th>Name</th>
           <th>ID Number</th>
           <th>E-mail</th>
@@ -47,7 +46,6 @@
         <input type="hidden" id="menu" value="candidate">
         <input type="hidden" id="user_id" value="<%= candidate.id %>">
         <input type="hidden" id="other_id" value="<%= cand.id %>">
-          <td><%= candidate.id %></td>
           <td><%= cand.election_id %></td>
           <td><%= candidate.name %></td>
           <td><%= candidate.idNumber %></td>

@@ -4,7 +4,17 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <div class="input-group mb-2">
+          <%= text_field_tag :organizer_search, "", class: "form-control", placeholder: "Name" %>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fa fa-search"></span></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-md-2">
       <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
@@ -16,25 +26,13 @@
       </div>
     </div> 
 
-    <div class="col-md-4">
-      <div class="form-group">
-        <div class="input-group mb-2">
-          <%= text_field_tag :organizer_search, "", class: "form-control", placeholder: "Name" %>
-          <div class="input-group-append">
-            <div class="input-group-text"><span class="fa fa-search"></span></div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="row">
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>User ID</th>
-          <th>Election ID</th>
-          <th>Access Right ID</th>
+          <th>Election</th>
           <th>Name</th>
           <th>ID Number</th>
           <th>E-mail</th>
@@ -48,9 +46,7 @@
         <input type="hidden" id="menu" value="organizer">
         <input type="hidden" id="user_id" value="<%= organizer.id %>">
         <input type="hidden" id="other_id" value="<%= org.id %>">
-          <td><%= organizer.id %></td>
           <td><%= org.election_id %></td>
-          <td><%= org.access_right_id %></td>
           <td><%= organizer.name %></td>
           <td><%= organizer.idNumber %></td>
           <td><%= organizer.email %></td>
@@ -192,13 +188,11 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :edit_access_right_id, "Access Right" %>
-              <select name="edit_access_right_id" id="edit_access_right_id" class="custom-select">
-<% all_access_rights.each do |access_right| %>
-                <option value="<%= access_right.id %>"><%= access_right.name =%></option>
-<% end %>
-              </select>
+            <div class="form-group" style="margin-top: 40px">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="edit_admin" name="edit_admin"/>
+                <label class="custom-control-label" for="edit_admin">Admin</label>
+              </div>
             </div>
           </div>
         </div>
