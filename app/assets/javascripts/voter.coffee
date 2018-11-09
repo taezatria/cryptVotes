@@ -3,6 +3,14 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on "turbolinks:load", ->
+  $("#user_role").change ->
+    if $("#user_role").val() == "0"
+      window.location.href = "/voter?role=0";
+    else if $("#user_role").val() == "1"
+      window.location.href = "/organize?role=1"
+    else if $("#user_role").val() == "-1"
+      window.location.href = "/organize?role=-1"
+
   $("#electvote_card").on "click", ".card", ->
     $("#vote_election_id").val($(this).children("#elec_id").val());
     $.ajax

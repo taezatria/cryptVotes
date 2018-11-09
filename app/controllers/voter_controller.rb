@@ -2,7 +2,7 @@ class VoterController < ApplicationController
   before_action :check_user_login
 
   def home
-    @status = role_user
+    @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = 'home' unless ["change_password", "vote", "verify"].include? @menu
     if @menu == "vote"
@@ -108,9 +108,16 @@ class VoterController < ApplicationController
   private
 
   def check_user_login
-    if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).nil?
+    stts = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    if stts.nil?
       flash[:alert] = "You must login first !"
       redirect_back fallback_location: root_path
+    else
+      stts = stts.split(",")
+      unless stts.include? "0"
+        flash[:alert] = "You dont have authorize !"
+        redirect_to '/organize'
+      end
     end
   end
 
@@ -133,8 +140,14 @@ class VoterController < ApplicationController
     end
   end
 
-  def role_user
-    $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
+  def role_user(role)
+    stts = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).split(",")
+    if stts.include? role.to_s
+      stts.delete role.to_s
+      stts.unshift role.to_s
+      $redis.set(User::USER_LOGIN_KEY+session[:current_user_id].to_s, stts.join(","))
+    end
+    stts
   end
 
 end

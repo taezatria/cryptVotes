@@ -51,8 +51,10 @@ class HomeController < ApplicationController
   end
 
   def email
-    user = User.find_by(email: params[:verifyemail], approved: true, firstLogin: true, deleted_at: nil)
+    user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
     if user.present?
+      user.firstLogin = true
+      user.save
       # SendEmailJob.set(wait: 10.seconds).perform_later("verify", user)
       UserMailer.with(user: user).verification_email.deliver_later
       flash[:notice] = "E-mail sent successfully, please to check your inbox"
@@ -80,12 +82,12 @@ class HomeController < ApplicationController
       user = User.login(params[:username], Digest::MD5.hexdigest(params[:password]))
       if user.present?
         session[:current_user_id] = user[:user_id]
-        if user[:status] == 0
+        if user[:status][0] == 0
           redirect_to '/voter'
         else
           redirect_to '/organize'
-        end 
-      else 
+        end
+      else
         flash[:alert] = "Username or password doesn't match"
         redirect_back fallback_location: root_path
       end
@@ -121,6 +123,17 @@ class HomeController < ApplicationController
         flash[:alert] ||= "User doesn't exist"
       end
       redirect_to :index
+    elsif params[:email].present?
+      user = User.find_by(email: params[:email], approved: true, deleted_at: nil)
+      if user.present?
+        # SendEmailJob.set(wait: 10.seconds).perform_later("password", user)
+        UserMailer.with(user: user).forget_password.deliver_later
+        flash[:notice] = "E-mail sent successfully, please to check your inbox"
+      else
+        flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
+        @regis = true
+      end
+      render :index
     else
       redirect_to root_path
     end
@@ -156,6 +169,17 @@ class HomeController < ApplicationController
         flash[:alert] = "User doesn't exist"
       end
       redirect_to :index
+    elsif params[:email].present?
+      user = User.find_by(email: params[:email], approved: true, deleted_at: nil)
+      if user.present?
+        # SendEmailJob.set(wait: 10.seconds).perform_later("passphrase", user)
+        UserMailer.with(user: user).passphrase_reset.deliver_later
+        flash[:notice] = "E-mail sent successfully, please to check your inbox"
+      else
+        flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
+        @regis = true
+      end
+      render :index
     else
       redirect_to root_path
     end
@@ -197,8 +221,8 @@ class HomeController < ApplicationController
   def check_user_login
     if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).present?
       flash[:alert] = "You have logged in!"
-      status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
-      if status == "0"
+      status = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).split(",")
+      if status[0] == "0"
         redirect_to '/voter'
       else
         redirect_to '/organize'

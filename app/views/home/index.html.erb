@@ -35,10 +35,10 @@
         <ul class="nav nav-tabs nav-justified" >
 <% if @regis.present? %>
           <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#home">Login</a></li>
-          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#regisemail">Register</a></li>
+          <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#regisemail">Reset Account</a></li>
 <% else %>
           <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Login</a></li>
-          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regisemail">Register</a></li>
+          <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regisemail">Reset Account</a></li>
 <% end %>
         </ul>
         <br/>
@@ -112,9 +112,17 @@
                 <%= email_field_tag :verifyemail, "", class: "form-control", required: true %>
                 <div class="invalid-feedback" hidden><span class="fa fa-times"></span> ex: name@email.com, username@serv.univ.ac.id</div>
                 <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
-             </div>
-
-             <%= submit_tag "Send Verification Email", class: "btn btn-primary btn-block" %>
+              </div>
+             <%= submit_tag "Send Verification E-mail", class: "btn btn-primary btn-block" %>
+             <br />
+              <div class="row">
+                <div class="col-md-6">
+                  <button type="button" id="word_button" class="btn btn-basic btn-block">Forget Password</button>
+                </div>
+                <div class="col-md-6">
+                  <button type="button" id="phrase_button" class="btn btn-basic btn-block">Reset Passphrase</button>
+                </div>
+              </div>
             <% end %>
             <br/>
 

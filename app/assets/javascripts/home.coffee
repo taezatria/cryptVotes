@@ -188,6 +188,12 @@ $(document).on "turbolinks:load", ->
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
     resetPassphraseForm_check(false);
+
+  $("#word_button").click ->
+    window.location.href = "/home/forget/"+$("#verifyemail").val()
+
+  $("#phrase_button").click ->
+    window.location.href = "/home/genkey/"+$("#verifyemail").val()
   
   $("#loginForm").submit ->
     loginForm_check(true);
@@ -218,10 +224,14 @@ loginForm_check = ($submit) ->
 regisEmailForm_check = ($submit) ->
   if $("#verifyemail").hasClass("is-valid")
     $("#regisEmailForm").children("input[type=submit]").removeAttr("disabled")
+    $("#word_button").removeAttr("disabled")
+    $("#phrase_button").removeAttr("disabled")
   else if $submit
     event.preventDefault();
   else
     $("#regisEmailForm").children("input[type=submit]").attr("disabled",true)
+    $("#word_button").attr("disabled", true)
+    $("#phrase_button").attr("disabled", true)
 
 registerForm_check = ($submit) ->
   if $("#name").hasClass("is-valid") && $("#idnumber").hasClass("is-valid") && $("#email").hasClass("is-valid") && $("#phone").hasClass("is-valid")

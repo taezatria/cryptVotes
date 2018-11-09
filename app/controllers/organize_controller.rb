@@ -5,7 +5,7 @@ class OrganizeController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def home
-    @status = role_user
+    @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = display_menu(@menu, @status)
     render :home
@@ -255,20 +255,33 @@ class OrganizeController < ApplicationController
   private
 
   def check_user_login
-    if $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).nil?
+    stts = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    if stts.nil?
       flash[:alert] = "You must login first !"
       redirect_back fallback_location: root_path
+    else
+      stts = stts.split(",")
+      unless stts.include?("1") || stts.include?("-1")
+      flash[:alert] = "You dont have authorize !"
+      redirect_to '/voter'
+      end
     end
   end
 
-  def role_user
-    $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).to_i
+  def role_user(role)
+    stts = $redis.get(User::USER_LOGIN_KEY+session[:current_user_id].to_s).split(",")
+    if stts.include? role.to_s
+      stts.delete role.to_s
+      stts.unshift role.to_s
+      $redis.set(User::USER_LOGIN_KEY+session[:current_user_id].to_s, stts.join(","))
+    end
+    stts
   end
 
   def display_menu(menu, status)
-    if status == 1 
+    if status[0].to_i == 1 
       menu = 'home' unless ["change_password","voter", "candidate"].include? menu
-    elsif status == -1
+    elsif status[0].to_i == -1
       menu = 'home' unless ["change_password","access_right", "election", "organizer"].include? menu
     end
     menu

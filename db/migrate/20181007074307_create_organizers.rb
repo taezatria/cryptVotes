@@ -3,8 +3,7 @@ class CreateOrganizers < ActiveRecord::Migration[5.2]
     create_table :organizers do |t|
       t.references :user
       t.references :election
-      t.references :access_right
-      t.datetime "deleted_at"
+      t.boolean "admin", :default => false
       t.timestamps
     end
   end

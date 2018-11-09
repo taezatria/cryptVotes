@@ -3,9 +3,8 @@ class Voter < ApplicationRecord
   belongs_to :election
 
   def self.discard(voter_id)
-    voter = Voter.find(voter_id)
-    voter.deleted_at = DateTime.now
-    User.discard(voter.user_id) if voter.save
+    Voter.find(voter_id).destroy
+    # User.discard(voter.user_id)
   end
   
   def self.attend(user_id)

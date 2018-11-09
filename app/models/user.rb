@@ -12,17 +12,19 @@ class User < ApplicationRecord
     if user.present?
       organizer = Organizer.find_by(user_id: user.id)
       voter = Voter.find_by(user_id: user.id)
+      status = []
       if organizer.present?
-        if organizer.access_right_id == AccessRight.first.id
-          status = -1
+        if organizer.access_right_id == 1# organizer.admin
+          status.push -1
         else
-          status = 1
+          status.push 1
         end
-      elsif voter.present?
-        status = 0
+      end
+      if voter.present?
+        status.push 0
       end
 
-      $redis.set(USER_LOGIN_KEY+user.id.to_s, status)
+      $redis.set(USER_LOGIN_KEY+user.id.to_s, status.join(","))
       { user_id: user.id, status: status }
     end
   end

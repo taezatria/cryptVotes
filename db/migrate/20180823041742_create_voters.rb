@@ -5,7 +5,6 @@ class CreateVoters < ActiveRecord::Migration[5.2]
       t.references :election
       t.boolean "hasAttend", :default => false
       t.boolean "hasVote", :default => false
-      t.datetime "deleted_at"
       t.timestamps
     end
   end

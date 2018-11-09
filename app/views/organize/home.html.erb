@@ -10,7 +10,17 @@
   <ul class="navbar-nav">
     <li class="nav-item"><a href="#" class="nav-link">
       <%= image_tag 'logo.png', size: '30', class: "rounded-circle" %>
-      CryptVotes Admin </a>
+      CryptVotes Admin&nbsp</a>
+    </li>
+    <li class="nav-item">
+      <select id="user_role" class="custom-select">
+<% @status.each do |stts| %>
+        <option value="<%= stts %>">
+        <%= "Voter" if stts.to_i == 0 %>
+        <%= "Organizer" if stts.to_i == 1 %>
+        <%= "Admin Organizer" if stts.to_i == -1 %></option>
+<% end %>
+      </select>
     </li>
   </ul>
 </nav>
@@ -28,7 +38,7 @@
           <span class="menu-collapsed">Dashboard</span>
         </div>
       </a>
-<% if @status == -1 %>
+<% if @status[0].to_i == -1 %>
       <a href="#" aria-expanded="true" class="bg-dark list-group-item list-group-item-action flex-column align-items-start toggle-icon collapsed">
         <div class="d-flex w-100 justify-content-start align-items-center">
           <span class="fa fa-key fa-fw mr-3"></span>
@@ -51,7 +61,7 @@
           <span class="menu-collapsed">Access Rights</span>
         </a>
       </div> 
-<% elsif @status == 1 %>
+<% elsif @status[0].to_i == 1 %>
       <a href="/organize?menu=voter" class="bg-dark list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-start align-items-center">
           <span class="fa fa-users fa-fw mr-3"></span>
