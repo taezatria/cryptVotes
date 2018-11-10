@@ -69,6 +69,7 @@ module Multichain
         end
 
         passdef = $redis.get("defaultpassphrase")
+        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
         org_privkey = $opssl.decrypt("default", passdef, org.privateKey)
         node_address = $hot.getaddresses[0]
         node_privkey = $hot.dumpprivkey node_address

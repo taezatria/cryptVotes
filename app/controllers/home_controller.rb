@@ -56,7 +56,7 @@ class HomeController < ApplicationController
       user.firstLogin = true
       user.save
       # SendEmailJob.set(wait: 10.seconds).perform_later("verify", user)
-      UserMailer.with(user: user).verification_email.deliver_later
+      UserMailer.with(user: user).verification_email.deliver_now
       flash[:notice] = "E-mail sent successfully, please to check your inbox"
     else
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"

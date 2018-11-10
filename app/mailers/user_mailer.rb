@@ -1,8 +1,6 @@
 class UserMailer < ApplicationMailer
   URL_HOME = "http://192.168.108.134:6789".freeze
 
-  default from: 'admin-notification@cryptvotes.com'
-
   def welcome_email
     @user = params[:user]
     @url = URL_HOME

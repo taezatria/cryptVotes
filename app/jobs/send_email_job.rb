@@ -10,5 +10,6 @@ class SendEmailJob < ApplicationJob
       UserMailer.with(user: user).forget_password.deliver_later
     elsif menu == "passphrase"
       UserMailer.with(user: user).passphrase_reset.deliver_later
+    end
   end
 end
