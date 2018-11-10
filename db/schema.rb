@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.bigint "user_id"
     t.bigint "election_id"
     t.text "description"
-    t.text "image", null: false
+    t.text "image"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.text "description"
     t.datetime "start_date", null: false
     t.datetime "end_date", null: false
-    t.integer "participants", null: false
+    t.integer "participants", default: 0, null: false
     t.integer "status", default: 0
     t.text "image", null: false
     t.text "addressKey"
@@ -56,11 +56,10 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
   create_table "organizers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "election_id"
-    t.bigint "access_right_id"
+    t.boolean "admin", default: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["access_right_id"], name: "index_organizers_on_access_right_id"
     t.index ["election_id"], name: "index_organizers_on_election_id"
     t.index ["user_id"], name: "index_organizers_on_user_id"
   end

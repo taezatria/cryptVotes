@@ -14,7 +14,7 @@ class User < ApplicationRecord
       voter = Voter.find_by(user_id: user.id)
       status = []
       if organizer.present?
-        if organizer.access_right_id == 1# organizer.admin
+        if organizer.admin
           status.push -1
         else
           status.push 1

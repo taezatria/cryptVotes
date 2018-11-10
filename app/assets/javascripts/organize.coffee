@@ -21,7 +21,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_user_id").val(data.user.id);
         $("#edit_org_id").val(data.other.id);
         $("#edit_election_id").val(data.other.election_id);
-        $("#edit_access_right_id").val(data.other.access_right_id);
+        $("#edit_admin").prop("checked", data.other.admin);
         $("#edit_name").val(data.user.name);
         $("#edit_id_number").val(data.user.idNumber);
         $("#edit_email").val(data.user.email);
@@ -132,7 +132,41 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              return false;
+
+  $("#voter_searchid").keyup ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/voter/searchid/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_voter").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              return false;
+
+  $("#voter_searchel").change ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == "0"
+      $search = "all";
+    $.ajax
+      url: 'organize/voter/filter/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_voter").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
               return false;
 
   $("#candidate_search").keyup ->
@@ -149,7 +183,41 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_candidate").append('<tr><input type="hidden" id="menu" value="candidate"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              $("#tbody_candidate").append('<tr><input type="hidden" id="menu" value="candidate"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
+
+  $("#candidate_searchid").keyup ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/candidate/searchid/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_candidate").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_candidate").append('<tr><input type="hidden" id="menu" value="candidate"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
+
+  $("#candidate_searchel").change ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == "0"
+      $search = "all";
+    $.ajax
+      url: 'organize/candidate/filter/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_candidate").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_candidate").append('<tr><input type="hidden" id="menu" value="candidate"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
               return false;
 
   $("#organizer_search").keyup ->
@@ -166,7 +234,41 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value2.id+'</td><td>'+value1.election_id+'</td><td>'+value1.access_right_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
+
+  $("#organizer_searchid").keyup ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == ""
+      $search = "all";
+    $.ajax
+      url: 'organize/organizer/searchid/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_organizer").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              return false;
+
+  $("#organizer_searchel").change ->
+    # alert('searching...');
+    $search = $(this).val();
+    if $(this).val() == "0"
+      $search = "all";
+    $.ajax
+      url: 'organize/organizer/filter/'+$search
+      method: 'get'
+      dataType: 'json'
+      success: (data) ->
+        $("#tbody_organizer").html("");
+        $(data.other).each (i, value1) ->
+          $(data.user).each (i, value2) ->
+            if value1.user_id == value2.id
+              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
               return false;
 
   $("#election_search").keyup ->

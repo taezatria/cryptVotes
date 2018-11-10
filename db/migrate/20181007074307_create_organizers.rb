@@ -4,6 +4,7 @@ class CreateOrganizers < ActiveRecord::Migration[5.2]
       t.references :user
       t.references :election
       t.boolean "admin", :default => false
+      t.datetime "deleted_at"
       t.timestamps
     end
   end

@@ -18,13 +18,13 @@ admin = User.create(
   firstLogin: false
 )
 
-admin_right = AccessRight.create(
-  name: "Admin"
-)
+# admin_right = AccessRight.create(
+#   name: "Admin"
+# )
 
 admin_election = Election.create(
   name: "Default",
-  description: "default election for admin",
+  description: "default election for organizer",
   start_date: DateTime.now,
   end_date: DateTime.now,
   participants: 0,
@@ -35,7 +35,7 @@ admin_election = Election.create(
 Organizer.create(
   user: admin,
   election: admin_election,
-  access_right: admin_right
+  admin: true
 )
 
 #other user seed
@@ -62,6 +62,7 @@ elec1 = Election.create(
   end_date: ed,
   participants: SecureRandom.random_number(100),
   status: sta,
+  addressKey: "16fDSG4bhjBtto3PbqPKYoe2ZqhMNMDczRCdKQ",
   image: SecureRandom.hex
 )
 #Multichain::Multichain.setup_election(elec1)
@@ -90,6 +91,7 @@ elec2 = Election.create(
   end_date: ed,
   participants: SecureRandom.random_number(100),
   status: sta,
+  addressKey: "1gncPC1YXxSd1WDXC4FHrSWYvJe8sroJwZGfr",
   image: SecureRandom.hex
 )
 #Multichain::Multichain.setup_election(elec2)
@@ -152,11 +154,10 @@ end
     user: user,
     election: elec1
   )
-  ar = AccessRight.create(name: SecureRandom.hex(3))
+  # ar = AccessRight.create(name: SecureRandom.hex(3))
   Organizer.create(
     user: user,
-    election: elec1,
-    access_right: ar
+    election: elec1
   )
   i+=1
 end
@@ -186,11 +187,10 @@ end
     user: user,
     election: elec2
   )
-  ar = AccessRight.create(name: SecureRandom.hex(3))
+  # ar = AccessRight.create(name: SecureRandom.hex(3))
   Organizer.create(
     user: user,
-    election: elec2,
-    access_right: ar
+    election: elec2
   )
   i+=1
 end

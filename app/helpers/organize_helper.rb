@@ -24,15 +24,27 @@ module OrganizeHelper
     User.where(deleted_at: nil)
   end
 
-  def voter(id)
-    Voter.where(user_id: id, deleted_at: nil)
+  def voter(id, election = 1)
+    if election == 1
+      Voter.where(user_id: id, deleted_at: nil)
+    else
+      Voter.where(user_id: id, election_id: election, deleted_at: nil)
+    end
   end
 
-  def candidate(id)
-    Candidate.where(user_id: id, deleted_at: nil)
+  def candidate(id, election = 1)
+    if election == 1
+      Candidate.where(user_id: id, deleted_at: nil)
+    else
+      Candidate.where(user_id: id, election_id: election, deleted_at: nil)
+    end
   end
 
-  def organizer(id)
-    Organizer.where(user_id: id, deleted_at: nil)
+  def organizer(id, election = 1)
+    if election == 1
+      Organizer.where(user_id: id, deleted_at: nil)
+    else
+      Organizer.where(user_id: id, election_id: election, deleted_at: nil)
+    end
   end
 end

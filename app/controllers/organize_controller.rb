@@ -8,6 +8,7 @@ class OrganizeController < ApplicationController
     @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = display_menu(@menu, @status)
+    @elec = election_org
     render :home
   end
 
@@ -134,7 +135,7 @@ class OrganizeController < ApplicationController
     render :json => { data: data, other: other }
   end
 
-  def search
+  def search_by_name
     if params[:menu] == "election"
       if params[:name] == "all"
         user = Election.where(deleted_at: nil)
@@ -146,7 +147,7 @@ class OrganizeController < ApplicationController
     else
       user = User.where('name LIKE ?',"%#{params[:name]}%").where(deleted_at: nil)
     end
-
+    org = Organizer.find_by(user_id: session[:current_user_id], deleted_at: nil)
     if params[:menu] == 'organizer'
       other = Organizer.where(user_id: user.ids, deleted_at: nil)
     elsif params[:menu] == 'candidate'
@@ -158,6 +159,53 @@ class OrganizeController < ApplicationController
     else
       user = nil
       other = nil
+    end
+    unless org.election_id == 1 || params[:menu] == 'election'
+      other = other.where(election_id: org.election_id)
+    end
+    render :json => { user: user, other: other }
+  end
+
+  def search_by_idnumber
+    if params[:idnumber] == "all"
+      user = User.where(deleted_at: nil)
+    else
+      user = User.where('idNumber LIKE ?',"%#{params[:idnumber]}%").where(deleted_at: nil)
+    end
+    org = Organizer.find_by(user_id: session[:current_user_id], deleted_at: nil)
+    if params[:menu] == 'organizer'
+      other = Organizer.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'candidate'
+      other = Candidate.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'voter'
+      other = Voter.where(user_id: user.ids, deleted_at: nil)
+    else
+      user = nil
+      other = nil
+    end
+    unless org.election_id == 1 || params[:menu] == 'election'
+      other = other.where(election_id: org.election_id)
+    end
+    render :json => { user: user, other: other }
+  end
+
+  def filter_by_election
+    user = User.where(deleted_at: nil)
+    org = Organizer.find_by(user_id: session[:current_user_id], deleted_at: nil)
+    if params[:menu] == 'organizer'
+      other = Organizer.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'candidate'
+      other = Candidate.where(user_id: user.ids, deleted_at: nil)
+    elsif params[:menu] == 'voter'
+      other = Voter.where(user_id: user.ids, deleted_at: nil)
+    else
+      user = nil
+      other = nil
+    end
+    if org.election_id == 1 && params[:election_id] != "all"
+      other = other.where(election_id: params[:election_id])
+    elsif org.election_id != 1
+      other = other.where(election_id: org.election_id)
     end
     render :json => { user: user, other: other }
   end
@@ -276,6 +324,10 @@ class OrganizeController < ApplicationController
       $redis.set(User::USER_LOGIN_KEY+session[:current_user_id].to_s, stts.join(","))
     end
     stts
+  end
+
+  def election_org
+    Organizer.find_by(user_id: session[:current_user_id], deleted_at: nil).election_id
   end
 
   def display_menu(menu, status)

@@ -4,12 +4,30 @@
   </div>
 
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-3">
+      <div class="form-group">
+        <select name="candidate_searchel" id="candidate_searchel" class="custom-select">
+          <option value="0">-= All Elections =-</option>
+<% all_elections.each do |election| %>
+          <option value="<%= election.id %>"><%= election.name =%></option>
+<% end %>
+        </select>
+      </div>
     </div>
     <div class="col-md-3">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :candidate_search, "", class: "form-control", placeholder: "Name" %>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fa fa-search"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <div class="input-group mb-2">
+          <%= text_field_tag :candidate_searchid, "", class: "form-control", placeholder: "ID Number" %>
           <div class="input-group-append">
             <div class="input-group-text"><span class="fa fa-search"></span></div>
           </div>
@@ -41,7 +59,7 @@
       </thead>
       <tbody id="tbody_candidate">
 <% all_candidates.each do |candidate| %>
-  <% candidate(candidate.id).each do |cand| %>
+  <% candidate(candidate.id, @elec).each do |cand| %>
         <tr>
         <input type="hidden" id="menu" value="candidate">
         <input type="hidden" id="user_id" value="<%= candidate.id %>">
