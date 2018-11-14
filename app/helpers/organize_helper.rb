@@ -16,10 +16,6 @@ module OrganizeHelper
     User.joins(:organizers).where(deleted_at: nil).distinct
   end
 
-  def all_access_rights
-    AccessRight.where(deleted_at: nil)
-  end
-
   def all_users
     User.where(deleted_at: nil)
   end

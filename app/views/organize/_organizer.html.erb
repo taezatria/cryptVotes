@@ -112,16 +112,7 @@
               </select>
             </div>
           </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <%= label_tag :add_access_right_id, "Access Right" %>
-              <select name="add_access_right_id" id="add_access_right_id" class="custom-select">
-<% all_access_rights.each do |access_right| %>
-                <option value="<%= access_right.id %>"><%= access_right.name =%></option>
-<% end %>
-              </select>
-            </div>
-          </div>
+
         </div>
 
         <div class="row">

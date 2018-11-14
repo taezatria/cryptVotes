@@ -88,7 +88,6 @@ class OrganizeController < ApplicationController
         description: params[:add_description],
         start_date: params[:add_start_date][0],
         end_date: params[:add_end_date][0],
-        participants: params[:add_participants],
         image: item_name
       )
       Multichain::Multichain.setup_election(el)
@@ -282,7 +281,6 @@ class OrganizeController < ApplicationController
     elsif params[:menu] == 'election'
       el = Election.find(params[:edit_election_id])
       el.name = params[:edit_name]
-      el.participants = params[:edit_participants]
       el.description = params[:edit_description]
       el.start_date = params[:edit_start_date][0]
       el.end_date = params[:edit_end_date][0]
@@ -314,7 +312,7 @@ class OrganizeController < ApplicationController
 
   def tally
     if params[:id].present?
-      el = Election.find_by(id: params[:id, deleted_at: nil)
+      el = Election.find_by(id: params[:id], deleted_at: nil)
       Multichain::Multichain.tally_votes(el)
     end
   end
