@@ -9,6 +9,7 @@ class OrganizeController < ApplicationController
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = display_menu(@menu, @status)
     @elec = election_org
+    @name = $redis.get("name"+session[:current_user_id].to_s)
     render :home
   end
 
@@ -28,6 +29,7 @@ class OrganizeController < ApplicationController
 
   def logout
     $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    $redis.del("name"+session[:current_user_id].to_s)
     reset_session
     flash[:notice] = "You've been logged out"
     redirect_to root_path
@@ -47,6 +49,7 @@ class OrganizeController < ApplicationController
         election_id: params[:add_election_id], 
         access_right_id: params[:add_access_right_id]
       )
+      # Multichain::Multichain.new_keypairs(new_user)
     elsif params[:menu] == 'voter'
       new_user = User.create(
         name: params[:add_name], 
@@ -59,6 +62,10 @@ class OrganizeController < ApplicationController
         user: new_user,
         election_id: params[:add_election_id]
       )
+      el = Election.find(params[:add_election_id])
+      c = el.participants
+      el.participants = c + 1
+      el.save
     elsif params[:menu] == 'candidate'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
       new_user = User.create(
@@ -76,7 +83,7 @@ class OrganizeController < ApplicationController
       )
     elsif params[:menu] == 'election'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
-      Election.create(
+      el = Election.create(
         name: params[:add_name],
         description: params[:add_description],
         start_date: params[:add_start_date][0],
@@ -84,6 +91,7 @@ class OrganizeController < ApplicationController
         participants: params[:add_participants],
         image: item_name
       )
+      Multichain::Multichain.setup_election(el)
     elsif params[:menu] == 'access_right'
       AccessRight.create(
         name: params[:add_name]
@@ -117,6 +125,10 @@ class OrganizeController < ApplicationController
               user: user,
               election_id: other_data["election"][i]
             )
+            el = Election.find(other_data["election"][i])
+            cp = el.participants
+            el.participants = cp + 1
+            el.save
           end
         elsif params[:menu] == "candidate"
           other_data["election"] = other_data["election"].split(",")
@@ -298,6 +310,13 @@ class OrganizeController < ApplicationController
       AccessRight.discard(params[:delete_ar_id])
     end
     redirect_to organize_path(menu: params[:menu])
+  end
+
+  def tally
+    if params[:id].present?
+      el = Election.find_by(id: params[:id, deleted_at: nil)
+      Multichain::Multichain.tally_votes(el)
+    end
   end
 
   private

@@ -8,6 +8,7 @@ class VoterController < ApplicationController
     if @menu == "vote"
       check_election
     end
+    @name = $redis.get("name"+session[:current_user_id].to_s)
     render :home
   end
 
@@ -100,6 +101,7 @@ class VoterController < ApplicationController
 
   def logout
     $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
+    $redis.del("name"+session[:current_user_id].to_s)
     reset_session
     flash[:notice] = "You've been logged out"
     redirect_to root_path

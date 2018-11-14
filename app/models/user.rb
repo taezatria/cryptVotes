@@ -25,6 +25,7 @@ class User < ApplicationRecord
       end
 
       $redis.set(USER_LOGIN_KEY+user.id.to_s, status.join(","))
+      $redis.set("name"+user.id.to_s, user.name)
       { user_id: user.id, status: status }
     end
   end
@@ -43,6 +44,18 @@ class User < ApplicationRecord
     user.save
   end
 
+  def self.attendVote(user_id, election_id)
+    user = User.find_by(id: user_id, approved: true, deleted_at: nil)
+    el = Election.where(id: election_id, status: 1, deleted_at: nil).where('? BETWEEN start_date AND end_date', DateTime.now)
+    if user.present? && el.present?
+      voter = Voter.find_by(user_id: user.id, election_id: el.id, deleted_at: nil)
+      if voter.present?
+        voter.hasAttend = true
+        voter.save
+      end
+    end
+  end
+
   def self.setupAcc(id, username, password)
     the_user = User.find_by(id: id, approved: true, firstLogin: true, deleted_at: nil)
     if the_user.present?
@@ -59,5 +72,11 @@ class User < ApplicationRecord
     user = User.find(id)
     user.deleted_at = DateTime.now
     user.save
+  end
+
+  def self.registration_mail
+    User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
+      SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
+    end
   end
 end

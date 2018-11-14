@@ -9,10 +9,15 @@ class HomeController < ApplicationController
   def setup_account
     if User.setupAcc(params[:user_id], params[:username], params[:password])
       if $opssl.genpkey(params[:user_id], params[:passphrase])
+        $opssl.genpbkey(params[:user_id], params[:passphrase])
         flash[:success] = "account setup successfully"
         user = User.find(params[:user_id])
         # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
         UserMailer.with(user: user).welcome_email.deliver_later
+        Multichain::Multichain.new_keypairs(user)
+        if Organizer.find_by(user_id: params[:user_id]).present?
+          $redis.set(params[:user_id].to_s+"passphrase", params[:passphrase])
+        end
       else
         flash[:alert] = "failed to generate keys"  
       end

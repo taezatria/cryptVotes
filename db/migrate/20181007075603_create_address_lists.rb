@@ -3,6 +3,7 @@ class CreateAddressLists < ActiveRecord::Migration[5.2]
     create_table :address_lists do |t|
       t.text "address", :null => false
       t.text "tx"
+      t.boolean "counted", :default => false
       t.datetime "deleted_at"
       t.timestamps
     end

@@ -40,7 +40,7 @@ module Multichain
       if grnt.present?
         if AddressList.where(address: multisigaddress["address"]).count == 0
           AddressList.create(
-            address: multisigaddress["address"],
+            address: multisigaddress["address"]
           )
         end
         $redis.set(user.id.to_s+"multiaddress", multisigaddress["address"])
@@ -68,7 +68,7 @@ module Multichain
           end
         end
 
-        passdef = $redis.get("defaultpassphrase")
+        passdef = $redis.get(orgid.to_s+"passphrase")
         $hot.walletpassphrase $redis.get("nodepassphrase"), 5
         org_privkey = $opssl.decrypt("default", passdef, org.privateKey)
         node_address = $hot.getaddresses[0]
@@ -130,7 +130,31 @@ module Multichain
       end
     end
 
-    # private
+    def self.tally_votes(el)
+      all_txs = $hot.listaddresstransactions el.addressKey
+      all_txs.each do |tx|
+        if tx["balance"]["assets"].present? && tx["balance"]["assets"][0]["name"] == COIN+el.id.to_s && tx["balance"]["assets"][0]["qty"] > 0
+          data_tx = AddressList.find_by(address: tx["addresses"][0])
+          if data_tx.present? && data_tx.tx == tx["txid"] && !data_tx.counted && tx["valid"]
+            data_tx.counted = true
+            raw = $hot.getrawtransaction txid
+            VoteResult.create(
+              hex: raw,
+              blockHash: tx["blockhash"],
+              txid: tx["txid"],
+              data: tx["data"][0],
+              fromAddress: tx["myaddresses"][0],
+              toAddress: tx["addresses"][0],
+              amount: tx["balance"]["assets"][0]["qty"],
+              confirmation: tx["confirmations"]
+            )
+            data.save
+          end
+        end
+      end
+    end
+
+    private
 
     def self.get_addresses
       org_count = Organizer.all.count

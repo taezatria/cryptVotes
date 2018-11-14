@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   get 'organize/:menu/:user_id/:other_id', to: 'organize#get_data'
   post 'organize/alter', to: 'organize#alter' #!
   post 'organize/discard', to: 'organize#discard' #!
+  post 'organize/tally/:id', to: 'organize#tally'
 
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
