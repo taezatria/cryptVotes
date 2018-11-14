@@ -94,7 +94,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :add_user_id, "User" %>
-              <select name="add_user_id" id="add_user_id" class="custom-select">
+              <select name="add_user_id" id="add_user_id" class="selectpicker" data-live-search="true">
                 <option value="0">--= NEW USER =--</option>
 <% all_users.each do |user| %>
                 <option value="<%= user.id %>"><%= user.name =%></option>

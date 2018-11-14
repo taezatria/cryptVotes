@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on "turbolinks:load", ->
+  $('.selectpicker').selectpicker();
   $("#user_role").change ->
     if $("#user_role").val() == "0"
       window.location.href = "/voter?role=0";
