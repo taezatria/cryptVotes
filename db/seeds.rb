@@ -7,6 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 #admin
+$opssl.genpkey("1","foobar")
+$opssl.genpbkey("1","foobar")
+address = $cold.createkeypairs[0]
+privkey = $opssl.encrypt("1", address["privkey"])
+
 admin = User.create(
   name: "Admin CryptVotes",
   idNumber: "1234567890",
@@ -15,7 +20,10 @@ admin = User.create(
   username: "cryptadmin",
   password: Digest::MD5.hexdigest("cryptadmin"),
   approved: true,
-  firstLogin: false
+  firstLogin: false,
+  addressKey: address["address"],
+  publicKey: address["pubkey"],
+  privateKey: privkey
 )
 
 admin_election = Election.create(
