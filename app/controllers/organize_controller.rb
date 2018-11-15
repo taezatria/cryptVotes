@@ -37,50 +37,64 @@ class OrganizeController < ApplicationController
 
   def add
     if params[:menu] == 'organizer'
-      new_user = User.create(
-        name: params[:add_name], 
-        idNumber: params[:add_id_number], 
-        email: params[:add_email], 
-        phone: params[:add_phone],
-        approved: true
-      )
-      Organizer.create(
-        user: new_user, 
-        election_id: params[:add_election_id], 
-        access_right_id: params[:add_access_right_id]
-      )
+      unless User.find(params[:add_user_id]).present?
+        new_user = User.create(
+          name: params[:add_name], 
+          idNumber: params[:add_id_number], 
+          email: params[:add_email], 
+          phone: params[:add_phone],
+          approved: true
+        )
+        params[:add_user_id] = new_user.id
+      end
+      unless Organizer.find_by(user_id: params[:add_user_id], election_id: params[:add_election_id]).present?
+        Organizer.create(
+          user_id: params[:add_user_id], 
+          election_id: params[:add_election_id]
+        )
+      end
       # Multichain::Multichain.new_keypairs(new_user)
     elsif params[:menu] == 'voter'
-      new_user = User.create(
-        name: params[:add_name], 
-        idNumber: params[:add_id_number], 
-        email: params[:add_email], 
-        phone: params[:add_phone],
-        approved: true
-      )
-      Voter.create(
-        user: new_user,
-        election_id: params[:add_election_id]
-      )
+      unless User.find(params[:add_user_id]).present?
+        new_user = User.create(
+          name: params[:add_name], 
+          idNumber: params[:add_id_number], 
+          email: params[:add_email], 
+          phone: params[:add_phone],
+          approved: true
+        )
+        params[:add_user_id] = new_user.id
+      end
+      unless Voter.find_by(user_id: params[:add_user_id], election_id: params[:add_election_id]).present?
+        Voter.create(
+          user_id: params[:add_user_id],
+          election_id: params[:add_election_id]
+        )
+      end
       el = Election.find(params[:add_election_id])
       c = el.participants
       el.participants = c + 1
       el.save
     elsif params[:menu] == 'candidate'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
-      new_user = User.create(
-        name: params[:add_name], 
-        idNumber: params[:add_id_number], 
-        email: params[:add_email], 
-        phone: params[:add_phone],
-        approved: true
-      )
-      Candidate.create(
-        user: new_user,
-        election_id: params[:add_election_id],
-        description: params[:add_description],
-        image: item_name
-      )
+      unless User.find(params[:add_user_id]).present?
+        new_user = User.create(
+          name: params[:add_name], 
+          idNumber: params[:add_id_number], 
+          email: params[:add_email], 
+          phone: params[:add_phone],
+          approved: true
+        )
+        params[:add_user_id] = new_user.id
+      end
+      unless Candidate.find_by(user_id: params[:add_user_id], election_id: params[:add_election_id]).present?
+        Candidate.create(
+          user_id: params[:add_user_id],
+          election_id: params[:add_election_id],
+          description: params[:add_description],
+          image: item_name
+        )
+      end
     elsif params[:menu] == 'election'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
       el = Election.create(
@@ -91,10 +105,6 @@ class OrganizeController < ApplicationController
         image: item_name
       )
       # Multichain::Multichain.setup_election(el)
-    elsif params[:menu] == 'access_right'
-      AccessRight.create(
-        name: params[:add_name]
-      )
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -109,12 +119,10 @@ class OrganizeController < ApplicationController
         user = User.create!(user_data)
         if params[:menu] == "organizer"
           other_data["election"] = other_data["election"].split(",")
-          other_data["access_right"] = other_data["access_right"].split(",")
           other_data["election"].count.times do |i|
             Organizer.create(
               user: user,
-              election_id: other_data["election"][i],
-              access_right_id: other_data["access_right"][i]
+              election_id: other_data["election"][i]
             )
           end
         elsif params[:menu] == "voter"
@@ -251,33 +259,39 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      org = Organizer.find(params[:edit_org_id])
-      org.election_id = params[:edit_election_id]
-      org.access_right_id = params[:edit_access_right_id]
-      org.save
+      unless Organizer.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
+        org = Organizer.find(params[:edit_org_id])
+        org.election_id = params[:edit_election_id]
+        org.admin = params[:edit_admin].present?
+        org.save
+      end
     elsif params[:menu] == 'candidate'
       the_user = User.find(params[:edit_user_id])
       the_user.email = params[:edit_email]
       the_user.username = params[:edit_username]
       the_user.save
 
-      item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : the_user.image
-      cand = Candidate.find(params[:edit_candidate_id])
-      cand.election_id = params[:edit_election_id]
-      cand.description = params[:edit_description]
-      cand.image = item_name
-      cand.save
+      unless Candidate.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
+        item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : the_user.image
+        cand = Candidate.find(params[:edit_candidate_id])
+        cand.election_id = params[:edit_election_id]
+        cand.description = params[:edit_description]
+        cand.image = item_name
+        cand.save
+      end
     elsif params[:menu] == 'voter'
       the_user = User.find(params[:edit_user_id])
       the_user.email = params[:edit_email]
       the_user.username = params[:edit_username]
       the_user.save
 
-      vot = Voter.find(params[:edit_voter_id])
-      vot.election_id = params[:edit_election_id]
-      vot.hasAttend = params[:edit_hasattend].present?
-      vot.hasVote = params[:edit_hasvote].present?
-      vot.save
+      unless Voter.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
+        vot = Voter.find(params[:edit_voter_id])
+        vot.election_id = params[:edit_election_id]
+        vot.hasAttend = params[:edit_hasattend].present?
+        vot.hasVote = params[:edit_hasvote].present?
+        vot.save
+      end
     elsif params[:menu] == 'election'
       el = Election.find(params[:edit_election_id])
       el.name = params[:edit_name]
@@ -287,10 +301,7 @@ class OrganizeController < ApplicationController
       item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : el.image
       el.image = item_name
       el.save
-    elsif params[:menu] == 'access_right'
-      ar = AccessRight.find(params[:edit_ar_id])
-      ar.name = params[:edit_name]
-      ar.save
+      # add participants to the database
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -304,8 +315,6 @@ class OrganizeController < ApplicationController
       Candidate.discard(params[:delete_candidate_id])
     elsif params[:menu] == 'election'
       Election.discard(params[:delete_election_id])
-    elsif params[:menu] == 'access_right'
-      AccessRight.discard(params[:delete_ar_id])
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -351,7 +360,7 @@ class OrganizeController < ApplicationController
     if status[0].to_i == 1 
       menu = 'home' unless ["change_password","voter", "candidate"].include? menu
     elsif status[0].to_i == -1
-      menu = 'home' unless ["change_password","access_right", "election", "organizer"].include? menu
+      menu = 'home' unless ["change_password", "election", "organizer"].include? menu
     end
     menu
   end

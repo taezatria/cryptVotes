@@ -144,15 +144,18 @@
             </div>
           </div>
           <div class="col-md-3"> 
-            <div class="form-group">
+            <div class="form-group" id="div-count">
               <button type="button" id="btn-count" disabled class="btn btn-primary btn-block"><span class="fa fa-chart-bar"></span> Count Votes</button>
+            </div>
+            <div class="form-group" id="div-anounce" hidden>
+              <button type="button" id="btn-anounce" disabled class="btn btn-info btn-block"><span class="fa fa-bullhorn"></span> Anounce Election</button>
             </div>
           </div>
           <div class="col-md-6"> 
             <div class="form-group">
-              <select class="selectpicker form-control" id="add_participants" name="add_participants" multiple data-live-search="true" data-selected-text-format="count" data-size="10" data-actions-box="true" title="Select participants...">
+              <select class="selectpicker form-control" id="add_participants" name="add_participants[]" multiple data-live-search="true" data-selected-text-format="count" data-size="10" data-actions-box="true" title="Select participants...">
 <% all_voters.each do |voter| %>
-                <option data-subtext="<%= voter.idNumber %>"><%= voter.name %></option>
+                <option data-subtext="<%= voter.idNumber %>" value="<%= voter.id %>"><%= voter.name %></option>
 <% end %>
               </select>
             </div>
