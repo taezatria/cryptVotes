@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="form-group">
-        <select name="organizer_searchel" id="organizer_searchel" class="custom-select">
+        <select name="organizer_searchel" id="organizer_searchel" class="selectpicker form-control">
           <option value="0">-= All Elections =-</option>
 <% all_elections.each do |election| %>
           <option value="<%= election.id %>"><%= election.name =%></option>
@@ -91,21 +91,21 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_user_id, "User" %>
-              <select name="add_user_id" id="add_user_id" class="selectpicker" data-live-search="true">
+              <select name="add_user_id" id="add_user_id" class="selectpicker form-control" data-live-search="true">
                 <option value="0">--= NEW USER =--</option>
 <% all_users.each do |user| %>
-                <option value="<%= user.id %>"><%= user.name =%></option>
+                <option data-subtext="<%= user.idNumber %>" value="<%= user.id %>"><%= user.name =%></option>
 <% end %>
               </select>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_election_id, "Election" %>
-              <select name="add_election_id" id="add_election_id" class="custom-select">
+              <select name="add_election_id" id="add_election_id" class="selectpicker form-control">
 <% all_elections.each do |election| %>
                 <option value="<%= election.id %>"><%= election.name =%></option>
 <% end %>
@@ -189,7 +189,7 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_election_id, "Election" %>
-              <select name="edit_election_id" id="edit_election_id" class="custom-select">
+              <select name="edit_election_id" id="edit_election_id" class="selectpicker form-control">
                 <% all_elections.each do |election| %>
                 <option value="<%= election.id %>"><%= election.name =%></option>
                 <% end %>

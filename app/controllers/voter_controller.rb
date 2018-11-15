@@ -34,6 +34,8 @@ class VoterController < ApplicationController
               txid: ctx,
               digSign: cdig
             )
+            voter.hasVote = true
+            voter.save
             $redis.del(user.id.to_s+"Ballot")
             flash[:notice] = "success, txid: "+ res[:txid]
           else

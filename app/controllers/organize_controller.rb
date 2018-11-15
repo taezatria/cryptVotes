@@ -90,7 +90,7 @@ class OrganizeController < ApplicationController
         end_date: params[:add_end_date][0],
         image: item_name
       )
-      Multichain::Multichain.setup_election(el)
+      # Multichain::Multichain.setup_election(el)
     elsif params[:menu] == 'access_right'
       AccessRight.create(
         name: params[:add_name]

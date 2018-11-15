@@ -86,9 +86,6 @@ module Multichain
           adr = AddressList.find_by(address: addr)
           adr.tx = txid
           adr.save
-          voter = Voter.find_by(user_id: user.id)
-          voter.hasVote = true
-          voter.save
         end
       end
       $hot.revoke addr, "send"

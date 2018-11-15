@@ -45,6 +45,24 @@ $(document).on "turbolinks:load", ->
       method: 'get'
       dataType: 'json'
       success: (data) ->
+        if data.user.status == 0
+          $("#div-start").removeAttr("hidden")
+          $("#div-stop").attr("hidden",true)
+          $("#btn-stop").removeAttr("disabled")
+          $("#btn-start").removeAttr("disabled")
+          $("#btn-count").attr("disabled",true)
+        else if data.user.status == 1
+          $("#div-stop").removeAttr("hidden")
+          $("#div-start").attr("hidden",true)
+          $("#btn-stop").removeAttr("disabled")
+          $("#btn-start").removeAttr("disabled")
+          $("#btn-count").attr("disabled",true)
+        else
+          $("#div-start").removeAttr("hidden")
+          $("#div-stop").attr("hidden",true)
+          $("#btn-start").attr("disabled",true)
+          $("#btn-stop").attr("disabled",true)
+          $("#btn-count").removeAttr("disabled")
         $("#edit_election_id").val(data.user.id);
         $("#edit_name").val(data.user.name);
         $("#edit_participants").val(data.user.participants);
