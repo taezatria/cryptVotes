@@ -37,7 +37,7 @@ class OrganizeController < ApplicationController
 
   def add
     if params[:menu] == 'organizer'
-      unless User.find(params[:add_user_id]).present?
+      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -55,7 +55,7 @@ class OrganizeController < ApplicationController
       end
       # Multichain::Multichain.new_keypairs(new_user)
     elsif params[:menu] == 'voter'
-      unless User.find(params[:add_user_id]).present?
+      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -77,7 +77,7 @@ class OrganizeController < ApplicationController
       el.save
     elsif params[:menu] == 'candidate'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
-      unless User.find(params[:add_user_id]).present?
+      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -122,7 +122,8 @@ class OrganizeController < ApplicationController
           other_data["election"].count.times do |i|
             Organizer.create(
               user: user,
-              election_id: other_data["election"][i]
+              election_id: other_data["election"][i],
+              admin: (other_data["admin"][i] == "1")
             )
           end
         elsif params[:menu] == "voter"
@@ -259,7 +260,7 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      unless Organizer.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
+      if Organizer.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
         org = Organizer.find(params[:edit_org_id])
         org.election_id = params[:edit_election_id]
         org.admin = params[:edit_admin].present?
@@ -271,9 +272,9 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      unless Candidate.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
-        item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : the_user.image
+      if Candidate.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
         cand = Candidate.find(params[:edit_candidate_id])
+        item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : cand.image
         cand.election_id = params[:edit_election_id]
         cand.description = params[:edit_description]
         cand.image = item_name
@@ -285,7 +286,7 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      unless Voter.find_by(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).present?
+      if Voter.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
         vot = Voter.find(params[:edit_voter_id])
         vot.election_id = params[:edit_election_id]
         vot.hasAttend = params[:edit_hasattend].present?
@@ -302,6 +303,19 @@ class OrganizeController < ApplicationController
       el.image = item_name
       el.save
       # add participants to the database
+      if params[:add_participants].present?
+        params[:add_participants].each do |part|
+          unless Voter.where(user_id: part, election_id: params[:edit_election_id]).present?
+            Voter.create(
+              user_id: part,
+              election_id: params[:edit_election_id]
+            )
+            co = el.participants
+            el.participants = co + 1
+            el.save
+          end
+        end
+      end
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -320,10 +334,55 @@ class OrganizeController < ApplicationController
   end
 
   def tally
+    stts = false
     if params[:id].present?
       el = Election.find_by(id: params[:id], deleted_at: nil)
-      Multichain::Multichain.tally_votes(el)
+      if el.present?
+        # Multichain::Multichain.tally_votes(el)
+        stts = true
+      end
     end
+    render :json => { 'status' => stts }
+  end
+
+  def anounce
+    stts = false
+    if params[:id].present?
+      # el = Election.find(params[:id])
+      # users = User.joins(:voters).where('voters.election_id' => params[:id], deleted_at: nil).distinct
+      # if el.present? && users.present?
+      #   AnounceElectionJob.set(wait: 1.seconds).perform_later(users, el)
+      # end
+      stts = true
+    end
+    render :json => { 'success' => stts }
+  end
+
+  def verifyemail
+    # User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
+    #   SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
+    # end
+    flash[:notice] = "Sending the e-mail..."
+    redirect_to "/organize?menu=voter"
+  end
+
+  def handle_election
+    stts = false
+    if params[:id].present? && params[:staction].present?
+      el = Election.find_by(id: params[:id], deleted_at: nil)
+      if el.present? && params[:staction] == "start"
+        el.start_date = DateTime.now
+        el.status = 1
+        el.save
+        stts = true
+      elsif el.present? && params[:staction] == "stop"
+        el.end_date = DateTime.now
+        el.status = 2
+        el.save
+        stts = true
+      end
+    end
+    render :json => { 'success' => stts }
   end
 
   private

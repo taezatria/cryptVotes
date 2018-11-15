@@ -5,7 +5,9 @@
     </div>
     <div class="col-md-3">
       <div class="form-group">
-        <button type="button" class="btn btn-primary btn-block"><span class="fa fa-paper-plane"></span> Send Verification E-mail</button>
+      <%= form_tag "organize/verifyemail", method: "post" do %>
+        <button type="submit" class="btn btn-primary btn-block"><span class="fa fa-paper-plane"></span> Send Verification E-mail</button>
+      <% end %>
       </div>
     </div>
   </div>
@@ -13,7 +15,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="form-group">
-        <select name="voter_searchel" id="voter_searchel" class="selectpicker form-control">
+        <select name="voter_searchel" id="voter_searchel" class="selectpicker form-control" data-size="10">
           <option value="0">-= All Elections =-</option>
 <% all_elections.each do |election| %>
           <option value="<%= election.id %>"><%= election.name =%></option>

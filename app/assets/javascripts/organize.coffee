@@ -408,6 +408,59 @@ $(document).on "turbolinks:load", ->
   $("#organizerchangepasswordForm").submit ->
     organizerchangepasswordForm_check(true);
 
+  $("#btn-start").click ->
+    raw = $("#form_org_alter").serializeArray();
+    data = {};
+    data[raw[0].name] = raw[0].value;
+    data[raw[1].name] = raw[1].value;
+    $.ajax
+      url: 'organize/election/'+$("#edit_election_id").val()+'/'+"start"
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        alert(JSON.stringify(res));
+        window.location.href = '/organize?menu=election'
+  $("#btn-stop").click ->
+    raw = $("#form_org_alter").serializeArray();
+    data = {};
+    data[raw[0].name] = raw[0].value;
+    data[raw[1].name] = raw[1].value;
+    $.ajax
+      url: 'organize/election/'+$("#edit_election_id").val()+'/'+"stop"
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        alert(JSON.stringify(res));
+        window.location.href = '/organize?menu=election'
+  $("#btn-count").click ->
+    raw = $("#form_org_alter").serializeArray();
+    data = {};
+    data[raw[0].name] = raw[0].value;
+    data[raw[1].name] = raw[1].value;
+    $.ajax
+      url: 'organize/tally/'+$("#edit_election_id").val()
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        alert(JSON.stringify(res));
+        window.location.href = '/organize?menu=election'
+  $("#btn-anounce").click ->
+    raw = $("#form_org_alter").serializeArray();
+    data = {};
+    data[raw[0].name] = raw[0].value;
+    data[raw[1].name] = raw[1].value;
+    $.ajax
+      url: 'organize/anounce/'+$("#edit_election_id").val()
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        alert(JSON.stringify(res));
+        window.location.href = '/organize?menu=election'
+
 organizerchangepasswordForm_check = ($submit) ->
   if $("#oldpassword").hasClass("is-valid") && $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
     $("#organizerchangepasswordForm").children("input[type=submit]").removeAttr("disabled")

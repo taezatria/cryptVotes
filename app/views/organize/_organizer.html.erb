@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-md-3">
       <div class="form-group">
-        <select name="organizer_searchel" id="organizer_searchel" class="selectpicker form-control">
+        <select name="organizer_searchel" id="organizer_searchel" class="selectpicker form-control" data-size="10">
           <option value="0">-= All Elections =-</option>
 <% all_elections.each do |election| %>
           <option value="<%= election.id %>"><%= election.name =%></option>

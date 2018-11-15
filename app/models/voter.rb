@@ -3,7 +3,12 @@ class Voter < ApplicationRecord
   belongs_to :election
 
   def self.discard(voter_id)
-    Voter.find(voter_id).destroy
+    voter = Voter.find(voter_id)
+    el = Election.find(voter.election_id)
+    parti = el.participants
+    el.participants = parti - 1
+    el.save
+    voter.destroy
     # User.discard(voter.user_id)
   end
 end

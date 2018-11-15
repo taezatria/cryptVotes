@@ -62,10 +62,4 @@ class User < ApplicationRecord
     user.save
   end
 
-  def self.registration_mail
-    User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
-      SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
-    end
-  end
-  
 end

@@ -28,13 +28,16 @@ Rails.application.routes.draw do
 
   post 'organize/add', to: 'organize#add' #!
   post 'organize/addbyfile', to: 'organize#add_by_file' #!
+  post 'organize/tally/:id', to: 'organize#tally'
+  post 'organize/anounce/:id', to: 'organize#anounce'
+  post 'organize/verifyemail', to: 'organize#verifyemail'
+  post 'organize/election/:id/:staction', to: 'organize#handle_election'
+  post 'organize/alter', to: 'organize#alter' #!
+  post 'organize/discard', to: 'organize#discard' #!
   get 'organize/:menu/search/:name', to: 'organize#search_by_name'
   get 'organize/:menu/searchid/:idnumber', to: 'organize#search_by_idnumber'
   get 'organize/:menu/filter/:election_id', to: 'organize#filter_by_election'
   get 'organize/:menu/:user_id/:other_id', to: 'organize#get_data'
-  post 'organize/alter', to: 'organize#alter' #!
-  post 'organize/discard', to: 'organize#discard' #!
-  post 'organize/tally/:id', to: 'organize#tally'
 
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
