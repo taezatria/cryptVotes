@@ -109,7 +109,7 @@ $(document).on "turbolinks:load", ->
     voteForm_check(true);
 
 voterchangepasswordForm_check = ($submit) ->
-  if $("#oldpassword").hasClass("is-valid") && $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+  if !$("#oldpassword").hasClass("is-invalid") && !$("#newpassword").hasClass("is-invalid") && !$("#retypepassword").hasClass("is-invalid")
     $("#voterchangepasswordForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -117,7 +117,7 @@ voterchangepasswordForm_check = ($submit) ->
     $("#voterchangepasswordForm").children("input[type=submit]").attr("disabled",true)
 
 voteForm_check = ($submit) ->
-  if $("#passphrase").hasClass("is-valid")
+  if !$("#passphrase").hasClass("is-invalid")
     $("#voteSubmit").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -125,7 +125,7 @@ voteForm_check = ($submit) ->
     $("#voteSubmit").attr("disabled",true)
 
 formPass_check = ($submit) ->
-  if $("#passphrase").hasClass("is-valid")
+  if !$("#passphrase").hasClass("is-invalid")
     $("#verifySubmit").removeAttr("disabled")
   else if $submit
     event.preventDefault();

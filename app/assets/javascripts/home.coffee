@@ -214,7 +214,7 @@ $(document).on "turbolinks:load", ->
     resetPassphraseForm_check(true);
 
 loginForm_check = ($submit) ->
-  if $("#username").hasClass("is-valid") && $("#password").hasClass("is-valid")
+  if !$("#username").hasClass("is-invalid") && !$("#password").hasClass("is-invalid")
     $("#loginForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -222,7 +222,7 @@ loginForm_check = ($submit) ->
     $("#loginForm").children("input[type=submit]").attr("disabled",true)
 
 regisEmailForm_check = ($submit) ->
-  if $("#verifyemail").hasClass("is-valid")
+  if !$("#verifyemail").hasClass("is-invalid")
     $("#regisEmailForm").children("input[type=submit]").removeAttr("disabled")
     $("#word_button").removeAttr("disabled")
     $("#phrase_button").removeAttr("disabled")
@@ -234,7 +234,7 @@ regisEmailForm_check = ($submit) ->
     $("#phrase_button").attr("disabled", true)
 
 registerForm_check = ($submit) ->
-  if $("#name").hasClass("is-valid") && $("#idnumber").hasClass("is-valid") && $("#email").hasClass("is-valid") && $("#phone").hasClass("is-valid")
+  if !$("#name").hasClass("is-invalid") && !$("#idnumber").hasClass("is-invalid") && !$("#email").hasClass("is-invalid") && !$("#phone").hasClass("is-invalid")
     $("#registerForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -242,7 +242,7 @@ registerForm_check = ($submit) ->
     $("#registerForm").children("input[type=submit]").attr("disabled",true)
 
 setupForm_check = ($submit) ->
-  if $("#username").hasClass("is-valid") && $("#password").hasClass("is-valid") && $("#passphrase").hasClass("is-valid")
+  if !$("#username").hasClass("is-invalid") && !$("#password").hasClass("is-invalid") && !$("#passphrase").hasClass("is-invalid")
     $("#setupForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -250,7 +250,7 @@ setupForm_check = ($submit) ->
     $("#setupForm").children("input[type=submit]").attr("disabled",true)
 
 resetPasswordForm_check = ($submit) ->
-  if $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+  if !$("#newpassword").hasClass("is-invalid") && !$("#retypepassword").hasClass("is-invalid")
     $("#resetPasswordForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
@@ -258,7 +258,7 @@ resetPasswordForm_check = ($submit) ->
     $("#resetPasswordForm").children("input[type=submit]").attr("disabled",true)
 
 resetPassphraseForm_check = ($submit) ->
-  if $("#passphrase").hasClass("is-valid")
+  if !$("#passphrase").hasClass("is-invalid")
     $("#resetPassphraseForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();

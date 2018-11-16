@@ -4,6 +4,8 @@
 
 $(document).on "turbolinks:load", ->
   $('.selectpicker').selectpicker();
+  $("#add_start_date_").val(new Date().toISOString().substring(0,10));
+  $("#add_end_date_").val(new Date().toISOString().substring(0,10));
   $("#user_role").change ->
     if $("#user_role").val() == "0"
       window.location.href = "/voter?role=0";
@@ -55,6 +57,7 @@ $(document).on "turbolinks:load", ->
           $("#div-count").attr("hidden",true)
           $("#btn-anounce").removeAttr("disabled")
           $("#btn-count").attr("disabled", true)
+          $("#add_participants").removeAttr("disabled");
         else if data.user.status == 1
           $("#div-stop").removeAttr("hidden")
           $("#div-start").attr("hidden",true)
@@ -64,7 +67,8 @@ $(document).on "turbolinks:load", ->
           $("#div-count").removeAttr("hidden")
           $("#div-anounce").attr("hidden",true)
           $("#btn-anounce").attr("disabled", true)
-          $("#btn-count").attr("disabled", true)          
+          $("#btn-count").attr("disabled", true)     
+          $("#add_participants").attr("disabled", true);     
         else
           $("#div-start").removeAttr("hidden")
           $("#div-stop").attr("hidden",true)
@@ -75,6 +79,7 @@ $(document).on "turbolinks:load", ->
           $("#div-anounce").attr("hidden",true)
           $("#btn-anounce").attr("disabled", true)
           $("#btn-count").removeAttr("disabled") 
+          $("#add_participants").attr("disabled", true);
 
         $("#edit_election_id").val(data.user.id);
         $("#edit_name").val(data.user.name);
@@ -84,6 +89,22 @@ $(document).on "turbolinks:load", ->
         $("#edit_end_date_").val(data.other.end_date);
         $("#edit_show_image").attr('src', data.user.image);
     $("#editModal").modal('show');
+
+  $("#add_end_date_").change ->
+    if $("#add_end_date_").val() <= $("#add_start_date_").val()
+      $("#add_end_date_").val($("#add_start_date_").val());
+
+  $("#add_start_date_").change ->
+    if $("#add_end_date_").val() <= $("#add_start_date_").val()
+      $("#add_end_date_").val($("#add_start_date_").val());
+  
+  $("#edit_end_date_").change ->
+    if $("#edit_end_date_").val() <= $("#edit_start_date_").val()
+      $("#edit_end_date_").val($("#edit_start_date_").val());
+  
+  $("#edit_start_date_").change ->
+    if $("#edit_end_date_").val() <= $("#edit_start_date_").val()
+      $("#edit_end_date_").val($("#edit_start_date_").val());
   
   $("#tbody_voter").on "click", "tr", ->
     $("#delete_voter_id").val($(this).children("#other_id").val());
@@ -131,6 +152,7 @@ $(document).on "turbolinks:load", ->
       $("#add_id_number").removeAttr("readonly");
       $("#add_email").removeAttr("readonly");
       $("#add_phone").removeAttr("readonly");
+
       $("#add_name").val("");
       $("#add_id_number").val("");
       $("#add_email").val("");
@@ -149,6 +171,8 @@ $(document).on "turbolinks:load", ->
           $("#add_id_number").val(data.user.idNumber);
           $("#add_email").val(data.user.email);
           $("#add_phone").val(data.user.phone);
+    reset_addForm();
+    $("#add_submit").removeAttr("disabled");
 
   $("#voter_search").keyup ->
     # alert('searching...');
@@ -320,7 +344,7 @@ $(document).on "turbolinks:load", ->
           $("#tbody_election").append('<tr><input type="hidden" id="menu" value="election"><input type="hidden" id="election_id" value="'+value.id+'"><td>'+value.name+'</td><td>'+value.description+'</td><td>'+$sd+'</td><td>'+$ed+'</td><td>'+value.participants+'</td></tr>');
 
   $(".name-check").change ->
-    if (/^[a-z ]{6,50}$/i).test($(this).val())
+    if (/^[a-z0-9 ]{6,50}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
       $(this).siblings(".valid-feedback").removeAttr("hidden");
@@ -330,9 +354,15 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_add_check(false);
   
   $(".username-check").change ->
-    if (/^[a-z0-9]{6,}$/i).test($(this).val())
+    if $(this).val() == ""
+      $(this).removeClass("is-invalid");
+      $(this).removeClass("is-valid");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    else if (/^[a-z0-9]{6,}$/i).test($(this).val())
       $(this).removeClass("is-invalid");
       $(this).addClass("is-valid");
       $(this).siblings(".valid-feedback").removeAttr("hidden");
@@ -342,6 +372,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_edit_check(false);
 
   $(".password-check").change ->
     if (/^[a-z0-9]{8,}$/i).test($(this).val())
@@ -356,7 +387,7 @@ $(document).on "turbolinks:load", ->
       $(this).siblings(".valid-feedback").attr("hidden", true);
     organizerchangepasswordForm_check(false);
   
-  $(".email-check").change ->
+  $("#add_email").change ->
     $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if $re.test($(this).val())
       $(this).removeClass("is-invalid");
@@ -368,6 +399,21 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_add_check(false);
+
+  $("#edit_email").change ->
+    $re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if $re.test($(this).val())
+      $(this).removeClass("is-invalid");
+      $(this).addClass("is-valid");
+      $(this).siblings(".valid-feedback").removeAttr("hidden");
+      $(this).siblings(".invalid-feedback").attr("hidden", true);    
+    else
+      $(this).removeClass("is-valid");
+      $(this).addClass("is-invalid");
+      $(this).siblings(".invalid-feedback").removeAttr("hidden");
+      $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_edit_check(false);
   
   $(".idnumber-check").change ->
     if (/^[a-z]{0,1}[0-9]{6,}$/i).test($(this).val())
@@ -380,6 +426,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_add_check(false);
   
   $(".phone-check").change ->
     if (/^[0-9-]{6,}$/i).test($(this).val())
@@ -392,6 +439,7 @@ $(document).on "turbolinks:load", ->
       $(this).addClass("is-invalid");
       $(this).siblings(".invalid-feedback").removeAttr("hidden");
       $(this).siblings(".valid-feedback").attr("hidden", true);
+    form_add_check(false);
   
   $(".number-check").change ->
     if (/^[0-9]+$/i).test($(this).val())
@@ -462,9 +510,46 @@ $(document).on "turbolinks:load", ->
         window.location.href = '/organize?menu=election'
 
 organizerchangepasswordForm_check = ($submit) ->
-  if $("#oldpassword").hasClass("is-valid") && $("#newpassword").hasClass("is-valid") && $("#retypepassword").hasClass("is-valid")
+  if !$("#oldpassword").hasClass("is-invalid") && !$("#newpassword").hasClass("is-invalid") && !$("#retypepassword").hasClass("is-invalid")
     $("#organizerchangepasswordForm").children("input[type=submit]").removeAttr("disabled")
   else if $submit
     event.preventDefault();
   else
     $("#organizerchangepasswordForm").children("input[type=submit]").attr("disabled",true)
+
+form_add_check = ($submit) ->
+  if $("#add_user_id").val() == "0" && !$("#add_name").hasClass("is-invalid") && !$("#add_id_number").hasClass("is-invalid") && !$("#add_email").hasClass("is-invalid") && !$("#add_phone").hasClass("is-invalid")
+    $("#add_submit").removeAttr("disabled");
+  else if $submit
+    event.preventDefault();
+  else
+    $("#add_submit").attr("disabled",true);
+
+form_edit_check = ($submit) ->
+  if !$("#edit_email").hasClass("is-invalid") && !$("#edit_username").hasClass("is-invalid")
+    $("#edit_submit").removeAttr("disabled");
+  else if $submit
+    event.preventDefault();
+  else
+    $("#edit_submit").attr("disabled",true);
+
+reset_addForm = () ->
+  $("#add_name").removeClass("is-valid");
+  $("#add_id_number").removeClass("is-valid");
+  $("#add_email").removeClass("is-valid");
+  $("#add_phone").removeClass("is-valid");
+
+  $("#add_name").removeClass("is-invalid");
+  $("#add_id_number").removeClass("is-invalid");
+  $("#add_email").removeClass("is-invalid");
+  $("#add_phone").removeClass("is-invalid");
+
+  $("#add_name").siblings(".invalid-feedback").attr("hidden", true);
+  $("#add_id_number").siblings(".invalid-feedback").attr("hidden", true);
+  $("#add_email").siblings(".invalid-feedback").attr("hidden", true);
+  $("#add_phone").siblings(".invalid-feedback").attr("hidden", true);
+
+  $("#add_name").siblings(".valid-feedback").attr("hidden", true);
+  $("#add_id_number").siblings(".valid-feedback").attr("hidden", true);
+  $("#add_email").siblings(".valid-feedback").attr("hidden", true);
+  $("#add_phone").siblings(".valid-feedback").attr("hidden", true);

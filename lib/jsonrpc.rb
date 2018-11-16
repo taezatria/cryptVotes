@@ -48,10 +48,12 @@ module Multichain
     end
 
     def self.topup(el, user)
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
       addr = $redis.get(user.id.to_s+"multiaddress")
       tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN+el.id.to_s => 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
       $hot.sendrawtransaction tx["hex"]
+      $hot.walletlock
     end
 
     def self.vote(el, user, privkey, data)
@@ -119,11 +121,13 @@ module Multichain
     end
 
     def self.setup_election(el)
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
       el.addressKey = $hot.getnewaddress
       grnt = $hot.grant el.addressKey, "send"
       if grnt.present?
         tx = $hot.issue el.addressKey, COIN+el.id.to_s, 10000, 1
         el.save if tx.present?
+        $hot.walletlock
       end
     end
 

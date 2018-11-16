@@ -37,7 +37,7 @@ class OrganizeController < ApplicationController
 
   def add
     if params[:menu] == 'organizer'
-      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
+      if params[:add_user_id] == "0" || !User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -46,16 +46,17 @@ class OrganizeController < ApplicationController
           approved: true
         )
         params[:add_user_id] = new_user.id
+        Multichain::Multichain.new_keypairs(new_user)
       end
       unless Organizer.find_by(user_id: params[:add_user_id], election_id: params[:add_election_id]).present?
         Organizer.create(
           user_id: params[:add_user_id], 
-          election_id: params[:add_election_id]
+          election_id: params[:add_election_id],
+          admin: params[:add_admin].present?
         )
       end
-      # Multichain::Multichain.new_keypairs(new_user)
     elsif params[:menu] == 'voter'
-      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
+      if params[:add_user_id] == "0" || !User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -77,7 +78,7 @@ class OrganizeController < ApplicationController
       el.save
     elsif params[:menu] == 'candidate'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
-      unless params[:add_user_id] == 0 || User.find(params[:add_user_id]).present?
+      if params[:add_user_id] == "0" || !User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
           idNumber: params[:add_id_number], 
@@ -104,7 +105,7 @@ class OrganizeController < ApplicationController
         end_date: params[:add_end_date][0],
         image: item_name
       )
-      # Multichain::Multichain.setup_election(el)
+      Multichain::Multichain.setup_election(el)
     end
     redirect_to organize_path(menu: params[:menu])
   end
@@ -245,7 +246,7 @@ class OrganizeController < ApplicationController
     elsif params[:menu] == 'election'
       user = Election.find_by(id: params[:user_id], deleted_at: nil)
       #asset_path = '/assets/'+user.image#ActionController::Base.helpers.image_url(user.image)
-      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d") }
+      other = { start_date: user.start_date.strftime("%Y-%m-%d"), end_date: user.end_date.strftime("%Y-%m-%d") } if user.present?
     else
       user = nil
       other = nil
@@ -302,7 +303,7 @@ class OrganizeController < ApplicationController
       item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : el.image
       el.image = item_name
       el.save
-      # add participants to the database
+
       if params[:add_participants].present?
         params[:add_participants].each do |part|
           unless Voter.where(user_id: part, election_id: params[:edit_election_id]).present?
@@ -338,7 +339,7 @@ class OrganizeController < ApplicationController
     if params[:id].present?
       el = Election.find_by(id: params[:id], deleted_at: nil)
       if el.present?
-        # Multichain::Multichain.tally_votes(el)
+        Multichain::Multichain.tally_votes(el)
         stts = true
       end
     end
@@ -348,20 +349,20 @@ class OrganizeController < ApplicationController
   def anounce
     stts = false
     if params[:id].present?
-      # el = Election.find(params[:id])
-      # users = User.joins(:voters).where('voters.election_id' => params[:id], deleted_at: nil).distinct
-      # if el.present? && users.present?
-      #   AnounceElectionJob.set(wait: 1.seconds).perform_later(users, el)
-      # end
+      el = Election.find(params[:id])
+      users = User.joins(:voters).where('voters.election_id' => params[:id], deleted_at: nil).distinct
+      if el.present? && users.present?
+        AnounceElectionJob.set(wait: 1.seconds).perform_later(users, el)
+      end
       stts = true
     end
     render :json => { 'success' => stts }
   end
 
   def verifyemail
-    # User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
-    #   SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
-    # end
+    User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
+      SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
+    end
     flash[:notice] = "Sending the e-mail..."
     redirect_to "/organize?menu=voter"
   end

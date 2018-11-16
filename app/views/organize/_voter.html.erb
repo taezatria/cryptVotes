@@ -94,7 +94,7 @@
 <div class="modal fade" id="addModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "organize/add", method: "post" do %>
+      <%= form_tag "organize/add", id: "form_add", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">New Voter</h4>
@@ -170,7 +170,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <%= submit_tag "Submit", class: "btn btn-success" %>
+        <%= submit_tag "Submit", id: "add_submit", class: "btn btn-success" %>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
       <% end %>
@@ -182,7 +182,7 @@
 <div class="modal fade" id="editModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <%= form_tag "organize/alter", method: "post" do %>
+      <%= form_tag "organize/alter", id: "form_edit", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title">Edit Voter</h4>
@@ -301,7 +301,7 @@
       <!-- Modal footer -->
       <div class="modal-footer">
         <button class="btn btn-danger" data-toggle="modal" data-dismiss="modal" data-target="#deleteModal"><span class="fa fa-trash"></span></button>
-        <%= submit_tag "Save", class: "btn btn-success" %>
+        <%= submit_tag "Save", id: "edit_submit", class: "btn btn-success" %>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
       <% end %>
