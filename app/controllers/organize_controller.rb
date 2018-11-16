@@ -98,12 +98,22 @@ class OrganizeController < ApplicationController
       end
     elsif params[:menu] == 'election'
       item_name = save_image(params[:add_image]) if params[:add_image].present?
+      if DateTime.now < params[:add_start_date][0]
+        sta = 0
+      elsif DateTime.now <= params[:add_end_date][0]
+        sta = 1
+      elsif DateTime.now <= (params[:add_end_date][0].to_date + 6.days)
+        sta = 2
+      else
+        sta = 3
+      end
       el = Election.create(
         name: params[:add_name],
         description: params[:add_description],
         start_date: params[:add_start_date][0],
         end_date: params[:add_end_date][0],
-        image: item_name
+        image: item_name,
+        status: sta
       )
       Multichain::Multichain.setup_election(el)
     end
@@ -295,6 +305,15 @@ class OrganizeController < ApplicationController
         vot.save
       end
     elsif params[:menu] == 'election'
+      if DateTime.now < params[:edit_start_date][0]
+        sta = 0
+      elsif DateTime.now <= params[:edit_end_date][0]
+        sta = 1
+      elsif DateTime.now <= (params[:edit_end_date][0].to_date + 6.days)
+        sta = 2
+      else
+        sta = 3
+      end
       el = Election.find(params[:edit_election_id])
       el.name = params[:edit_name]
       el.description = params[:edit_description]
@@ -302,6 +321,7 @@ class OrganizeController < ApplicationController
       el.end_date = params[:edit_end_date][0]
       item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : el.image
       el.image = item_name
+      el.status = sta
       el.save
 
       if params[:add_participants].present?
