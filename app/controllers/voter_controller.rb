@@ -37,6 +37,7 @@ class VoterController < ApplicationController
             voter.hasVote = true
             voter.save
             $redis.del(user.id.to_s+"Ballot")
+            $redis.del(user.id.to_s+"Topup")
             flash[:notice] = "success, txid: "+ res[:txid]
           else
             flash[:alert] = "failed to vote"
@@ -83,8 +84,14 @@ class VoterController < ApplicationController
       candidate.each do |cand|
         other.push(User.find_by(id: cand.user_id, deleted_at: nil))
       end
+      el = Election.find_by(id: params[:id], deleted_at: nil)
+      user = User.find_by(id: session[:current_user_id], deleted_at: nil)
+      if el.present? && user.present? && $redis.get(session[:current_user_id].to_s+"Topup").nil?
+        Multichain::Multichain.topup(el, user)
+        $redis.set(session[:current_user_id].to_s+"Topup", true)
+      end
     end
-    render :json => { candidate: candidate, other: other }
+    render :json => { candidate: candidate, other: other, el: el, user: user }
   end
 
   def change_password

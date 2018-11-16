@@ -161,7 +161,8 @@ module Multichain
       org_count = Organizer.all.count
       rnd = SecureRandom.random_number(org_count) + 1
       org_id = Organizer.find_by(id: rnd, deleted_at: nil).user_id
-      org = User.find_by(id: 16, firstLogin: false, deleted_at: nil)
+      org = User.find_by(id: org_id, firstLogin: false, deleted_at: nil)
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
       addr = $hot.getaddresses[0]
       { organizer: org, node: $hot.validateaddress(addr) }
     end

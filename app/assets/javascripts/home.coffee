@@ -190,10 +190,28 @@ $(document).on "turbolinks:load", ->
     resetPassphraseForm_check(false);
 
   $("#word_button").click ->
-    window.location.href = "/home/forget/"+$("#verifyemail").val()
+    raw = $("#regisEmailForm").serializeArray();
+    data = {};
+    $(raw).each (i,val) ->
+      data[val.name] = val.value
+    $.ajax
+      url: '/home/forget'
+      method: 'post'
+      dataType: 'json'
+      data: data
+      window.location.href = "/"
 
   $("#phrase_button").click ->
-    window.location.href = "/home/genkey/"+$("#verifyemail").val()
+    raw = $("#regisEmailForm").serializeArray();
+    data = {};
+    $(raw).each (i,val) ->
+      data[val.name] = val.value
+    $.ajax
+      url: '/home/genkey'
+      method: 'post'
+      dataType: 'json'
+      data: data
+      window.location.href = "/"
   
   $("#loginForm").submit ->
     loginForm_check(true);

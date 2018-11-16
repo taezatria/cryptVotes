@@ -24,7 +24,7 @@ class HomeController < ApplicationController
     else
       flash[:alert] = "failed to setup account"
     end
-    redirect_to :index
+    redirect_to root_path
   end
   
   def setup
@@ -127,9 +127,9 @@ class HomeController < ApplicationController
       else
         flash[:alert] ||= "User doesn't exist"
       end
-      redirect_to :index
-    elsif params[:email].present?
-      user = User.find_by(email: params[:email], approved: true, deleted_at: nil)
+      redirect_to root_path
+    elsif params[:verifyemail].present?
+      user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
         # SendEmailJob.set(wait: 10.seconds).perform_later("password", user)
         UserMailer.with(user: user).forget_password.deliver_later
@@ -153,7 +153,7 @@ class HomeController < ApplicationController
         if params[:str] == str
           @user_id = user.id
           @menu = "passphrase"
-          render :setup
+          render :reset
         else
           flash[:alert] = "Link doesn't exist"
           redirect_to root_path
@@ -166,6 +166,8 @@ class HomeController < ApplicationController
       user = User.find_by(id: params[:user_id], approved: true, firstLogin: false, deleted_at: nil)
       if user.present?
         if $opssl.genpkey(params[:user_id], params[:passphrase])
+          $opssl.genpbkey(params[:user_id], params[:passphrase])
+          Multichain::Multichain.new_keypairs(user)
           flash[:success] = "account setup successfully"
         else
           flash[:alert] = "failed to generate keys" 
@@ -173,9 +175,9 @@ class HomeController < ApplicationController
       else
         flash[:alert] = "User doesn't exist"
       end
-      redirect_to :index
-    elsif params[:email].present?
-      user = User.find_by(email: params[:email], approved: true, deleted_at: nil)
+      redirect_to root_path
+    elsif params[:verifyemail].present?
+      user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
         # SendEmailJob.set(wait: 10.seconds).perform_later("passphrase", user)
         UserMailer.with(user: user).passphrase_reset.deliver_later
