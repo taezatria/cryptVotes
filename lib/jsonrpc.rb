@@ -61,6 +61,7 @@ module Multichain
       org = User.find(orgid)
       addr = $redis.get(user.id.to_s+"multiaddress")
       if privkey.present? && org.present? && addr.present?
+        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
         tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN+el.id.to_s => 1 } }, [data]
         dtx = $hot.decoderawtransaction tx1
         scriptPubkey = nil
@@ -71,8 +72,7 @@ module Multichain
         end
 
         passdef = $redis.get(orgid.to_s+"passphrase")
-        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
-        org_privkey = $opssl.decrypt("default", passdef, org.privateKey)
+        org_privkey = $opssl.decrypt(orgid, passdef, org.privateKey)
         node_address = $hot.getaddresses[0]
         node_privkey = $hot.dumpprivkey node_address
 
@@ -80,11 +80,12 @@ module Multichain
         #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
         if tx2["complete"]
           $hot.walletlock
-          txid = $hot.sendrawtransaction tx2["hex"]
           digsign = $hot.signmessage privkey, tx2["hex"]
+          txid = $hot.sendrawtransaction tx2["hex"]
           #f = $hot.signmessage a[0]["privkey"], e["hex"]
           $redis.del(user.id.to_s+"orgid")
           $redis.del(user.id.to_s+"redeemScript")
+          $redis.del(user.id.to_s+"multiaddress")
           adr = AddressList.find_by(address: addr)
           adr.tx = txid
           adr.save
