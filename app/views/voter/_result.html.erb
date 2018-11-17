@@ -1,0 +1,53 @@
+<div class="container" style="margin-top: 2%">
+	<h2>Vote Result of</h2>
+	<h2><%= @el.name %> Election</h2>
+	<br />
+	<div class="row">
+		<div class="col-md-6">
+			<h4>Bar Chart</h4>
+			<%= bar_chart @data %>
+		</div>
+		<div class="col-md-6">
+			<h4>Pie Chart</h4>
+			<%= pie_chart @data %>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div class="row" style="margin: 10px 0px;">
+		<div class="col-md-6">
+			<h4>Table</h4>
+		</div>
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-2">
+			
+		<a href="/home/result/download.csv" class="btn btn-primary"><span class="fa fa-download"></span> Download Data</a>
+		</div>
+	</div>
+	<div class="row">
+		<table class="table table-hover table-responsive">
+			<thead class="thead-light">
+				<tr>
+					<th>TxID</th>
+					<th>Block</th>
+					<th>Data</th>
+					<th>Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% all_result_data.each do |tx|
+					rawdata = tx.data.scan(/../).map { |x| x.hex.chr }.join.split('00')
+					if rawdata[1] == @el.id.to_s %>
+					<tr>
+						<td><%= tx.txid %></td>
+						<td><%= tx.blockHash %></td>
+						<td><%= rawdata[2] %></td>
+						<td><%= tx.fromAddress %></td>
+					</tr>
+					<% end %>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+</div>

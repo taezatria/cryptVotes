@@ -105,11 +105,15 @@
           <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :add_election_id, "Election" %>
+<% if @elec == 1 %>
               <select name="add_election_id" id="add_election_id" class="selectpicker form-control">
     <% all_elections.each do |election| %>
                 <option value="<%= election.id %>"><%= election.name =%></option>
     <% end %>
               </select>
+<% else %>
+              <%= text_field_tag :add_election_id, @elec, class: "form-control", readonly: "true", required: true %>
+<% end %>
             </div>
           </div>
         </div>
@@ -205,11 +209,15 @@
           <div class="col-md-4">
             <div class="form-group">
               <%= label_tag :edit_election_id, "Election" %>
+<% if @elec == 1 %>
               <select name="edit_election_id" id="edit_election_id" class="selectpicker form-control">
-                <% all_elections.each do |election| %>
+<% all_elections.each do |election| %>
                 <option value="<%= election.id %>"><%= election.name =%></option>
-                <% end %>
+<% end %>
               </select>
+<% else %>
+                <%= text_field_tag :edit_election_id, @elec, class: "form-control", readonly: "true", required: true %>
+<% end %>
             </div>
           </div>
         </div>

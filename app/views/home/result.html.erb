@@ -1,8 +1,8 @@
 <div class="container-fluid" style="margin-top: 2%">
 	<h1>Vote Result</h1>
-  
+
   <div class="card-columns" id="electresult_card">
-<% all_elections.each do |elec| %>
+<% all_elections_result.each do |elec| %>
     <div class="card bg-light" style="width:300px">
     <input type="hidden" id="elec_id" value="<%= elec.id %>">
       <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
@@ -15,6 +15,6 @@
       </div>
     </div>
 <% end %>
-    
+
   </div>
 </div>

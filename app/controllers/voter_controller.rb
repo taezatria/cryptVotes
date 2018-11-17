@@ -4,20 +4,23 @@ class VoterController < ApplicationController
   def home
     @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
-    @menu = 'home' unless ["change_password", "vote", "verify"].include? @menu
+    @menu = 'home' unless ["result","change_password", "vote", "verify"].include? @menu
     if @menu == "vote"
       check_election
+    elsif @menu == 'result'
+      @data = vote_result(params[:election])
+      @el = Election.find params[:election]
     end
     @name = $redis.get("name"+session[:current_user_id].to_s)
     render :home
   end
 
   def vote
-    if params[:passphrase].present? && params[:candidate_id].present? & params[:vote_election_id].present?
+    if params[:passphrase].present? && params[:vote_candidate_id].present? & params[:vote_election_id].present?
       voter = Voter.find_by(user_id: session[:current_user_id], hasVote: false, hasAttend: true)
       user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at: nil)
       el = election_now(params[:vote_election_id])
-      cand = Candidate.find_by(id: params[:candidate_id], election_id: params[:vote_election_id])
+      cand = Candidate.find_by(id: params[:vote_candidate_id], election_id: params[:vote_election_id])
       candidate = User.find_by(id: cand.user_id, approved: true, deleted_at: nil)
       if voter.present? && user.present? && el.present? && candidate.present?
         privkey = $opssl.decrypt(user.id, params[:passphrase], user.privateKey)
@@ -108,6 +111,16 @@ class VoterController < ApplicationController
     redirect_back fallback_location: root_path
   end
 
+  def download
+    @result = VoteResult.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @result.to_csv, 
+      filename: "vote-result-#{Date.today}.csv" }
+    end
+  end
+
   def logout
     $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
     $redis.del("name"+session[:current_user_id].to_s)
@@ -159,6 +172,17 @@ class VoterController < ApplicationController
       $redis.set(User::USER_LOGIN_KEY+session[:current_user_id].to_s, stts.join(","))
     end
     stts
+  end
+
+  def vote_result(elect_id)
+    res = {}
+    VoteResult.group(:data).count.each do |k,v|
+      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+      if str_key[1] == elect_id.to_s
+        res[str_key[2]] = v
+      end
+    end
+    res
   end
 
 end

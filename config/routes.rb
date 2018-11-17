@@ -36,9 +36,11 @@ Rails.application.routes.draw do
   get 'organize/:menu/searchid/:idnumber', to: 'organize#search_by_idnumber'
   get 'organize/:menu/filter/:election_id', to: 'organize#filter_by_election'
   get 'organize/:menu/:user_id/:other_id', to: 'organize#get_data'
+  get 'organize/result/:id/download', to: 'organize#download'
 
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
+  get 'voter/result/:id/download', to: 'voter#download'
 
   get 'vote/:id', to: 'voter#get_candidate'
   post 'vote', to: 'voter#vote' #!

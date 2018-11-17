@@ -1,0 +1,20 @@
+<div class="container-fluid" style="margin-top: 2%">
+	<h1>Vote Result</h1>
+  
+  <div class="card-columns" id="electresult_card">
+<% all_elections_result.each do |elec| %>
+    <div class="card bg-light" style="width:300px">
+    <input type="hidden" id="elec_id" value="<%= elec.id %>">
+      <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
+      <div class="card-body">
+        <h4 class="card-title"><%= elec.name %></h4>
+        <p class="card-text"><%= elec.description %></p>
+        <p class="card-text"><%= elec.participants %> participants<br />
+        <%= elec.start_date.strftime("%A, %d %B %Y") %> - <%= elec.end_date.strftime("%A, %d %B %Y") %></p>
+        <a href="/voter?menu=result&election=<%= elec.id %>" class="btn btn-primary">View Result</a>
+      </div>
+    </div>
+<% end %>
+    
+  </div>
+</div>

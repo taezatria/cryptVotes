@@ -8,6 +8,10 @@ class OrganizeController < ApplicationController
     @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
     @menu = display_menu(@menu, @status)
+    if @menu == 'result'
+      @data = vote_result(params[:election])
+      @el = Election.find params[:election]
+    end
     @elec = election_org
     @name = $redis.get("name"+session[:current_user_id].to_s)
     render :home
@@ -406,6 +410,16 @@ class OrganizeController < ApplicationController
     render :json => { 'success' => stts }
   end
 
+  def download
+    @result = VoteResult.where(deleted_at: nil)
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @result.to_csv, 
+      filename: "vote-result-#{Date.today}.csv" }
+    end
+  end
+
   private
 
   def check_user_login
@@ -438,9 +452,9 @@ class OrganizeController < ApplicationController
 
   def display_menu(menu, status)
     if status[0].to_i == 1 
-      menu = 'home' unless ["change_password","voter", "candidate"].include? menu
+      menu = 'home' unless ["result","change_password","voter", "candidate"].include? menu
     elsif status[0].to_i == -1
-      menu = 'home' unless ["change_password", "election", "organizer"].include? menu
+      menu = 'home' unless ["result","change_password", "election", "organizer"].include? menu
     end
     menu
   end
@@ -452,6 +466,17 @@ class OrganizeController < ApplicationController
       f.write(img.read)
     end
     '/assets/'+item_name
+  end
+
+  def vote_result(elect_id)
+    res = {}
+    VoteResult.group(:data).count.each do |k,v|
+      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+      if str_key[1] == elect_id.to_s
+        res[str_key[2]] = v
+      end
+    end
+    res
   end
   
 end

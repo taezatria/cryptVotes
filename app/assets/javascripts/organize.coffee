@@ -24,6 +24,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_user_id").val(data.user.id);
         $("#edit_org_id").val(data.other.id);
         $("#edit_election_id").val(data.other.election_id);
+        $("#edit_election_id").next().children().children().children().html($("#edit_election_id :selected").text());
         $("#edit_admin").prop("checked", data.other.admin);
         $("#edit_name").val(data.user.name);
         $("#edit_id_number").val(data.user.idNumber);
@@ -116,6 +117,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_user_id").val(data.user.id);
         $("#edit_voter_id").val(data.other.id);
         $("#edit_election_id").val(data.other.election_id);
+        $("#edit_election_id").next().children().children().children().html($("#edit_election_id :selected").text());
         $("#edit_name").val(data.user.name);
         $("#edit_id_number").val(data.user.idNumber);
         $("#edit_email").val(data.user.email);
@@ -137,6 +139,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_user_id").val(data.user.id);
         $("#edit_candidate_id").val(data.other.id);
         $("#edit_election_id").val(data.other.election_id);
+        $("#edit_election_id").next().children().children().children().html($("#edit_election_id :selected").text());
         $("#edit_name").val(data.user.name);
         $("#edit_id_number").val(data.user.idNumber);
         $("#edit_email").val(data.user.email);
