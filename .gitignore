@@ -18,3 +18,4 @@
 
 #else
 /public/assets/*
+/.keysdata/*
