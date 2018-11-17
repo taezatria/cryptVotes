@@ -13,7 +13,7 @@ class HomeController < ApplicationController
         flash[:success] = "account setup successfully"
         user = User.find(params[:user_id])
         # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
-        UserMailer.with(user: user).welcome_email.deliver_later
+        UserMailer.with(user: user).welcome_email.deliver_now
         Multichain::Multichain.new_keypairs(user)
         if Organizer.find_by(user_id: params[:user_id]).present?
           $redis.set(params[:user_id].to_s+"passphrase", params[:passphrase])
@@ -67,7 +67,7 @@ class HomeController < ApplicationController
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
       @regis = true
     end
-    render :index
+    redirect_to :root_path
   end
 
   def verify
@@ -132,8 +132,8 @@ class HomeController < ApplicationController
       user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
         # SendEmailJob.set(wait: 10.seconds).perform_later("password", user)
-        UserMailer.with(user: user).forget_password.deliver_later
-        flash[:notice] = "E-mail sent successfully, please to check your inbox"
+        UserMailer.with(user: user).forget_password.deliver_now
+        flash[:success] = "E-mail sent successfully, please to check your inbox"
       else
         flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
         @regis = true
@@ -168,6 +168,9 @@ class HomeController < ApplicationController
         if $opssl.genpkey(params[:user_id], params[:passphrase])
           $opssl.genpbkey(params[:user_id], params[:passphrase])
           Multichain::Multichain.new_keypairs(user)
+          if Organizer.find_by(user_id: params[:user_id]).present?
+            $redis.set(params[:user_id].to_s+"passphrase", params[:passphrase])
+          end
           flash[:success] = "account setup successfully"
         else
           flash[:alert] = "failed to generate keys" 
@@ -180,8 +183,8 @@ class HomeController < ApplicationController
       user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
         # SendEmailJob.set(wait: 10.seconds).perform_later("passphrase", user)
-        UserMailer.with(user: user).passphrase_reset.deliver_later
-        flash[:notice] = "E-mail sent successfully, please to check your inbox"
+        UserMailer.with(user: user).passphrase_reset.deliver_now
+        flash[:success] = "E-mail sent successfully, please to check your inbox"
       else
         flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
         @regis = true

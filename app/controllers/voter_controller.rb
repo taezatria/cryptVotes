@@ -41,7 +41,7 @@ class VoterController < ApplicationController
             voter.save
             $redis.del(user.id.to_s+"Ballot")
             $redis.del(user.id.to_s+"Topup")
-            flash[:notice] = "success, txid: "+ res[:txid]
+            flash[:success] = "success, txid: "+ res[:txid]
           else
             flash[:alert] = "failed to vote"
           end
@@ -124,6 +124,7 @@ class VoterController < ApplicationController
   def logout
     $redis.del(User::USER_LOGIN_KEY+session[:current_user_id].to_s)
     $redis.del("name"+session[:current_user_id].to_s)
+    clear_redis
     reset_session
     flash[:notice] = "You've been logged out"
     redirect_to root_path
@@ -183,6 +184,14 @@ class VoterController < ApplicationController
       end
     end
     res
+  end
+
+  def clear_redis
+    $redis.del(session[:current_user_id].to_s+"Ballot")
+    $redis.del(session[:current_user_id].to_s+"Topup")
+    $redis.del(session[:current_user_id].to_s+"multiaddress")
+    $redis.del(session[:current_user_id].to_s+"orgid")
+    $redis.del(session[:current_user_id].to_s+"redeemScript")
   end
 
 end

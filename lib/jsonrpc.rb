@@ -79,7 +79,6 @@ module Multichain
         tx2 = $cold.signrawtransaction tx1, [{"txid": dtx["vin"][0]["txid"], "vout": dtx["vin"][0]["vout"], "scriptPubKey": scriptPubkey, "redeemScript": $redis.get(user.id.to_s+"redeemScript")}], [privkey, org_privkey, node_privkey]
         #e = $cold.signrawtransaction c, [{"txid": d["vin"][0]["txid"], "vout": d["vin"][0]["vout"], "scriptPubKey": d["vout"][0]["scriptPubKey"]["hex"], "redeemScript": b["redeemScript"]}], [a[0]["privkey"],a[1]["privkey"],a[2]["privkey"]]
         if tx2["complete"]
-          $hot.walletlock
           digsign = $hot.signmessage privkey, tx2["hex"]
           txid = $hot.sendrawtransaction tx2["hex"]
           #f = $hot.signmessage a[0]["privkey"], e["hex"]
@@ -92,6 +91,7 @@ module Multichain
         end
       end
       $hot.revoke addr, "send"
+      $hot.walletlock
       { txid: txid, digsign: digsign }
     end
 

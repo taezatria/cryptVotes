@@ -44,11 +44,14 @@ $(document).on "turbolinks:load", ->
 
   $("#formPass").submit ->
     formPass_check(true);
+    event.preventDefault();
+    $("#passModal").modal('hide');
     raw = $("#formPass").serializeArray();
     data = {};
     $(raw).each (i,val) ->
       data[val.name] = val.value
-    $("#passphrase").val("");
+    clear_passphrase();
+    
     $.ajax
       url: 'vote/verify'
       method: 'post'
@@ -60,6 +63,18 @@ $(document).on "turbolinks:load", ->
           alert("verified");
         else if res.status == 0
           $("#verifyModal").modal('show');
+          $("#txhex").val(res.tx.hex);
+          $("#blockhash1").val(res.tx.blockhash);
+          $("#mined").val(res.tx.time);
+          $("#data").val(res.tx.data);
+          $("#size").val(res.size);
+          $("#confirmation").val(res.tx.confirmations);
+          $(res.tx.vout).each (i, data) ->
+            if data.assets.length > 0
+              $("#toaddress").val(data.scriptPubKey.addresses);
+              $("#amount").val(data.assets[0].qty);
+            else if data.scriptPubKey.addresses != ""
+              $("#fromaddress").val(data.scriptPubKey.addresses);
         else
           alert('nil');
 
@@ -131,3 +146,10 @@ formPass_check = ($submit) ->
     event.preventDefault();
   else
     $("#verifySubmit").attr("disabled",true)
+
+clear_passphrase = () ->
+  $("#passphrase").val("");
+  $("#passphrase").removeClass("is-invalid");
+  $("#passphrase").removeClass("is-valid");
+  $("#passphrase").siblings(".valid-feedback").removeAttr("hidden");
+  $("#passphrase").siblings(".invalid-feedback").removeAttr("hidden"); 
