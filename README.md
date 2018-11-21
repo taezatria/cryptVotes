@@ -7,7 +7,8 @@
 * gem install rails (rails 5.2.1)
 * **bundle install**
 * create cryptAdmin on MySQL
-* rake db:create & migrate
+* rake db:create & migrate & seed
+* cp multichain/params.dat ~/.multichain-cold/cryptvotechain/
 * foreman start
 
 ### **Multichain Explorer**

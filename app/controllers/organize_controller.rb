@@ -388,7 +388,7 @@ class OrganizeController < ApplicationController
       SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
     end
     flash[:notice] = "Sending the e-mail..."
-    redirect_to "/organize?menu=voter"
+    redirect_to organize_path(menu: "voter")
   end
 
   def handle_election
@@ -431,7 +431,7 @@ class OrganizeController < ApplicationController
       stts = stts.split(",")
       unless stts.include?("1") || stts.include?("-1")
       flash[:alert] = "You dont have authorize !"
-      redirect_to '/voter'
+      redirect_to voter_path
       end
     end
   end

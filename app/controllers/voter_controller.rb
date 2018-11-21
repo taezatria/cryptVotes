@@ -55,7 +55,7 @@ class VoterController < ApplicationController
     else
       flash[:alert] = "datas are not completed"
     end
-    redirect_to '/voter?menu=vote'
+    redirect_to voter_path(menu: "vote")
   end
 
   def verify
@@ -142,7 +142,7 @@ class VoterController < ApplicationController
       stts = stts.split(",")
       unless stts.include? "0"
         flash[:alert] = "You dont have authorize !"
-        redirect_to '/organize'
+        redirect_to organize_path
       end
     end
   end
