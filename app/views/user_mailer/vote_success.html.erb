@@ -4,15 +4,13 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1>Your Vote has been Mined !</h1>
+    <h1>Your Vote has been Recorded !</h1>
     <p>
       Dear <%= @user.name %>, <br /><br />
-      Your ballot has been included to the blockchain !<br />
-      Here is the detail of the block<br />
+      Your ballot of <%= @election.name %> Election <br />
+      has been recorded to the system ! <br />
+      Here is the vote ID of your Vote<br />
     </p>
-      <h4>Block Hash :</h4>
-      <h3><%= @blockhash %></h3>
-      <br />
       <h4>Transaction ID (or Vote ID) :</h4>
       <h3><%= @txid %></h3>
       <br />

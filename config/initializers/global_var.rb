@@ -6,5 +6,5 @@ $cold = Multichain::JsonRPC.new("http://multichainrpc:CHDVVFzyJsvPQJaZPfEuvm3i9q
 # $cold = Multichain::JsonRPC.new("http://multichainrpc:H7YhbgdtUPA3BmCiQc9NHTJ8kzAMBEZSzFZFKE45UxY4@localhost:45313")
 $hot = Multichain::JsonRPC.new("http://multichainrpc:9eHahUSWh6zUUTiVAoi1rpv2RKvvEJpjKm3S9aodkwcS@192.168.37.189:45313")
 $opssl = OpSSL::OpSSL.new
-$redis.set("1passphrase","foobar")
+$redis.set("1passphrase","111111")
 $redis.set("nodepassphrase","cryptvotechain")

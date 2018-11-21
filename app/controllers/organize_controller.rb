@@ -7,12 +7,12 @@ class OrganizeController < ApplicationController
   def home
     @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
-    @menu = display_menu(@menu, @status)
+    @elec = election_org
+    @menu = display_menu(@menu, @status, @elec)
     if @menu == 'result'
       @data = vote_result(params[:election])
       @el = Election.find params[:election]
     end
-    @elec = election_org
     @name = $redis.get("name"+session[:current_user_id].to_s)
     render :home
   end
@@ -81,7 +81,7 @@ class OrganizeController < ApplicationController
       el.participants = c + 1
       el.save
     elsif params[:menu] == 'candidate'
-      item_name = save_image(params[:add_image]) if params[:add_image].present?
+      item_name = params[:add_image].present? ? save_image(params[:add_image]) : '/assets/default.jpg'
       if params[:add_user_id] == "0" || !User.find(params[:add_user_id]).present?
         new_user = User.create(
           name: params[:add_name], 
@@ -101,7 +101,7 @@ class OrganizeController < ApplicationController
         )
       end
     elsif params[:menu] == 'election'
-      item_name = save_image(params[:add_image]) if params[:add_image].present?
+      item_name = params[:add_image].present? ? save_image(params[:add_image]) : '/assets/default.jpg'
       if DateTime.now < params[:add_start_date][0]
         sta = 0
       elsif DateTime.now <= params[:add_end_date][0]
@@ -450,11 +450,14 @@ class OrganizeController < ApplicationController
     Organizer.find_by(user_id: session[:current_user_id], deleted_at: nil).election_id
   end
 
-  def display_menu(menu, status)
+  def display_menu(menu, status, elec = 1)
     if status[0].to_i == 1 
       menu = 'home' unless ["result","change_password","voter", "candidate"].include? menu
     elsif status[0].to_i == -1
       menu = 'home' unless ["result","change_password", "election", "organizer"].include? menu
+    end
+    if elec != 1 && menu == "election"
+      menu = 'home'
     end
     menu
   end

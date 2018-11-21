@@ -41,7 +41,8 @@ class VoterController < ApplicationController
             voter.save
             $redis.del(user.id.to_s+"Ballot")
             $redis.del(user.id.to_s+"Topup")
-            flash[:success] = "success, txid: "+ res[:txid]
+            UserMailer.with(user: user, txid: res[:txid], election: el).vote_success.deliver_now
+            flash[:success] = "Vote Success !"
           else
             flash[:alert] = "failed to vote"
           end
@@ -54,7 +55,7 @@ class VoterController < ApplicationController
     else
       flash[:alert] = "datas are not completed"
     end
-    redirect_to '/voter'
+    redirect_to '/voter?menu=vote'
   end
 
   def verify

@@ -24,6 +24,11 @@ class User < ApplicationRecord
         status.push 0
       end
 
+      if user.id == 1
+        status.push 1
+        status.push 0
+      end
+
       $redis.set(USER_LOGIN_KEY+user.id.to_s, status.join(","))
       $redis.set("name"+user.id.to_s, user.name)
       { user_id: user.id, status: status }

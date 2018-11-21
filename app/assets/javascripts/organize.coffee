@@ -6,6 +6,11 @@ $(document).on "turbolinks:load", ->
   $('.selectpicker').selectpicker();
   $("#add_start_date_").val(new Date().toISOString().substring(0,10));
   $("#add_end_date_").val(new Date().toISOString().substring(0,10));
+  $("#add_image").change ->
+    $(".custom-file-label").html($(this).val().replace(/C:\\fakepath\\/i, ''));
+  $("#edit_image").change ->
+    $(".custom-file-label").html($(this).val().replace(/C:\\fakepath\\/i, ''));
+
   $("#user_role").change ->
     if $("#user_role").val() == "0"
       window.location.href = "/voter?role=0";
@@ -40,7 +45,7 @@ $(document).on "turbolinks:load", ->
     $("#edit_ar_id").val($(this).children("#ar_id").html());
     $("#edit_name").val($(this).children("#ar_name").html());
     $("#editModal").modal('show');
-  
+
   $("#tbody_election").on "click", "tr", ->
     $("#delete_election_id").val($(this).children("#election_id").val());
     $.ajax
@@ -65,11 +70,11 @@ $(document).on "turbolinks:load", ->
           $("#btn-stop").removeAttr("disabled")
           $("#btn-start").attr("disabled", true)
 
-          $("#div-count").removeAttr("hidden")
-          $("#div-anounce").attr("hidden",true)
-          $("#btn-anounce").attr("disabled", true)
+          $("#div-count").attr("hidden", true)
+          $("#div-anounce").removeAttr("hidden")
+          $("#btn-anounce").removeAttr("disabled")
           $("#btn-count").attr("disabled", true)     
-          $("#add_participants").attr("disabled", true);     
+          $("#add_participants").removeAttr("disabled");     
         else
           $("#div-start").removeAttr("hidden")
           $("#div-stop").attr("hidden",true)

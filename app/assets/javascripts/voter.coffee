@@ -51,16 +51,19 @@ $(document).on "turbolinks:load", ->
     $(raw).each (i,val) ->
       data[val.name] = val.value
     clear_passphrase();
-    
+    data['authenticity_token'] = $('meta[name=csrf-token]').attr('content');
     $.ajax
       url: 'vote/verify'
       method: 'post'
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
+        # alert(JSON.stringify(res));
         if res.status == 1
-          alert("verified");
+          if res.verifystatus
+            alert("verified");
+          else
+            alert("not verified")
         else if res.status == 0
           $("#verifyModal").modal('show');
           $("#txhex").val(res.tx.hex);
@@ -76,7 +79,7 @@ $(document).on "turbolinks:load", ->
             else if data.scriptPubKey.addresses != ""
               $("#fromaddress").val(data.scriptPubKey.addresses);
         else
-          alert('nil');
+          alert('input is not valid');
 
   $(".password-check").change ->
     if (/^[a-z0-9]{8,}$/i).test($(this).val())

@@ -34,6 +34,14 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Passphrase Reset Request')
   end
 
+  def vote_success
+    @user = params[:user]
+    @election = params[:election]
+    @txid = params[:txid]
+    @url = URL_HOME+"/home/verify"
+    mail(to: @user.email, subject: 'You have Voted !')
+  end
+
   def block_mined
     @user = params[:user]
     @blockhash = params[:blockhash]
