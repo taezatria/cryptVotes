@@ -128,6 +128,10 @@ class OrganizeController < ApplicationController
     if params[:addfile].present? && params[:menu].present?
       data = []
       other = []
+      org = []
+      Organizer.where(user_id: session[:current_user_id]).each do |o|
+        org.push o.election_id
+      end
       CSV.foreach(params[:addfile].path, :headers => true) do |row|
         user_data = row.to_hash
         other_data = user_data.slice!("name","idNumber","email","phone")
@@ -135,39 +139,48 @@ class OrganizeController < ApplicationController
         if params[:menu] == "organizer"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            Organizer.create(
-              user: user,
-              election_id: other_data["election"][i],
-              admin: (other_data["admin"][i] == "1")
-            )
+            if org.include? other_data["election"][i].to_i
+              Organizer.create(
+                user: user,
+                election_id: other_data["election"][i],
+                admin: (other_data["admin"][i] == "1")
+              )
+            end
           end
         elsif params[:menu] == "voter"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            Voter.create(
-              user: user,
-              election_id: other_data["election"][i]
-            )
-            el = Election.find(other_data["election"][i])
-            cp = el.participants
-            el.participants = cp + 1
-            el.save
+            if org.include? other_data["election"][i].to_i
+              Voter.create(
+                user: user,
+                election_id: other_data["election"][i]
+              )
+              el = Election.find(other_data["election"][i])
+              cp = el.participants
+              el.participants = cp + 1
+              el.save
+            end
           end
         elsif params[:menu] == "candidate"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            Candidate.create(
-              user: user,
-              election_id: other_data["election"][i],
-              image: "person.jpg"
-            )
+            if org.include? other_data["election"][i].to_i
+              Candidate.create(
+                user: user,
+                election_id: other_data["election"][i],
+                image: "/assets/default.jpg"
+              )
+            end
           end
         end
-        data.push user_data
-        other.push other_data
+        # data.push user_data
+        # other.push other_data]
+        flash[:success] = "Users added successfully"
       end
+    else
+      flash[:alert] = "Failed to add"
     end
-    render :json => { data: data, other: other }
+    redirect_to organize_path(menu: params[:menu])
   end
 
   def search_by_name
@@ -365,6 +378,8 @@ class OrganizeController < ApplicationController
       if el.present?
         Multichain::Multichain.tally_votes(el)
         stts = true
+        el.status = 3
+        el.save
       end
     end
     render :json => { 'status' => stts }
@@ -411,7 +426,7 @@ class OrganizeController < ApplicationController
   end
 
   def download
-    @result = VoteResult.where(deleted_at: nil)
+    @result = VoteResult.where(election: params[:id], deleted_at: nil)
 
     respond_to do |format|
       format.html
@@ -473,10 +488,10 @@ class OrganizeController < ApplicationController
 
   def vote_result(elect_id)
     res = {}
-    VoteResult.group(:data).count.each do |k,v|
-      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+    VoteResult.group(:data).count.each do |data,count|
+      str_key = data.scan(/../).map { |x| x.hex.chr }.join.split('0x0')
       if str_key[1] == elect_id.to_s
-        res[str_key[2]] = v
+        res[str_key[2]] = count
       end
     end
     res

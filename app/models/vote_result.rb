@@ -5,7 +5,11 @@ class VoteResult < ApplicationRecord
   def self.to_csv
     attributes = column_names
     i = attributes.index "data"
+    j = attributes.index "election"
+    k = attributes.index "candidate"
     attributes[i] = "data_vote"
+    attributes[j] = "election_name"
+    attributes[k] = "candidate_name"
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -17,7 +21,15 @@ class VoteResult < ApplicationRecord
   end
   
   def data_vote
-    raw = data.scan(/../).map { |x| x.hex.chr }.join.split('00')
+    raw = data.scan(/../).map { |x| x.hex.chr }.join.split('0x0')
     raw.join('-')
+  end
+
+  def election_name
+    Election.find(election).name
+  end
+
+  def candidate_name
+    User.find(candidate).name
   end
 end

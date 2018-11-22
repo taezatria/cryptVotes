@@ -20,8 +20,16 @@ class VoterController < ApplicationController
       voter = Voter.find_by(user_id: session[:current_user_id], hasVote: false, hasAttend: true)
       user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at: nil)
       el = election_now(params[:vote_election_id])
-      cand = Candidate.find_by(id: params[:vote_candidate_id], election_id: params[:vote_election_id])
-      candidate = User.find_by(id: cand.user_id, approved: true, deleted_at: nil)
+      if params[:vote_candidate_id] == "0"
+        candidate = User.new
+        candidate.name = "Abstance"
+        candidate.id = 0
+        cand = Candidate.new
+        cand.id = 0
+      else
+        cand = Candidate.find_by(id: params[:vote_candidate_id], election_id: params[:vote_election_id])
+        candidate = User.find_by(id: cand.user_id, approved: true, deleted_at: nil)
+      end
       if voter.present? && user.present? && el.present? && candidate.present?
         privkey = $opssl.decrypt(user.id, params[:passphrase], user.privateKey)
         if privkey.present?
@@ -113,7 +121,7 @@ class VoterController < ApplicationController
   end
 
   def download
-    @result = VoteResult.where(deleted_at: nil)
+    @result = VoteResult.where(election: params[:id], deleted_at: nil)
 
     respond_to do |format|
       format.html
@@ -178,10 +186,10 @@ class VoterController < ApplicationController
 
   def vote_result(elect_id)
     res = {}
-    VoteResult.group(:data).count.each do |k,v|
-      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+    VoteResult.group(:data).count.each do |data,count|
+      str_key = data.scan(/../).map { |x| x.hex.chr }.join.split('0x0')
       if str_key[1] == elect_id.to_s
-        res[str_key[2]] = v
+        res[str_key[2]] = count
       end
     end
     res

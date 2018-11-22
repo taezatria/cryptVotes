@@ -8,6 +8,7 @@ class CreateElections < ActiveRecord::Migration[5.2]
       t.integer "participants", :null => false, :default => 0
       t.integer "status", :default => 0
       t.text "image", :null => false
+      t.integer "cand", :default => 1
       t.text "addressKey"
       t.datetime "deleted_at"
       t.timestamps

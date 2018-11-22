@@ -154,7 +154,7 @@
           <div class="col-md-6"> 
             <div class="form-group">
               <select class="selectpicker form-control" id="add_participants" name="add_participants[]" multiple data-live-search="true" data-selected-text-format="count" data-size="10" data-actions-box="true" title="Select participants...">
-<% all_voters.each do |voter| %>
+<% all_users.each do |voter| %>
                 <option data-subtext="<%= voter.idNumber %>" value="<%= voter.id %>"><%= voter.name %></option>
 <% end %>
               </select>

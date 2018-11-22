@@ -139,18 +139,22 @@ module Multichain
           data_tx = AddressList.find_by(address: tx["addresses"][0])
           if data_tx.present? && data_tx.tx == tx["txid"] && !data_tx.counted && tx["valid"]
             data_tx.counted = true
-            raw = $hot.getrawtransaction txid
+            dt = tx["data"][0].scan(/../).map { |x| x.hex.chr }.join.split('0x0')
+
+            raw = $hot.getrawtransaction tx["txid"]
             VoteResult.create(
               hex: raw,
               blockHash: tx["blockhash"],
               txid: tx["txid"],
+              election: dt[1],
+              candidate: dt[0],
               data: tx["data"][0],
               fromAddress: tx["myaddresses"][0],
               toAddress: tx["addresses"][0],
               amount: tx["balance"]["assets"][0]["qty"],
               confirmation: tx["confirmations"]
             )
-            data.save
+            data_tx.save
           end
         end
       end

@@ -10,7 +10,8 @@ $(document).on "turbolinks:load", ->
     $(".custom-file-label").html($(this).val().replace(/C:\\fakepath\\/i, ''));
   $("#edit_image").change ->
     $(".custom-file-label").html($(this).val().replace(/C:\\fakepath\\/i, ''));
-
+  $("#addfile").change ->
+    $(".custom-file-label").html($(this).val().replace(/C:\\fakepath\\/i, ''));
   $("#user_role").change ->
     if $("#user_role").val() == "0"
       window.location.href = "/voter?role=0";

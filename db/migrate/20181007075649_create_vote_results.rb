@@ -4,6 +4,8 @@ class CreateVoteResults < ActiveRecord::Migration[5.2]
       t.text "hex"
       t.text "blockHash"
       t.text "txid"
+      t.integer "election"
+      t.integer "candidate"
       t.text "data"
       t.text "fromAddress"
       t.text "toAddress"

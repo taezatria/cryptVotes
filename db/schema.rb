@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.integer "participants", default: 0, null: false
     t.integer "status", default: 0
     t.text "image", null: false
+    t.integer "cand", default: 1
     t.text "addressKey"
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
@@ -91,6 +92,8 @@ ActiveRecord::Schema.define(version: 2018_10_07_075649) do
     t.text "hex"
     t.text "blockHash"
     t.text "txid"
+    t.integer "election"
+    t.integer "candidate"
     t.text "data"
     t.text "fromAddress"
     t.text "toAddress"

@@ -10,7 +10,6 @@ class HomeController < ApplicationController
     if User.setupAcc(params[:user_id], params[:username], params[:password])
       if $opssl.genpkey(params[:user_id], params[:passphrase])
         $opssl.genpbkey(params[:user_id], params[:passphrase])
-        flash[:success] = "account setup successfully"
         user = User.find(params[:user_id])
         # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
         UserMailer.with(user: user).welcome_email.deliver_now
@@ -18,6 +17,7 @@ class HomeController < ApplicationController
         if Organizer.find_by(user_id: params[:user_id]).present?
           $redis.set(params[:user_id].to_s+"passphrase", params[:passphrase])
         end
+        flash[:success] = "account setup successfully"
       else
         flash[:alert] = "failed to generate keys"  
       end
@@ -67,7 +67,7 @@ class HomeController < ApplicationController
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
       @regis = true
     end
-    redirect_to :root_path
+    redirect_to root_path
   end
 
   def verify
