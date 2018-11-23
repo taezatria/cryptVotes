@@ -8,7 +8,9 @@
 * **bundle install**
 * create cryptAdmin on MySQL
 * rake db:create & migrate & seed
-* cp multichain/params.dat ~/.multichain-cold/cryptvotechain/
+* cp multichain/params.dat ~/.multichain-cold/cryptvotechain/ (COLD)
+* walletpassphrase rpcallowip(HOT)
+* password node (COLD HOT)
 * foreman start
 
 ### **Multichain Explorer**

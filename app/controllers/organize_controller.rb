@@ -391,7 +391,7 @@ class OrganizeController < ApplicationController
       el = Election.find(params[:id])
       users = User.joins(:voters).where('voters.election_id' => params[:id], deleted_at: nil).distinct
       if el.present? && users.present?
-        AnounceElectionJob.set(wait: 1.seconds).perform_later(users, el)
+        AnounceElectionJob.perform_later(users, el)
       end
       stts = true
     end
@@ -400,7 +400,7 @@ class OrganizeController < ApplicationController
 
   def verifyemail
     User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
-      SendEmailJob.set(wait: 1.seconds).perform_later("verify", user)
+      SendEmailJob.perform_later("verify", user)
     end
     flash[:notice] = "Sending the e-mail..."
     redirect_to organize_path(menu: "voter")

@@ -49,7 +49,7 @@ class VoterController < ApplicationController
             voter.save
             $redis.del(user.id.to_s+"Ballot")
             $redis.del(user.id.to_s+"Topup")
-            UserMailer.with(user: user, txid: res[:txid], election: el).vote_success.deliver_now
+            VoteEmailJob.perform_later(user, res[:txid], el)
             flash[:success] = "Vote Success !"
           else
             flash[:alert] = "failed to vote"

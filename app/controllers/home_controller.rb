@@ -11,8 +11,8 @@ class HomeController < ApplicationController
       if $opssl.genpkey(params[:user_id], params[:passphrase])
         $opssl.genpbkey(params[:user_id], params[:passphrase])
         user = User.find(params[:user_id])
-        # SendEmailJob.set(wait: 10.seconds).perform_later("welcome", user)
-        UserMailer.with(user: user).welcome_email.deliver_now
+        SendEmailJob.perform_later("welcome", user)
+        # UserMailer.with(user: user).welcome_email.deliver_now
         Multichain::Multichain.new_keypairs(user)
         if Organizer.find_by(user_id: params[:user_id]).present?
           $redis.set(params[:user_id].to_s+"passphrase", params[:passphrase])
@@ -60,8 +60,8 @@ class HomeController < ApplicationController
     if user.present?
       user.firstLogin = true
       user.save
-      # SendEmailJob.set(wait: 10.seconds).perform_later("verify", user)
-      UserMailer.with(user: user).verification_email.deliver_now
+      SendEmailJob.perform_later("verify", user)
+      # UserMailer.with(user: user).verification_email.deliver_now
       flash[:notice] = "E-mail sent successfully, please to check your inbox"
     else
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
@@ -131,8 +131,8 @@ class HomeController < ApplicationController
     elsif params[:verifyemail].present?
       user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
-        # SendEmailJob.set(wait: 10.seconds).perform_later("password", user)
-        UserMailer.with(user: user).forget_password.deliver_now
+        SendEmailJob.perform_later("password", user)
+        # UserMailer.with(user: user).forget_password.deliver_now
         flash[:success] = "E-mail sent successfully, please to check your inbox"
       else
         flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
@@ -182,8 +182,8 @@ class HomeController < ApplicationController
     elsif params[:verifyemail].present?
       user = User.find_by(email: params[:verifyemail], approved: true, deleted_at: nil)
       if user.present?
-        # SendEmailJob.set(wait: 10.seconds).perform_later("passphrase", user)
-        UserMailer.with(user: user).passphrase_reset.deliver_now
+        SendEmailJob.perform_later("passphrase", user)
+        # UserMailer.with(user: user).passphrase_reset.deliver_now
         flash[:success] = "E-mail sent successfully, please to check your inbox"
       else
         flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
