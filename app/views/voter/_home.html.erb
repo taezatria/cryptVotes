@@ -1,8 +1,9 @@
 <div class="container-fluid" style="margin-top: 2%">
 	<h1>Vote Result</h1>
-  
+<% no = true %>
   <div class="card-columns" id="electresult_card">
 <% all_elections_result.each do |elec| %>
+  <% no = false %>
     <div class="card bg-light" style="width:300px">
     <input type="hidden" id="elec_id" value="<%= elec.id %>">
       <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
@@ -15,6 +16,18 @@
       </div>
     </div>
 <% end %>
-    
   </div>
+
+<% if no %>
+<div class="row">
+<div class="col-md-6">
+<div class="alert alert-info" role="alert">
+  <h4 class="alert-heading">Sorry !</h4>
+  <p>For now there is no result of any election.</p>
+  <hr>
+  <p class="mb-0">Thank you</p>
+</div>
+</div>
+</div>
+<% end %>
 </div>

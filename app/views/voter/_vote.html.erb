@@ -1,8 +1,9 @@
 <div class="container" style="margin-top: 2%">
   <h1>Time to Vote</h1>
-
+<% no = true %>
   <div class="card-columns" id="electvote_card">
 <% all_elections_vote(session[:current_user_id].to_s).each do |elec| %>
+  <% no = false %>
     <div class="card bg-light" style="width:300px">
       <img class="card-img-top" src="<%= elec.image %>" alt="Card image">
       <input type="hidden" id="elec_id" value="<%= elec.id %>">
@@ -15,8 +16,20 @@
       </div>
     </div>
   <% end %>
-
   </div>
+
+<% if no %>
+<div class="row">
+<div class="col-md-6">
+<div class="alert alert-info" role="alert">
+  <h4 class="alert-heading">Sorry !</h4>
+  <p>For now there is no running election.</p>
+  <hr>
+  <p class="mb-0">You can reach our organizer for any upcoming election.</p>
+</div>
+</div>
+</div>
+<% end %>
 </div>
 
 <div class="modal fade" id="voteModal">

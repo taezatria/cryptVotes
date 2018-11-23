@@ -54,7 +54,7 @@
     </div> 
 
   </div>
-
+<% no = true %>
   <div class="row">
     <table class="table table-hover">
       <thead class="thead-light">
@@ -71,6 +71,7 @@
       <tbody id="tbody_voter">
 <% all_voters.each do |voter| %>
   <% voter(voter.id, @elec).each do |vot| %>
+    <% no = false %>
         <tr>
         <input type="hidden" id="menu" value="voter">
         <input type="hidden" id="user_id" value="<%= voter.id %>">
@@ -88,6 +89,19 @@
       </tbody>
     </table>
   </div>
+
+<% if no %>
+<div class="row">
+<div class="col-md-8">
+<div class="alert alert-info" role="alert">
+  <h4 class="alert-heading">Sorry !</h4>
+  <p>There seems no record of any data.</p>
+  <hr>
+  <p class="mb-0">You can create a new one!</p>
+</div>
+</div>
+</div>
+<% end %>
 </div>
 
 <!-- The Modal Add -->
