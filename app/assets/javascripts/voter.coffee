@@ -61,9 +61,9 @@ $(document).on "turbolinks:load", ->
         # alert(JSON.stringify(res));
         if res.status == 1
           if res.verifystatus
-            alert("verified");
+            $("#isimessage").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><h4 class="alert-heading">Verified</h4><p class="mb-0"> Your ballot is not changed ! </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
           else
-            alert("not verified")
+            $("#isimessage").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><h4 class="alert-heading">NOT VERIFIED</h4><p> Your ballot has changed ! </p><hr /><p class="mb-0">Please contact our organizer. </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         else if res.status == 0
           $("#verifyModal").modal('show');
           $("#txhex").val(res.tx.hex);

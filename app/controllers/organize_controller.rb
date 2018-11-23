@@ -380,7 +380,11 @@ class OrganizeController < ApplicationController
         stts = true
         el.status = 3
         el.save
+      else
+        flash[:alert] = "Failed to counting votes of the election"
       end
+    else
+      flash[:alert] = "Failed to counting votes of the election"
     end
     render :json => { 'status' => stts }
   end
@@ -394,6 +398,9 @@ class OrganizeController < ApplicationController
         AnounceElectionJob.perform_later(users, el)
       end
       stts = true
+      flash[:success] = "Anouncement succeed"
+    else
+      flash[:alert] = "Anouncement failed"
     end
     render :json => { 'success' => stts }
   end
@@ -415,12 +422,18 @@ class OrganizeController < ApplicationController
         el.status = 1
         el.save
         stts = true
+        flash[:success] = "Success starting the election"
       elsif el.present? && params[:staction] == "stop"
         el.end_date = DateTime.now
         el.status = 2
         el.save
         stts = true
+        flash[:success] = "Success stoping the election"
+      else
+        flash[:alert] = "Failed to start/stop the election"
       end
+    else
+      flash[:alert] = "Failed to start/stop the election"
     end
     render :json => { 'success' => stts }
   end

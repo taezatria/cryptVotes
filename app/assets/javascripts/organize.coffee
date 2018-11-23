@@ -476,7 +476,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
+        # alert(JSON.stringify(res));
         window.location.href = '/organize?menu=election'
   $("#btn-stop").click ->
     raw = $("#form_org_alter").serializeArray();
@@ -489,7 +489,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
+        # alert(JSON.stringify(res));
         window.location.href = '/organize?menu=election'
   $("#btn-count").click ->
     raw = $("#form_org_alter").serializeArray();
@@ -502,7 +502,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
+        # alert(JSON.stringify(res));
         window.location.href = '/organize?menu=election'
   $("#btn-anounce").click ->
     raw = $("#form_org_alter").serializeArray();
@@ -515,7 +515,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        alert(JSON.stringify(res));
+        # alert(JSON.stringify(res));
         window.location.href = '/organize?menu=election'
 
 organizerchangepasswordForm_check = ($submit) ->
