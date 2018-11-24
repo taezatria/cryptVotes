@@ -4,7 +4,7 @@
   </div>
 <% no = true %>
     <div class="row">
-      <div class="col-md-6" id="isimessage">
+      <div class="col-sm-6" id="isimessage">
       </div>
     </div>
     
@@ -29,7 +29,7 @@
 
 <% if no %>
 <div class="row">
-<div class="col-md-6">
+<div class="col-sm-6">
 <div class="alert alert-info" role="alert">
   <h4 class="alert-heading">Sorry !</h4>
   <p>You does not seem to have voted yet.</p>
@@ -55,7 +55,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="form-group">
               <%= label_tag :txhex, "Transaction Hex" %>
               <%= text_area_tag :txhex, "", class: "form-control", rows: 3, readonly: true %>
@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="form-group">
               <%= label_tag :blockhash1, "Included in Block" %>
               <%= text_area_tag :blockhash1, "", class: "form-control", rows: 3, readonly: true %>
@@ -71,13 +71,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-sm-3">
             <div class="form-group">
               <%= label_tag :mined, "Mined time" %>
               <%= text_field_tag :mined, "", class: "form-control", readonly: true %>
             </div>
           </div>
-          <div class="col-md-9">
+          <div class="col-sm-9">
             <div class="form-group">
               <%= label_tag :data, "Data" %>
               <%= text_field_tag :data, "", class: "form-control", readonly: true %>
@@ -86,19 +86,19 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :size, "Size" %>
               <%= text_field_tag :size, "", class: "form-control", readonly: true %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :confirmation, "Confirmation" %>
               <%= text_field_tag :confirmation, "", class: "form-control", readonly: true %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :amount, "Amount" %>
               <%= text_field_tag :amount, "", class: "form-control", readonly: true %>
@@ -107,7 +107,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="form-group">
               <%= label_tag :fromaddress, "Sender Address" %>
               <%= text_area_tag :fromaddress, "", class: "form-control",rows: 2, readonly: true %>
@@ -115,7 +115,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="form-group">
               <%= label_tag :toaddress, "Receiver Address" %>
               <%= text_area_tag :toaddress, "", class: "form-control",rows: 2, readonly: true %>

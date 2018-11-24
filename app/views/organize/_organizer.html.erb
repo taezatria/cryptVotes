@@ -289,23 +289,19 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_address, "Blockchain Address" %>
               <%= text_area_tag :edit_address, "", class: "form-control", readonly: true, rows: 4 %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <div class="form-group">
               <%= label_tag :edit_public_key, "Blockchain Public Key" %>
               <%= text_area_tag :edit_public_key, "", class: "form-control", readonly: true, rows: 4  %>
             </div>
           </div>
-          <div class="col-md-4">
-            <div style="margin-top: 24px; padding-top: 0.5rem;">
-              <%= button_tag "Generate new Key", class: "btn btn-basic" %>
-            </div>
-          </div>
+          
         </div>
         <input type="hidden" name="edit_org_id" id="edit_org_id" required>
         <%= hidden_field_tag 'menu', 'organizer', required: true %>

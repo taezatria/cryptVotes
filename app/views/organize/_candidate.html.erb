@@ -4,7 +4,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="form-group">
         <select name="candidate_searchel" id="candidate_searchel" class="selectpicker form-control">
           <option value="0">-= All Elections =-</option>
@@ -14,7 +14,7 @@
         </select>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :candidate_search, "", class: "form-control", placeholder: "Name" %>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :candidate_searchid, "", class: "form-control", placeholder: "ID Number" %>
@@ -34,11 +34,11 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
         <span class="fa fa-plus mr-3"></span>Add New</button>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <div class="custom-file" data-toggle="modal" data-target="#addFileModal">
         <button type="button" class="btn btn-secondary btn-block"><span class="fa fa-file-upload mr-3"></span>Add Some</button>
       </div>
@@ -79,7 +79,7 @@
 
 <% if no %>
 <div class="row">
-<div class="col-md-8">
+<div class="col-sm-8">
 <div class="alert alert-info" role="alert">
   <h4 class="alert-heading">Sorry !</h4>
   <p>There seems no record of any data.</p>
@@ -105,7 +105,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_user_id, "User" %>
               <select name="add_user_id" id="add_user_id" class="selectpicker form-control" data-live-search="true" data-size="10">
@@ -116,7 +116,7 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_election_id, "Election" %>
 <% if @elec == 1 %>
@@ -133,7 +133,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_name, "Name" %>
               <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
@@ -141,7 +141,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_id_number, "ID Number" %>
               <%= text_field_tag :add_id_number, "", class: "form-control idnumber-check", required: true %>
@@ -152,7 +152,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_email, "E-mail" %>
               <%= text_field_tag :add_email, "", class: "form-control email-check", required: true %>
@@ -160,7 +160,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_phone, "Phone Number" %>
               <%= text_field_tag :add_phone, "", class: "form-control phone-check", required: true %>
@@ -176,10 +176,10 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <label>Add Image</label>
             <div class="custom-file">
                 <%= file_field_tag :add_image, class: "custom-file-input" %>
@@ -214,13 +214,13 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_user_id, "User ID" %>
               <%= text_field_tag :edit_user_id, "", class: "form-control", readonly: true, required: true %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_election_id, "Election" %>
 <% if @elec == 1 %>
@@ -237,7 +237,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
               <%= text_field_tag :edit_name, "", class: "form-control", readonly: true, required: true %>
@@ -245,7 +245,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_id_number, "ID Number" %>
               <%= text_field_tag :edit_id_number, "", class: "form-control", readonly: true, required: true %>
@@ -253,7 +253,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_phone, "Phone Number" %>
               <%= text_field_tag :edit_phone, "", class: "form-control", readonly: true, required: true %>
@@ -264,7 +264,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_email, "E-mail" %>
               <%= text_field_tag :edit_email, "", class: "form-control", required: true %>
@@ -272,7 +272,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_username, "Username" %>
               <%= text_field_tag :edit_username, "", class: "form-control" %>
@@ -288,10 +288,10 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <%= image_tag "home.jpg", width: '90%', id: "edit_show_image", class: "rounded float-right" %>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <label>Change Image</label>
             <div class="custom-file">
                 <%= file_field_tag :edit_image, class: "custom-file-input" %>
@@ -357,7 +357,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="custom-file">
               <%= file_field_tag :addfile, class: "custom-file-input", required: true %>
               <%= label_tag :addfile, "Choose File CSV", class: "custom-file-label" %>

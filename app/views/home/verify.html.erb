@@ -3,7 +3,7 @@
     <h1 class="text-center">Universal Ballot Verification</h1>
   </div>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-4">
     <br />
     <h4>Transaction Input</h4>
       <%= form_tag "#", id: "formVerify", method: "post" do %>
@@ -22,7 +22,7 @@
         <button type="button" id="submit-verify" class="btn btn-success btn-block">Submit</button>
       <% end %>
     </div>
-    <div class="col-md-7">
+    <div class="col-sm-7">
     <br />
     <h4>Detail Transaction</h4>
       <div class="form-group">
@@ -36,13 +36,13 @@
       </div>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="form-group">
             <%= label_tag :mined, "Mined time" %>
             <%= text_field_tag :mined, "", class: "form-control", readonly: true %>
           </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-sm-8">
           <div class="form-group">
             <%= label_tag :data, "Data" %>
             <%= text_field_tag :data, "", class: "form-control", readonly: true %>
@@ -51,19 +51,19 @@
       </div>
 
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="form-group">
             <%= label_tag :size, "Size" %>
             <%= text_field_tag :size, "", class: "form-control", readonly: true %>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="form-group">
             <%= label_tag :confirmation, "Confirmation" %>
             <%= text_field_tag :confirmation, "", class: "form-control", readonly: true %>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <div class="form-group">
             <%= label_tag :amount, "Amount" %>
             <%= text_field_tag :amount, "", class: "form-control", readonly: true %>

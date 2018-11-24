@@ -1,9 +1,9 @@
 <div class="container" style="margin-top: 2%">
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-sm-9">
       <h1>Voters</h1>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="form-group">
       <%= form_tag "organize/verifyemail", method: "post" do %>
         <button type="submit" class="btn btn-primary btn-block"><span class="fa fa-paper-plane"></span> Send Verification E-mail</button>
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="form-group">
         <select name="voter_searchel" id="voter_searchel" class="selectpicker form-control" data-size="10">
           <option value="0">-= All Elections =-</option>
@@ -23,7 +23,7 @@
         </select>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :voter_search, "", class: "form-control", placeholder: "Name" %>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :voter_searchid, "", class: "form-control", placeholder: "ID Number" %>
@@ -43,11 +43,11 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
         <span class="fa fa-plus mr-3"></span>Add New</button>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <div class="custom-file" data-toggle="modal" data-target="#addFileModal">
         <button type="button" class="btn btn-secondary btn-block"><span class="fa fa-file-upload mr-3"></span>Add Some</button>
       </div>
@@ -96,7 +96,7 @@
 
 <% if no %>
 <div class="row">
-<div class="col-md-8">
+<div class="col-sm-8">
 <div class="alert alert-info" role="alert">
   <h4 class="alert-heading">Sorry !</h4>
   <p>There seems no record of any data.</p>
@@ -122,7 +122,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_user_id, "User" %>
               <select name="add_user_id" id="add_user_id" class="selectpicker form-control" data-live-search="true">
@@ -133,7 +133,7 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_election_id, "Election" %>
 <% if @elec == 1 %>
@@ -150,7 +150,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_name, "Name" %>
               <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
@@ -158,7 +158,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_id_number, "ID Number" %>
               <%= text_field_tag :add_id_number, "", class: "form-control idnumber-check", required: true %>
@@ -169,7 +169,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_email, "E-mail" %>
               <%= text_field_tag :add_email, "", class: "form-control email-check", required: true %>
@@ -177,7 +177,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_phone, "Phone Number" %>
               <%= text_field_tag :add_phone, "", class: "form-control phone-check", required: true %>
@@ -214,13 +214,13 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_user_id, "User ID" %>
               <%= text_field_tag :edit_user_id, "", class: "form-control", readonly: true, required: true %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_election_id, "Election" %>
 <% if @elec == 1 %>
@@ -234,13 +234,13 @@
 <% end %>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-sm-2">
             <div class="custom-control custom-checkbox" style="margin-top: 40px">
               <input type="checkbox" class="custom-control-input" id="edit_hasattend" name="edit_hasattend"/>
               <label class="custom-control-label" for="edit_hasattend">Attended</label>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-sm-2">
             <div class="custom-control custom-checkbox" style="margin-top: 40px">
               <input type="checkbox" class="custom-control-input" id="edit_hasvote" name="edit_hasvote"/>
               <label class="custom-control-label" for="edit_hasvote">Voted</label>
@@ -250,7 +250,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
               <%= text_field_tag :edit_name, "", class: "form-control name-check", readonly: true, required: true %>
@@ -258,7 +258,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_id_number, "ID Number" %>
               <%= text_field_tag :edit_id_number, "", class: "form-control idnumber-check", readonly: true, required: true %>
@@ -266,7 +266,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_phone, "Phone Number" %>
               <%= text_field_tag :edit_phone, "", class: "form-control phone-check", readonly: true, required: true %>
@@ -277,7 +277,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_email, "E-mail" %>
               <%= text_field_tag :edit_email, "", class: "form-control email-check", required: true %>
@@ -285,7 +285,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-4">
             <div class="form-group">
               <%= label_tag :edit_username, "Username" %>
               <%= text_field_tag :edit_username, "", class: "form-control username-check" %>
@@ -293,31 +293,23 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-4">
-            <div style="margin-top: 24px; padding-top: 0.5rem;">
-              <%= button_tag "Reset Password", class: "btn btn-basic" %>
-            </div>
-          </div>
+          
         </div>
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_address, "Blockchain Address" %>
               <%= text_area_tag :edit_address, "", class: "form-control", readonly: true, rows: 4  %>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_public_key, "Blockchain Public Key" %>
               <%= text_area_tag :edit_public_key, "", class: "form-control", readonly: true, rows: 4  %>
             </div>
           </div>
-          <div class="col-md-4">
-            <div style="margin-top: 24px; padding-top: 0.5rem;">
-              <%= button_tag "Generate new Key", class: "btn btn-basic" %>
-            </div>
-          </div>
+          
         </div>
           
         <input type="hidden" name="edit_voter_id" id="edit_voter_id" required>
@@ -378,7 +370,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-sm-12">
             <div class="custom-file">
               <%= file_field_tag :addfile, class: "custom-file-input", required: true %>
               <%= label_tag :addfile, "Choose File CSV", class: "custom-file-label" %>

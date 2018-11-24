@@ -4,10 +4,10 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-sm-6">
     </div>
 
-    <div class="col-md-4">
+    <div class="col-sm-4">
       <div class="form-group">
         <div class="input-group mb-2">
           <%= text_field_tag :election_search, "", class: "form-control", placeholder: "Name" %>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <button class="btn btn-basic btn-block" data-toggle="modal" data-target="#addModal">
         <span class="fa fa-plus mr-3"></span>Add New</button>
     </div>
@@ -61,7 +61,7 @@
 
 <% if no %>
 <div class="row">
-<div class="col-md-8">
+<div class="col-sm-8">
 <div class="alert alert-info" role="alert">
   <h4 class="alert-heading">Sorry !</h4>
   <p>There seems no record of any data.</p>
@@ -87,7 +87,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_name, "Name" %>
               <%= text_field_tag :add_name, "", class: "form-control name-check", required: true %>
@@ -95,7 +95,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_description, "Description" %>
               <%= text_area_tag :add_description, "", class: "form-control", required: true, rows: 4 %>
@@ -104,13 +104,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_start_date, "Start Date" %>
               <%= date_field :add_start_date, "", class: "form-control", required: true %>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :add_end_date, "End Date" %>
               <%= date_field :add_end_date, "", class: "form-control", required: true %>
@@ -119,10 +119,10 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <%= image_tag "home.jpg", width: '90%', class: "rounded float-right" %>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <label>Add Image</label>
             <div class="custom-file">
                 <%= file_field_tag :add_image, class: "custom-file-input" %>
@@ -157,7 +157,7 @@
       <!-- Modal body -->
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-3"> 
+          <div class="col-sm-3"> 
             <div class="form-group" id="div-start">
               <button type="button" id="btn-start" class="btn btn-success btn-block"><span class="fa fa-play"></span> Start Election</button>
             </div>
@@ -165,7 +165,7 @@
               <button type="button" id="btn-stop" class="btn btn-danger btn-block"><span class="fa fa-stop"></span> Stop Election</button>
             </div>
           </div>
-          <div class="col-md-3"> 
+          <div class="col-sm-3"> 
             <div class="form-group" id="div-count">
               <button type="button" id="btn-count" disabled class="btn btn-primary btn-block"><span class="fa fa-chart-bar"></span> Count Votes</button>
             </div>
@@ -173,7 +173,7 @@
               <button type="button" id="btn-anounce" disabled class="btn btn-info btn-block"><span class="fa fa-bullhorn"></span> Anounce Election</button>
             </div>
           </div>
-          <div class="col-md-6"> 
+          <div class="col-sm-6"> 
             <div class="form-group">
               <select class="selectpicker form-control" id="add_participants" name="add_participants[]" multiple data-live-search="true" data-selected-text-format="count" data-size="10" data-actions-box="true" title="Select participants...">
 <% all_users.each do |voter| %>
@@ -184,7 +184,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
               <%= text_field_tag :edit_name, "", class: "form-control name-check", required: true %>
@@ -192,7 +192,7 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_description, "Description" %>
               <%= text_area_tag :edit_description, "", class: "form-control", rows: 4 %>
@@ -201,13 +201,13 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_start_date, "Start Date" %>
               <%= date_field :edit_start_date, "", class: "form-control", required: true %>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <div class="form-group">
               <%= label_tag :edit_end_date, "End Date" %>
               <%= date_field :edit_end_date, "", class: "form-control", required: true %>
@@ -216,10 +216,10 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <%= image_tag "home.jpg", id: "edit_show_image", width: '90%', class: "rounded float-right" %>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-6">
             <label>Change Image</label>
             <div class="custom-file">
                 <%= file_field_tag :edit_image, class: "custom-file-input" %>

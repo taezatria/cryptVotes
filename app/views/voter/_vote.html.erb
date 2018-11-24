@@ -20,7 +20,7 @@
 
 <% if no %>
 <div class="row">
-<div class="col-md-6">
+<div class="col-sm-6">
 <div class="alert alert-info" role="alert">
   <h4 class="alert-heading">Sorry !</h4>
   <p>For now there is no running election.</p>
@@ -54,7 +54,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <div class="col-md-4">
+        <div class="col-sm-4">
           <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "Passphrase", required: true %>
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
           <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
