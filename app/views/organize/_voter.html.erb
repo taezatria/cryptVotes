@@ -81,8 +81,12 @@
           <td><%= voter.idNumber %></td>
           <td><%= voter.email %></td>
           <td><%= voter.username %></td>
-          <td><%= vot.hasAttend %></td>
-          <td><%= vot.hasVote %></td>
+          <td><% if vot.hasAttend %><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5>
+          <% else %><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></span>
+          <% end %></td>
+          <td><% if vot.hasVote %><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5>
+          <% else %><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></span>
+          <% end %></td>
         </tr>
   <% end %>
 <% end %>

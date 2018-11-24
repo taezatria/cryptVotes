@@ -4,6 +4,8 @@ class OrganizeController < ApplicationController
   before_action :check_user_login
   skip_before_action :verify_authenticity_token
 
+  DEFAULT_PASS = "123456".freeze
+
   def home
     @status = role_user(params[:role])
     @menu = params[:menu].present? ? params[:menu] : 'home'
@@ -50,6 +52,9 @@ class OrganizeController < ApplicationController
           approved: true
         )
         params[:add_user_id] = new_user.id
+        $opssl.genpkey(new_user.id, DEFAULT_PASS)
+        $opssl.genpbkey(new_user.id, DEFAULT_PASS)
+        $redis.set(new_user.id.to_s+"passphrase", DEFAULT_PASS)
         Multichain::Multichain.new_keypairs(new_user)
       end
       unless Organizer.find_by(user_id: params[:add_user_id], election_id: params[:add_election_id]).present?
@@ -288,7 +293,7 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      if Organizer.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
+      if Organizer.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1
         org = Organizer.find(params[:edit_org_id])
         org.election_id = params[:edit_election_id]
         org.admin = params[:edit_admin].present?
@@ -300,7 +305,7 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      if Candidate.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
+      if Candidate.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1
         cand = Candidate.find(params[:edit_candidate_id])
         item_name = params[:edit_image].present? ? save_image(params[:edit_image]) : cand.image
         cand.election_id = params[:edit_election_id]
@@ -314,7 +319,7 @@ class OrganizeController < ApplicationController
       the_user.username = params[:edit_username]
       the_user.save
 
-      if Voter.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count == 1
+      if Voter.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1
         vot = Voter.find(params[:edit_voter_id])
         vot.election_id = params[:edit_election_id]
         vot.hasAttend = params[:edit_hasattend].present?

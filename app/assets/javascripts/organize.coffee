@@ -197,7 +197,17 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td>'
+              if value1.hasAttend
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+
+              if value1.hasVote
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td></tr>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td></tr>';
+              $("#tbody_voter").append(str);
               return false;
 
   $("#voter_searchid").keyup ->
@@ -214,7 +224,17 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td>'
+              if value1.hasAttend
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+
+              if value1.hasVote
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td></tr>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td></tr>';
+              $("#tbody_voter").append(str);
               return false;
 
   $("#voter_searchel").change ->
@@ -231,7 +251,17 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_voter").append('<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td><td>'+value1.hasAttend+'</td><td>'+value1.hasVote+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="voter"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td>'
+              if value1.hasAttend
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+
+              if value1.hasVote
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td></tr>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td></tr>';
+              $("#tbody_voter").append(str);
               return false;
 
   $("#candidate_search").keyup ->
@@ -299,7 +329,13 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td>';
+              if value1.admin
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+              str += '<td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>';
+              $("#tbody_organizer").append(str);
               return false;
 
   $("#organizer_searchid").keyup ->
@@ -316,7 +352,13 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td>';
+              if value1.admin
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+              str += '<td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>';
+              $("#tbody_organizer").append(str);
               return false;
 
   $("#organizer_searchel").change ->
@@ -333,7 +375,13 @@ $(document).on "turbolinks:load", ->
         $(data.other).each (i, value1) ->
           $(data.user).each (i, value2) ->
             if value1.user_id == value2.id
-              $("#tbody_organizer").append('<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td><td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>');
+              str = '<tr><input type="hidden" id="menu" value="organizer"><input type="hidden" id="user_id" value="'+value2.id+'"><input type="hidden" id="other_id" value="'+value1.id+'"><td>'+value1.election_id+'</td>';
+              if value1.admin
+                str += '<td><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5></td>';
+              else
+                str += '<td><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></td>';
+              str += '<td>'+value2.name+'</td><td>'+value2.idNumber+'</td><td>'+value2.email+'</td><td>'+value2.username+'</td></tr>';
+              $("#tbody_organizer").append(str);
               return false;
 
   $("#election_search").keyup ->
@@ -350,7 +398,17 @@ $(document).on "turbolinks:load", ->
         $(data.user).each (i, value) ->
           $sd = new Date(value.start_date).toDateString();
           $ed = new Date(value.end_date).toDateString();
-          $("#tbody_election").append('<tr><input type="hidden" id="menu" value="election"><input type="hidden" id="election_id" value="'+value.id+'"><td>'+value.name+'</td><td>'+value.description+'</td><td>'+$sd+'</td><td>'+$ed+'</td><td>'+value.participants+'</td></tr>');
+          str = '<tr><input type="hidden" id="menu" value="election"><input type="hidden" id="election_id" value="'+value.id+'">'
+          if value.status == 0
+            str += '<td><h5><span class="badge badge-warning">Preparing</span></h5></td>'
+          else if value.status == 1
+            str += '<td><h5><span class="badge badge-success">Running</span></h5></td>'
+          else if value.status == 2
+            str += '<td><h5><span class="badge badge-primary">Finished</span></h5></td>'
+          else
+            str += '<td><h5><span class="badge badge-danger">Counted</span></h5></td>'
+          str += '<td>'+value.name+'</td><td>'+$sd+'</td><td>'+$ed+'</td><td>'+value.participants+'</td></tr>'
+          $("#tbody_election").append(str);
 
   $(".name-check").change ->
     if (/^[a-z0-9 ]{6,50}$/i).test($(this).val())

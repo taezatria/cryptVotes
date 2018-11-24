@@ -28,9 +28,9 @@ $(document).on "turbolinks:load", ->
     ch = $(this).find("input").prop('checked');
     $(this).find("input").prop('checked', !ch);
     $(this).siblings(".card").each ->
-      $(this).removeClass('bg-secondary');
-      $(this).addClass('bg-light');
-    $(this).toggleClass('bg-secondary bg-light');
+      $(this).removeClass('border-primary');
+      # $(this).addClass('bg-light');
+    $(this).toggleClass('border-primary');
 
   $("#verifybutt").click ->
     $("#openverify").val("verify");

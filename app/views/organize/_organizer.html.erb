@@ -51,6 +51,7 @@
       <thead class="thead-light">
         <tr>
           <th>Election</th>
+          <th>Admin</th>
           <th>Name</th>
           <th>ID Number</th>
           <th>E-mail</th>
@@ -65,7 +66,10 @@
         <input type="hidden" id="menu" value="organizer">
         <input type="hidden" id="user_id" value="<%= organizer.id %>">
         <input type="hidden" id="other_id" value="<%= org.id %>">
-          <td><%= org.election_id %></td>
+          <td><%= org.election_id %>
+          <td><% if org.admin %><h5><span class="badge badge-success"><span class="fa fa-check"></span></span></h5>
+          <% else %><h5><span class="badge badge-danger"><span class="fa fa-times"></span></span></h5></span>
+          <% end %></td>
           <td><%= organizer.name %></td>
           <td><%= organizer.idNumber %></td>
           <td><%= organizer.email %></td>

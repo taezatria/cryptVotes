@@ -27,8 +27,8 @@
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
+          <th>Status</th>
           <th>Name</th>
-          <th>Description</th>
           <th>Start Date</th>
           <th>End Date</th>
           <th>Participants</th>
@@ -40,8 +40,16 @@
         <tr>
         <input type="hidden" id="menu" value="election">
         <input type="hidden" id="election_id" value="<%= election.id %>">
+          <td><% if election.status == 0 %>
+          <h5><span class="badge badge-warning">Preparing</span></h5>
+          <% elsif election.status == 1 %>
+          <h5><span class="badge badge-success">Running</span></h5>
+          <% elsif election.status == 2 %>
+          <h5><span class="badge badge-primary">Finished</span></h5>
+          <% else %>
+          <h5><span class="badge badge-danger">Counted</span></h5>
+          <% end %></td>
           <td><%= election.name %></td>
-          <td><%= election.description %></td>
           <td><%= election.start_date.strftime("%A, %d %B %Y") %></td>
           <td><%= election.end_date.strftime("%A, %d %B %Y") %></td>
           <td><%= election.participants %></td>
