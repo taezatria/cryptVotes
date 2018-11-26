@@ -41,12 +41,6 @@ $(document).on "turbolinks:load", ->
         $("#edit_public_key").val(data.user.publicKey);
     $("#editModal").modal('show');
 
-  $("#tbody_access_right").on "click", "tr", ->
-    $("#delete_ar_id").val($(this).children("#access_right_id").val());
-    $("#edit_ar_id").val($(this).children("#ar_id").html());
-    $("#edit_name").val($(this).children("#ar_name").html());
-    $("#editModal").modal('show');
-
   $("#tbody_election").on "click", "tr", ->
     $("#delete_election_id").val($(this).children("#election_id").val());
     $.ajax
@@ -89,6 +83,7 @@ $(document).on "turbolinks:load", ->
           $("#add_participants").attr("disabled", true);
 
         $("#edit_election_id").val(data.user.id);
+        $("#elect_id").val(data.user.id);
         $("#edit_name").val(data.user.name);
         $("#edit_participants").val(data.user.participants);
         $("#edit_description").val(data.user.description);

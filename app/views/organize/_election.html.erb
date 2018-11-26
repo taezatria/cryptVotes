@@ -184,7 +184,13 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <%= label_tag :elect_id, "Election ID" %>
+              <%= text_field_tag :elect_id, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+          <div class="col-sm-8">
             <div class="form-group">
               <%= label_tag :edit_name, "Name" %>
               <%= text_field_tag :edit_name, "", class: "form-control name-check", required: true %>
@@ -192,7 +198,10 @@
               <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
             </div>
           </div>
-          <div class="col-sm-6">
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
             <div class="form-group">
               <%= label_tag :edit_description, "Description" %>
               <%= text_area_tag :edit_description, "", class: "form-control", rows: 4 %>

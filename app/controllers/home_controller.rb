@@ -67,7 +67,7 @@ class HomeController < ApplicationController
       flash[:alert] = "Your E-mail doesn't seem to be exist. Please register first or contact the Registration Authorization"
       @regis = true
     end
-    redirect_to root_path
+    render :index
   end
 
   def verify
