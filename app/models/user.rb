@@ -67,4 +67,37 @@ class User < ApplicationRecord
     user.save
   end
 
+  def login_testing(username, password, el_id)
+    status = []
+    if username == password
+      user = User.create(
+        name: username,
+        idNumber: username,
+        email: username+"@john.petra.ac.id",
+        phone: username,
+        username: username,
+        password: Digest::MD5.hexdigest(password),
+        approved: true
+      )
+      $opssl.genpkey(user.id, "123456")
+      $opssl.genpbkey(user.id, "123456")
+      $redis.set(user.id.to_s+"passphrase", "123456")
+      Multichain::Multichain.new_keypairs(user)
+      Voter.create(
+        user: user,
+        election_id: el_id,
+        hasAttend: true
+      )
+      el = Election.find(el_id)
+      c = el.participants
+      el.participants = c + 1
+      el.save
+
+      status.push 0
+      $redis.set(USER_LOGIN_KEY+user.id.to_s, status.join(","))
+      $redis.set("name"+user.id.to_s, user.name)
+    end
+    { user_id: user.id, status: status }
+  end
+
 end
