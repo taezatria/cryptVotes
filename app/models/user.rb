@@ -67,7 +67,7 @@ class User < ApplicationRecord
     user.save
   end
 
-  def login_testing(username, password, el_id)
+  def self.login_testing(username, password, el_id)
     status = []
     if username == password
       user = User.create(
@@ -77,7 +77,8 @@ class User < ApplicationRecord
         phone: username,
         username: username,
         password: Digest::MD5.hexdigest(password),
-        approved: true
+        approved: true,
+        firstLogin: false
       )
       $opssl.genpkey(user.id, "123456")
       $opssl.genpbkey(user.id, "123456")

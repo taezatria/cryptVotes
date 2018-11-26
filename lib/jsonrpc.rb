@@ -166,15 +166,13 @@ module Multichain
 
     def self.get_addresses
       org_ids = User.joins(:organizers).where(approved: true, deleted_at: nil).distinct.ids
-      if org_ids.present?
-        rnd = SecureRandom.random_number(org_ids.count) + 1
-        org = User.find org_ids[rnd]
-        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
-        addr = $hot.getaddresses[0]
-        addrs = $hot.validateaddress(addr)
-        $hot.walletlock
-        { organizer: org, node: addrs }
-      end
+      rnd = SecureRandom.random_number(org_ids.count)
+      org = User.find org_ids[rnd]
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
+      addr = $hot.getaddresses[0]
+      addrs = $hot.validateaddress(addr)
+      $hot.walletlock
+      { organizer: org, node: addrs }
     end
   end
 end
