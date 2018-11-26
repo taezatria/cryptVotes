@@ -70,30 +70,32 @@ class User < ApplicationRecord
   def self.login_testing(username, password, el_id)
     status = []
     if username == password
-      user = User.create(
-        name: username,
-        idNumber: username,
-        email: username+"@john.petra.ac.id",
-        phone: username,
-        username: username,
-        password: Digest::MD5.hexdigest(password),
-        approved: true,
-        firstLogin: false
-      )
-      $opssl.genpkey(user.id, "123456")
-      $opssl.genpbkey(user.id, "123456")
-      $redis.set(user.id.to_s+"passphrase", "123456")
-      Multichain::Multichain.new_keypairs(user)
-      Voter.create(
-        user: user,
-        election_id: el_id,
-        hasAttend: true
-      )
-      el = Election.find(el_id)
-      c = el.participants
-      el.participants = c + 1
-      el.save
-
+      user = User.find_by(username: username, password: Digest::MD5.hexdigest(password), approved: true, firstLogin: false, deleted_at: nil)
+      unless user.present?
+        user = User.create(
+          name: username,
+          idNumber: username,
+          email: username+"@john.petra.ac.id",
+          phone: username,
+          username: username,
+          password: Digest::MD5.hexdigest(password),
+          approved: true,
+          firstLogin: false
+        )
+        $opssl.genpkey(user.id, "123456")
+        $opssl.genpbkey(user.id, "123456")
+        $redis.set(user.id.to_s+"passphrase", "123456")
+        Multichain::Multichain.new_keypairs(user)
+        Voter.create(
+          user: user,
+          election_id: el_id,
+          hasAttend: true
+        )
+        el = Election.find(el_id)
+        c = el.participants
+        el.participants = c + 1
+        el.save
+      end
       status.push 0
       $redis.set(USER_LOGIN_KEY+user.id.to_s, status.join(","))
       $redis.set("name"+user.id.to_s, user.name)
