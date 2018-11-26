@@ -66,16 +66,12 @@ $(document).on "turbolinks:load", ->
             $("#isimessage").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><h4 class="alert-heading">NOT VERIFIED</h4><p> Your ballot has changed ! </p><hr /><p class="mb-0">Please contact our organizer. </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         else if res.status == 0
           $("#verifyModal").modal('show');
-          $("#txhex").val(res.tx.hex);
+          $("#txid").val(res.tx.txid);
           $("#blockhash1").val(res.tx.blockhash);
-          $("#mined").val(res.tx.time);
           $("#data").val(res.tx.data);
-          $("#size").val(res.size);
-          $("#confirmation").val(res.tx.confirmations);
           $(res.tx.vout).each (i, data) ->
             if data.assets.length > 0
               $("#toaddress").val(data.scriptPubKey.addresses);
-              $("#amount").val(data.assets[0].qty);
             else if data.scriptPubKey.addresses != ""
               $("#fromaddress").val(data.scriptPubKey.addresses);
         else

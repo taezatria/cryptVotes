@@ -73,6 +73,8 @@ class VoterController < ApplicationController
         txid = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.txid)
         if txid.present?
           txs = Multichain::Multichain.get_tx(txid)
+          data = txs["data"][0].scan(/../).map { |x| x.hex.chr }.join.split("0x0")[2]
+          txs["data"] = data
           $redis.set(session[:current_user_id].to_s+"txhex", txs["hex"])
           status = 0
         end

@@ -76,6 +76,8 @@ class HomeController < ApplicationController
       if params[:blockhash].present?
         cek = tx["blockhash"] == params[:blockhash]
       end
+      data = tx["data"][0].scan(/../).map { |x| x.hex.chr }.join.split("0x0")[2]
+      tx["data"] = data
       render :json => { tx: tx, blockhash: cek, size: ObjectSpace.memsize_of(tx) }
     else
       render :verify
