@@ -203,6 +203,8 @@ class VoterController < ApplicationController
     $redis.del(session[:current_user_id].to_s+"multiaddress")
     $redis.del(session[:current_user_id].to_s+"orgid")
     $redis.del(session[:current_user_id].to_s+"redeemScript")
+    $redis.del(user.id.to_s+"txhex")
+    $redis.del(user.id.to_s+"digsign")
   end
 
 end
