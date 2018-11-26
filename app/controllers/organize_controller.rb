@@ -291,6 +291,7 @@ class OrganizeController < ApplicationController
       the_user = User.find(params[:edit_user_id])
       the_user.email = params[:edit_email]
       the_user.username = params[:edit_username]
+      the_user.approved = params[:edit_approved].present?
       the_user.save
 
       if Organizer.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1
@@ -303,6 +304,7 @@ class OrganizeController < ApplicationController
       the_user = User.find(params[:edit_user_id])
       the_user.email = params[:edit_email]
       the_user.username = params[:edit_username]
+      the_user.approved = params[:edit_approved].present?
       the_user.save
 
       if Candidate.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1
@@ -317,6 +319,7 @@ class OrganizeController < ApplicationController
       the_user = User.find(params[:edit_user_id])
       the_user.email = params[:edit_email]
       the_user.username = params[:edit_username]
+      the_user.approved = params[:edit_approved].present?
       the_user.save
 
       if Voter.where(user_id: params[:edit_user_id], election_id: params[:edit_election_id]).count <= 1

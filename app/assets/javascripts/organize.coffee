@@ -32,6 +32,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_election_id").val(data.other.election_id);
         $("#edit_election_id").next().children().children().children().html($("#edit_election_id :selected").text());
         $("#edit_admin").prop("checked", data.other.admin);
+        $("#edit_approved").prop("checked", data.user.approved);
         $("#edit_name").val(data.user.name);
         $("#edit_id_number").val(data.user.idNumber);
         $("#edit_email").val(data.user.email);
@@ -128,6 +129,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_public_key").val(data.user.publicKey);
         $("#edit_hasattend").prop('checked', data.other.hasAttend);
         $("#edit_hasvote").prop('checked', data.other.hasVote);
+        $("#edit_approved").prop("checked", data.user.approved);
     $("#editModal").modal('show');
 
   $("#tbody_candidate").on "click", "tr", ->
@@ -148,6 +150,7 @@ $(document).on "turbolinks:load", ->
         $("#edit_username").val(data.user.username);
         $("#edit_description").val(data.other.description);
         $("#edit_show_image").attr('src', data.other.image);
+        $("#edit_approved").prop("checked", data.user.approved);
     $("#editModal").modal('show');
   
   $("#add_user_id").change ->
