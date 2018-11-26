@@ -69,6 +69,9 @@ $(document).on "turbolinks:load", ->
           $("#txid").val(res.tx.txid);
           $("#blockhash1").val(res.tx.blockhash);
           $("#data").val(res.tx.data);
+          $("#data_img").prop("src", res.other.image)
+          $("#data_text").html(res.other.description);
+          $("#data_title").html(res.other.name);
           $(res.tx.vout).each (i, data) ->
             if data.assets.length > 0
               $("#toaddress").val(data.scriptPubKey.addresses);

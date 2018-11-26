@@ -73,8 +73,14 @@ class VoterController < ApplicationController
         txid = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.txid)
         if txid.present?
           txs = Multichain::Multichain.get_tx(txid)
-          data = txs["data"][0].scan(/../).map { |x| x.hex.chr }.join.split("0x0")[2]
-          txs["data"] = data
+          data = txs["data"][0].scan(/../).map { |x| x.hex.chr }.join.split("0x0")
+          unless data[0].to_s == "0"
+            u = User.find(data[0])
+            c = Candidate.find(data[3])
+            other = { "image" => c.image, "name" => u.name, "description" => c.description }
+          else
+            other = { "image" => "/assets/default.jpg", "name" => "Abstance", "description" => "You chose no one" }
+          end
           $redis.set(session[:current_user_id].to_s+"txhex", txs["hex"])
           status = 0
         end
@@ -87,7 +93,7 @@ class VoterController < ApplicationController
         end
       end
     end
-    render :json => { "status": status, tx: txs, "verifystatus": verifystatus }
+    render :json => { "status": status, tx: txs, "verifystatus": verifystatus, other: other }
   end
 
   def get_candidate
@@ -203,8 +209,8 @@ class VoterController < ApplicationController
     $redis.del(session[:current_user_id].to_s+"multiaddress")
     $redis.del(session[:current_user_id].to_s+"orgid")
     $redis.del(session[:current_user_id].to_s+"redeemScript")
-    $redis.del(user.id.to_s+"txhex")
-    $redis.del(user.id.to_s+"digsign")
+    $redis.del(session[:current_user_id].to_s+"txhex")
+    $redis.del(session[:current_user_id].to_s+"digsign")
   end
 
 end

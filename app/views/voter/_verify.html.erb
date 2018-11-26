@@ -54,6 +54,24 @@
 
       <!-- Modal body -->
       <div class="modal-body">
+        <center>
+          <div class="card" style="width: 300px;">
+            <img class="card-img-top" id="data_img" src="/assets/default.jpg" alt="Card image">
+            <div class="card-body">
+              <h5 class="card-title" id="data_title"></h5>
+              <p class="card-text" id="data_text"></p>
+            </div>
+          </div>
+        </center>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <%= label_tag :data, "Raw Data" %>
+              <%= text_field_tag :data, "", class: "form-control", readonly: true %>
+            </div>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-sm-12">
             <div class="form-group">
@@ -67,14 +85,6 @@
             <div class="form-group">
               <%= label_tag :blockhash1, "Included in Block" %>
               <%= text_area_tag :blockhash1, "", class: "form-control", readonly: true %>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="form-group">
-              <%= label_tag :data, "Data" %>
-              <%= text_field_tag :data, "", class: "form-control", readonly: true %>
             </div>
           </div>
         </div>
@@ -100,7 +110,7 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button class="btn btn-danger" id="verifybutt"><span class="fa fa-exclamation-triangle"></span> Verify</button>
+        <button class="btn btn-primary" id="verifybutt"><span class="fa fa-exclamation-triangle"></span> Verify</button>
         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
       </div>
 
