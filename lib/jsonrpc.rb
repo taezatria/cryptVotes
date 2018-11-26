@@ -33,10 +33,12 @@ module Multichain
     def self.prepare_ballot(user)
       addresses = get_addresses
       multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses[:organizer].publicKey, addresses[:node]["pubkey"]]
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
       $hot.importaddress multisigaddress["address"]
       $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
       $redis.set(user.id.to_s+"orgid", addresses[:organizer].id)
       grnt = $hot.grant multisigaddress["address"], "send"
+      $hot.walletlock
       if grnt.present?
         if AddressList.where(address: multisigaddress["address"]).count == 0
           AddressList.create(
@@ -164,13 +166,15 @@ module Multichain
 
     def self.get_addresses
       org_ids = User.joins(:organizers).where(approved: true, deleted_at: nil).distinct.ids
-      rnd = SecureRandom.random_number(org_ids.count) + 1
-      org = User.find org_ids[rnd]
-      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
-      addr = $hot.getaddresses[0]
-      addrs = $hot.validateaddress(addr)
-      $hot.walletlock
-      { organizer: org, node: addrs }
+      if org_ids.present?
+        rnd = SecureRandom.random_number(org_ids.count) + 1
+        org = User.find org_ids[rnd]
+        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
+        addr = $hot.getaddresses[0]
+        addrs = $hot.validateaddress(addr)
+        $hot.walletlock
+        { organizer: org, node: addrs }
+      end
     end
   end
 end
