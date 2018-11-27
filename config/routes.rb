@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get 'voter', to: 'voter#home'
   get 'voter/logout', to: 'voter#logout'
   get 'voter/result/:id/download', to: 'voter#download'
+  post 'voter/change_password', to: 'voter#change_password' #!
 
   get 'vote/:id', to: 'voter#get_candidate'
   post 'vote', to: 'voter#vote' #!

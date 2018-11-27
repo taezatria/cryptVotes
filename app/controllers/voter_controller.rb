@@ -122,7 +122,7 @@ class VoterController < ApplicationController
       unless flash[:alert].present?
         user.password = Digest::MD5.hexdigest(params[:newpassword])
         user.save
-        flash[:notice] = 'Password saved successfully'
+        flash[:success] = 'Password saved successfully'
       end
     end
     redirect_back fallback_location: root_path
