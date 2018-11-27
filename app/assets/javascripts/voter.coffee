@@ -42,9 +42,9 @@ $(document).on "turbolinks:load", ->
     $("#openverify").val("open");
     $("#passModal").modal('show');
 
-  $("#formPass").submit ->
-    formPass_check(true);
+  $("#formPass").submit (event) ->
     event.preventDefault();
+    formPass_check(true);
     $("#passModal").modal('hide');
     raw = $("#formPass").serializeArray();
     data = {};

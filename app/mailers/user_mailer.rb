@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-  URL_HOME = "http://192.168.43.40:8088".freeze
+  URL_HOME = "http://192.168.37.190:8088".freeze
 
   def welcome_email
     @user = params[:user]
