@@ -55,7 +55,7 @@ class VoterController < ApplicationController
             flash[:alert] = "failed to vote"
           end
         else
-          flash[:alert] = "wrong passphrase"
+          flash[:alert] = "wrong PIN"
         end
       else
         flash[:alert] = "datas are not valid"

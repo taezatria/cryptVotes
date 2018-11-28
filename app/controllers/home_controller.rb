@@ -86,8 +86,8 @@ class HomeController < ApplicationController
 
   def login
     if params[:username].present? && params[:password].present?
-      # user = User.login(params[:username], Digest::MD5.hexdigest(params[:password]))
-      user = User.login_testing(params[:username], params[:password], 5)
+      user = User.login(params[:username], Digest::MD5.hexdigest(params[:password]))
+      # user = User.login_testing(params[:username], params[:password], 5)
       if user.present?
         session[:current_user_id] = user[:user_id]
         if user[:status][0] == 0

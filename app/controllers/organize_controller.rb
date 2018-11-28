@@ -49,6 +49,7 @@ class OrganizeController < ApplicationController
           idNumber: params[:add_id_number], 
           email: params[:add_email], 
           phone: params[:add_phone],
+          username: "",
           approved: true
         )
         params[:add_user_id] = new_user.id
@@ -71,6 +72,7 @@ class OrganizeController < ApplicationController
           idNumber: params[:add_id_number], 
           email: params[:add_email], 
           phone: params[:add_phone],
+          username: "",
           approved: true
         )
         params[:add_user_id] = new_user.id
@@ -93,6 +95,7 @@ class OrganizeController < ApplicationController
           idNumber: params[:add_id_number], 
           email: params[:add_email], 
           phone: params[:add_phone],
+          username: "",
           approved: true
         )
         params[:add_user_id] = new_user.id
@@ -140,11 +143,13 @@ class OrganizeController < ApplicationController
       CSV.foreach(params[:addfile].path, :headers => true) do |row|
         user_data = row.to_hash
         other_data = user_data.slice!("name","idNumber","email","phone")
+        user_data["username"] = ""
+        user_data["approved"] = true
         user = User.create!(user_data)
         if params[:menu] == "organizer"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            if org.include? other_data["election"][i].to_i
+            unless org.include? other_data["election"][i].to_i
               Organizer.create(
                 user: user,
                 election_id: other_data["election"][i],
@@ -155,7 +160,7 @@ class OrganizeController < ApplicationController
         elsif params[:menu] == "voter"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            if org.include? other_data["election"][i].to_i
+            unless org.include? other_data["election"][i].to_i
               Voter.create(
                 user: user,
                 election_id: other_data["election"][i]
@@ -169,7 +174,7 @@ class OrganizeController < ApplicationController
         elsif params[:menu] == "candidate"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            if org.include? other_data["election"][i].to_i
+            unless org.include? other_data["election"][i].to_i
               Candidate.create(
                 user: user,
                 election_id: other_data["election"][i],
@@ -388,6 +393,7 @@ class OrganizeController < ApplicationController
         stts = true
         el.status = 3
         el.save
+        flash[:notice] = "Counting Votes..."
       else
         flash[:alert] = "Failed to counting votes of the election"
       end

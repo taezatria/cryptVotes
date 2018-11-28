@@ -125,7 +125,7 @@
       <%= form_tag "#", id: "formPass", method: "post" do %>
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Input Passphrase</h4>
+        <h4 class="modal-title">Input PIN</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
@@ -133,8 +133,8 @@
       <div class="modal-body">
 
         <div class="form-group">
-          <%= label_tag :passphrase, "Passphrase" %>
-          <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "Passphrase", required: true %>
+          <%= label_tag :passphrase, "PIN" %>
+          <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "PIN", required: true %>
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
           <div class="valid-feedback" hidden><span class="fa fa-check"></span></div>
         </div>

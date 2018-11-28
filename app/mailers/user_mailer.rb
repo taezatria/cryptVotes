@@ -31,7 +31,7 @@ class UserMailer < ApplicationMailer
     @user = params[:user]
     str = Digest::MD5.hexdigest(@user.id.to_s+@user.name+"passphrase")
     @url = URL_HOME+"/home/"+@user.id.to_s+"/genkey/"+str
-    mail(to: @user.email, subject: 'Passphrase Reset Request')
+    mail(to: @user.email, subject: 'PIN Reset Request')
   end
 
   def vote_success

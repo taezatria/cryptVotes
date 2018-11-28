@@ -151,8 +151,8 @@ module Multichain
               election: dt[1],
               candidate: dt[0],
               data: tx["data"][0],
-              fromAddress: tx["myaddresses"][0],
-              toAddress: tx["addresses"][0],
+              fromAddress: tx["addresses"][0],
+              toAddress: tx["myaddresses"][0],
               amount: tx["balance"]["assets"][0]["qty"],
               confirmation: tx["confirmations"]
             )
