@@ -135,7 +135,8 @@ module Multichain
     end
 
     def self.tally_votes(el)
-      all_txs = $hot.listaddresstransactions el.addressKey
+      wallet = $hot.getwalletinfo
+      all_txs = $hot.listaddresstransactions el.addressKey, wallet["txcount"]
       all_txs.each do |tx|
         if tx["balance"]["assets"].present? && tx["balance"]["assets"][0]["name"] == COIN+el.id.to_s && tx["balance"]["assets"][0]["qty"] > 0
           data_tx = AddressList.find_by(address: tx["addresses"][0])
