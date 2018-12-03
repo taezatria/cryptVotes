@@ -32,6 +32,8 @@
 <% end %>
 </div>
 
+<input type="hidden" id="pbkey" value="<%= File.read('.keysdata/server_pbkey.pem') %>">
+
 <div class="modal fade" id="voteModal">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

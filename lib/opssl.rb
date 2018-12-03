@@ -30,6 +30,13 @@ module OpSSL
       end
     end
 
+    def decryptServer(data)
+      IO.popen("echo '"+data.to_s+"' | base64 --decode | openssl rsautl -decrypt -inkey .keysdata/server_pkey.pem -passin pass:123456") do |f|
+        dat = f.gets 
+        dat.chomp if dat.present?
+      end
+    end
+
     def del_pub(user)
       IO.popen("rm .keysdata/"+user.to_s+"_pbkey.pem") do |f|
         f.close

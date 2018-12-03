@@ -20,14 +20,15 @@ class VoterController < ApplicationController
       voter = Voter.find_by(user_id: session[:current_user_id], hasVote: false, hasAttend: true)
       user = User.find_by(id: session[:current_user_id], approved: true, firstLogin: false, deleted_at: nil)
       el = election_now(params[:vote_election_id])
-      if params[:vote_candidate_id] == "0"
+      vote_candidate_id = $opssl.decryptServer(params[:vote_candidate_id])
+      if vote_candidate_id == "0"
         candidate = User.new
         candidate.name = "Abstance"
         candidate.id = 0
         cand = Candidate.new
         cand.id = 0
       else
-        cand = Candidate.find_by(id: params[:vote_candidate_id], election_id: params[:vote_election_id])
+        cand = Candidate.find_by(id: vote_candidate_id, election_id: params[:vote_election_id])
         candidate = User.find_by(id: cand.user_id, approved: true, deleted_at: nil)
       end
       if voter.present? && user.present? && el.present? && candidate.present?
@@ -63,7 +64,7 @@ class VoterController < ApplicationController
     else
       flash[:alert] = "datas are not completed"
     end
-    redirect_to voter_path(menu: "vote")
+    # redirect_to voter_path(menu: "vote")
   end
 
   def verify

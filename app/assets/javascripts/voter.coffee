@@ -122,8 +122,26 @@ $(document).on "turbolinks:load", ->
   $("#voterchangepasswordForm").submit ->
     voterchangepasswordForm_check(true);
   
-  $("#voteForm").submit ->
+  $("#voteForm").submit (event) ->
     voteForm_check(true);
+    event.preventDefault();
+    raw = $("#voteForm").serializeArray();
+    data = {}
+    $(raw).each (i,val) ->
+      data[val.name] = val.value
+    clear_passphrase();
+    data['authenticity_token'] = $('meta[name=csrf-token]').attr('content');
+    $encrypt = new JSEncrypt();
+    $encrypt.setPublicKey($('#pbkey').val());
+    $encrypted = $encrypt.encrypt($("input[name=vote_candidate_id]").val());
+    data['vote_candidate_id'] = $encrypted;
+    $.ajax
+      url: 'vote'
+      method: 'post'
+      dataType: 'json'
+      data: data
+      success: (res) ->
+        window.location.href = 'voter?menu=vote'
 
 voterchangepasswordForm_check = ($submit) ->
   if !$("#oldpassword").hasClass("is-invalid") && !$("#newpassword").hasClass("is-invalid") && !$("#retypepassword").hasClass("is-invalid")
