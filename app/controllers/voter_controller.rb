@@ -87,14 +87,19 @@ class VoterController < ApplicationController
         end
       elsif params[:openverify] == "verify" && tx.present?
         digsign = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digSign)
-        if digsign.present?
+        elect = Election.find_by(id: params[:elect_id], deleted_at: nil)
+        tx = $redis.get(session[:current_user_id].to_s+"txhex")
+        if digsign.present? && elect.present?
           $redis.set(session[:current_user_id].to_s+"digsign", digsign)
           verifystatus = Multichain::Multichain.verify(session[:current_user_id])
+          if elect.status == 3
+            counted = VoteResult.find_by(txid: tx, deleted_at: nil).present?
+          end
           status = 1
         end
       end
     end
-    render :json => { "status": status, tx: txs, "verifystatus": verifystatus, other: other }
+    render :json => { "status": status, tx: txs, "verifystatus": verifystatus, other: other, counted: counted }
   end
 
   def get_candidate

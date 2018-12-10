@@ -373,7 +373,9 @@ class OrganizeController < ApplicationController
 
   def discard
     if params[:menu] == 'organizer'
-      Organizer.discard(params[:delete_org_id])
+      unless params[:delete_org_id].to_s == "1"
+        Organizer.discard(params[:delete_org_id])
+      end
     elsif params[:menu] == 'voter'
       Voter.discard(params[:delete_voter_id])
     elsif params[:menu] == 'candidate'
@@ -409,7 +411,12 @@ class OrganizeController < ApplicationController
       el = Election.find(params[:id])
       users = User.joins(:voters).where('voters.election_id' => params[:id], deleted_at: nil).distinct
       if el.present? && users.present?
-        AnounceElectionJob.perform_later(users, el)
+        Thread.new do
+          users.each do |user|
+            UserMailer.with(user: user, election: el).anounce_election.deliver_now!
+          end
+        end
+        # AnounceElectionJob.perform_later(users, el)
       end
       stts = true
       flash[:success] = "Anouncement succeed"
@@ -420,8 +427,10 @@ class OrganizeController < ApplicationController
   end
 
   def verifyemail
-    User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
-      SendEmailJob.perform_later("verify", user)
+    Thread.new do
+      User.joins(:voters).where(deleted_at: nil).distinct.each do |user|
+        SendEmailJob.perform_later("verify", user)
+      end
     end
     flash[:notice] = "Sending the e-mail..."
     redirect_to organize_path(menu: "voter")

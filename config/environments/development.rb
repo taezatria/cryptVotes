@@ -31,21 +31,23 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.perform_caching = false
-
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { :host => '192.168.108.134:6789' }
+  config.action_mailer.default_url_options = { :host => '192.168.37.190:8088' }
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
     port:                 587,
     domain:               'cryptvotes.com',
-    user_name:            'm26415172@john.petra.ac.id',
-    password:             '',
+    user_name:            'noreply.cryptvotes@gmail.com',
+    password:             'cryptvotechain',
     authentication:       'plain',
-    enable_starttls_auto: true
+    enable_starttls_auto: true,
+    ssl:                  true
   }
+
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.exceptions_app = self.routes
 

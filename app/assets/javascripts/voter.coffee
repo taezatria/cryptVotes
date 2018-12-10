@@ -61,7 +61,12 @@ $(document).on "turbolinks:load", ->
         # alert(JSON.stringify(res));
         if res.status == 1
           if res.verifystatus
-            $("#isimessage").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><h4 class="alert-heading">Verified</h4><p class="mb-0"> Your ballot is not changed ! </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            if res.counted == null
+              $("#isimessage").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><h4 class="alert-heading">Verified</h4><p class="mb-0"> Your ballot is not changed ! </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            else if res.counted
+              $("#isimessage").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><h4 class="alert-heading">Verified & Counted</h4><p class="mb-0"> Your ballot is not changed and succeed to be counted ! </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            else
+              $("#isimessage").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><h4 class="alert-heading">NOT COUNTED</h4><p> Your ballot seems to be verified but it is not counted ! </p><hr /><p class="mb-0">Please contact our organizer. </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
           else
             $("#isimessage").html('<div class="alert alert-danger alert-dismissible fade show" role="alert"><h4 class="alert-heading">NOT VERIFIED</h4><p> Your ballot has changed ! </p><hr /><p class="mb-0">Please contact our organizer. </p><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
         else if res.status == 0
