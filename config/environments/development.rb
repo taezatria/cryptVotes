@@ -44,8 +44,7 @@ Rails.application.configure do
     user_name:            'noreply.cryptvotes@gmail.com',
     password:             'cryptvotechain',
     authentication:       'plain',
-    enable_starttls_auto: true,
-    ssl:                  true
+    enable_starttls_auto: true
   }
 
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker

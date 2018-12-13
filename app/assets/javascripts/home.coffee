@@ -196,6 +196,7 @@ $(document).on "turbolinks:load", ->
     data = {};
     $(raw).each (i,val) ->
       data[val.name] = val.value
+    data['authenticity_token'] = $('meta[name=csrf-token]').attr('content');
     $.ajax
       url: '/home/forget'
       method: 'post'
@@ -208,6 +209,7 @@ $(document).on "turbolinks:load", ->
     data = {};
     $(raw).each (i,val) ->
       data[val.name] = val.value
+    data['authenticity_token'] = $('meta[name=csrf-token]').attr('content');
     $.ajax
       url: '/home/genkey'
       method: 'post'

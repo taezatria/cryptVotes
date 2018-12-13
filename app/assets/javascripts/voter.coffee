@@ -138,7 +138,7 @@ $(document).on "turbolinks:load", ->
     data['authenticity_token'] = $('meta[name=csrf-token]').attr('content');
     $encrypt = new JSEncrypt();
     $encrypt.setPublicKey($('#pbkey').val());
-    $encrypted = $encrypt.encrypt($("input[name=vote_candidate_id]").val());
+    $encrypted = $encrypt.encrypt($("input[name=vote_candidate_id]:checked").val());
     data['vote_candidate_id'] = $encrypted;
     $.ajax
       url: 'vote'

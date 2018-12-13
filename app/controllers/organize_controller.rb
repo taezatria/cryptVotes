@@ -155,6 +155,10 @@ class OrganizeController < ApplicationController
                 election_id: other_data["election"][i],
                 admin: (other_data["admin"][i] == "1")
               )
+              $opssl.genpkey(user.id, DEFAULT_PASS)
+              $opssl.genpbkey(user.id, DEFAULT_PASS)
+              $redis.set(user.id.to_s+"passphrase", DEFAULT_PASS)
+              Multichain::Multichain.new_keypairs(user)
             end
           end
         elsif params[:menu] == "voter"
