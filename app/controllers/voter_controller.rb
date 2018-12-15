@@ -203,6 +203,9 @@ class VoterController < ApplicationController
     VoteResult.group(:data).count.each do |data,count|
       str_key = data.scan(/../).map { |x| x.hex.chr }.join.split('0x0')
       if str_key[1] == elect_id.to_s
+        if str_key[0] == "0"
+          count += Voter.where(election_id: elect_id, hasVote: false).count
+        end
         res[str_key[2]] = count
       end
     end

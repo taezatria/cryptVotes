@@ -223,8 +223,11 @@ class HomeController < ApplicationController
   def vote_result(elect_id)
     res = {}
     VoteResult.group(:data).count.each do |k,v|
-      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('00')
+      str_key = k.scan(/../).map { |x| x.hex.chr }.join.split('0x0')
       if str_key[1] == elect_id.to_s
+        if str_key[0] == "0"
+          count += Voter.where(election_id: elect_id, hasVote: false).count
+        end
         res[str_key[2]] = v
       end
     end
