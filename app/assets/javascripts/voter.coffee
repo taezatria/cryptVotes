@@ -58,7 +58,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: data
       success: (res) ->
-        # alert(JSON.stringify(res));
+        # console.log(res);
         if res.status == 1
           if res.verifystatus
             if res.counted == null

@@ -83,18 +83,20 @@ class VoterController < ApplicationController
             other = { "image" => "/assets/default.jpg", "name" => "Abstance", "description" => "You chose no one" }
           end
           $redis.set(session[:current_user_id].to_s+"txhex", txs["hex"])
+          $redis.set(session[:current_user_id].to_s+"txid", txid)
           status = 0
         end
       elsif params[:openverify] == "verify" && tx.present?
         digsign = $opssl.decrypt(session[:current_user_id], params[:passphrase], tx.digSign)
         elect = Election.find_by(id: params[:elect_id], deleted_at: nil)
-        tx = $redis.get(session[:current_user_id].to_s+"txhex")
+        tx = $redis.get(session[:current_user_id].to_s+"txid")
         if digsign.present? && elect.present?
           $redis.set(session[:current_user_id].to_s+"digsign", digsign)
           verifystatus = Multichain::Multichain.verify(session[:current_user_id])
           if elect.status == 3
             counted = VoteResult.find_by(txid: tx, deleted_at: nil).present?
           end
+          $redis.del(session[:current_user_id].to_s+"txid")
           status = 1
         end
       end
@@ -219,6 +221,7 @@ class VoterController < ApplicationController
     $redis.del(session[:current_user_id].to_s+"orgid")
     $redis.del(session[:current_user_id].to_s+"redeemScript")
     $redis.del(session[:current_user_id].to_s+"txhex")
+    $redis.del(session[:current_user_id].to_s+"txid")
     $redis.del(session[:current_user_id].to_s+"digsign")
   end
 
