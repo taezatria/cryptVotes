@@ -19,9 +19,9 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       success: (res) ->
         #alert(JSON.stringify(res));
-        $("#card_list").html('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="/assets/default.jpg" alt="Card image"><div class="card-body"><h4 class="card-title">Abstance</h4><p class="card-text">if you dont want to choose anyone</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="vote_candidate_id" value="0" required><label class="custom-control-label"></label></div></div></div>');
         $(res.candidate).each (i, data) ->
           $("#card_list").append('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="'+data.image+'" alt="Card image"><div class="card-body"><h4 class="card-title">'+res.other[i].name+'</h4><p class="card-text">'+data.description+'</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="vote_candidate_id" value="'+data.id+'" required><label class="custom-control-label"></label></div></div></div>');
+        #$("#card_list").html('<div class="card bg-light" style="width:225px"><img class="card-img-top" src="/assets/default.jpg" alt="Card image"><div class="card-body"><h4 class="card-title">Abstance</h4><p class="card-text">if you dont want to choose anyone</p><div class="custom-control custom-radio text-center"><input type="radio" class="custom-control-input" name="vote_candidate_id" value="0" required><label class="custom-control-label"></label></div></div></div>');
     $("#voteModal").modal('show');
 
   $("#card_list").on "click", ".card", ->
@@ -31,6 +31,16 @@ $(document).on "turbolinks:load", ->
       $(this).removeClass('border-primary');
       # $(this).addClass('bg-light');
     $(this).toggleClass('border-primary');
+    $("#abstain_vote").removeClass('border-primary');
+    $("#abstain_vote").find("input").prop('checked', false);
+  
+  $("#abstain_vote").click ->
+    $("#card_list .card").each ->
+      $(this).find("input").prop('checked', false);
+      $(this).removeClass('border-primary');
+    $(this).toggleClass('border-primary');
+    ch = $(this).find("input").prop('checked');
+    $(this).find("input").prop('checked', !ch);
 
   $("#verifybutt").click ->
     $("#openverify").val("verify");

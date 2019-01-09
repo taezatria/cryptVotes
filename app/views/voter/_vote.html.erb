@@ -48,7 +48,7 @@
       <div class="modal-body">
         
         <div class="card-columns" id="card_list">
-          
+        
         </div>
         <input type="hidden" id="vote_election_id" name="vote_election_id" required>
 
@@ -56,6 +56,17 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
+        <div class="col-sm-4">
+          <div class="card bg-light" id="abstain_vote">
+            <div class="card-body">
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="vote_candidate_id" value="0" required>
+                <label class="custom-control-label">Abstance</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1"></div>
         <div class="col-sm-4">
           <%= password_field_tag :passphrase, "", class: "form-control passphrase-check", placeholder: "PIN", required: true %>
           <div class="invalid-feedback" hidden><span class="fa fa-times"></span> Numeric 6 digits</div>
