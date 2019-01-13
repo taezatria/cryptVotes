@@ -149,7 +149,7 @@ class OrganizeController < ApplicationController
         if params[:menu] == "organizer"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            unless org.include? other_data["election"][i].to_i
+            if org.include? other_data["election"][i].to_i || org.include? 1
               Organizer.create(
                 user: user,
                 election_id: other_data["election"][i],
@@ -164,7 +164,7 @@ class OrganizeController < ApplicationController
         elsif params[:menu] == "voter"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            unless org.include? other_data["election"][i].to_i
+            if org.include? other_data["election"][i].to_i || org.include? 1
               Voter.create(
                 user: user,
                 election_id: other_data["election"][i]
@@ -178,7 +178,7 @@ class OrganizeController < ApplicationController
         elsif params[:menu] == "candidate"
           other_data["election"] = other_data["election"].split(",")
           other_data["election"].count.times do |i|
-            unless org.include? other_data["election"][i].to_i
+            if org.include? other_data["election"][i].to_i || org.include? 1
               Candidate.create(
                 user: user,
                 election_id: other_data["election"][i],
