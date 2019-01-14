@@ -30,6 +30,9 @@ class VoteResult < ApplicationRecord
   end
 
   def candidate_name
-    User.find(candidate).name
+    unless candidate == 0
+      User.find(candidate).name
+    else
+      "Abstance"
   end
 end

@@ -33,7 +33,7 @@ module Multichain
     def self.prepare_ballot(user)
       addresses = get_addresses
       multisigaddress = $cold.createmultisig 3, [user.publicKey, addresses[:organizer].publicKey, addresses[:node]["pubkey"]]
-      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 10
       $hot.importaddress multisigaddress["address"]
       $redis.set(user.id.to_s+"redeemScript", multisigaddress["redeemScript"])
       $redis.set(user.id.to_s+"orgid", addresses[:organizer].id)
@@ -50,7 +50,7 @@ module Multichain
     end
 
     def self.topup(el, user)
-      $hot.walletpassphrase $redis.get("nodepassphrase"), 5
+      $hot.walletpassphrase $redis.get("nodepassphrase"), 10
       addr = $redis.get(user.id.to_s+"multiaddress")
       tx = $hot.createrawsendfrom el.addressKey, { addr => { COIN+el.id.to_s => 1 } }, [], "sign"
       #c = $hot.createrawsendfrom addr[0], { b["address"] => {"asset2": 1 } }
@@ -63,7 +63,7 @@ module Multichain
       org = User.find(orgid)
       addr = $redis.get(user.id.to_s+"multiaddress")
       if privkey.present? && org.present? && addr.present?
-        $hot.walletpassphrase $redis.get("nodepassphrase"), 5
+        $hot.walletpassphrase $redis.get("nodepassphrase"), 10
         tx1 = $hot.createrawsendfrom addr, { el.addressKey => { COIN+el.id.to_s => 1 } }, [data]
         dtx = $hot.decoderawtransaction tx1
         scriptPubkey = nil
